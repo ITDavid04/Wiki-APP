@@ -218,6 +218,7 @@ section[id],li[id]{scroll-margin-top:96px}
 @media (min-width:861px) and (min-height:1040px){.ranke-copy{position:sticky;top:100px}}
 .ranke-copy h2{font-size:clamp(2.4rem,5.2vw,4.9rem);letter-spacing:-.05em}
 .ranke-copy .lead{font-size:1.1rem}
+.ranke-copy > .tlink{justify-self:start;margin-top:-8px}
 .legend{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
 .legend button{display:grid;grid-template-columns:2.4em minmax(0,1fr) auto;align-items:baseline;gap:12px;width:100%;padding:12px 4px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;cursor:pointer}
 .legend .no{color:var(--muted);font-variant-numeric:tabular-nums}
