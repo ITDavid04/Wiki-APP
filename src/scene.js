@@ -256,7 +256,8 @@ function bootVine(THREE, RoomEnvironment){
   scene.add(core);
   let coreG = 0, coreS = 0;
 
-  let dataLeaves = null, decoLeaves = null, buds = null;
+  let dataLeaves = null, decoLeaves = null, buds = null, secCores = null;
+  let SC = [];                             /* Blütenmitten der Abschnitte */
   let LD = [], LX = [], BD = [];           /* Blattdaten: Artikel, Deko, Knospen */
   let mainY = [], mainG = [], totalG = 0;  /* für die Zuordnung Scrollposition zu Wachstum */
   let twigTips = [];
@@ -420,6 +421,21 @@ function bootVine(THREE, RoomEnvironment){
     const end = pts[pts.length - 1];
     core.position.copy(end); core.position.z += 4 * unit; coreG = totalG - 40; coreS = (narrow ? 7 : 10) * unit;
     for (let k = 0; k < 5; k++) LX.push({ p: end.clone(), ang: k / 5 * Math.PI * 2 + 0.3, tilt: 0.35, size: (narrow ? 26 : 38) * unit, g: totalG - 60, ph: k, col: new THREE.Color(0xE2F06A), petal: true });
+    /* Kleinere Blüte je Abschnitt (01 Ranke bis 06 Mitmachen), am Stängel auf Höhe der Abschnittsnummer */
+    SC = [];
+    ['#ranke', '#regale', '#lernfelder', '#katalog', '#pruefung', '#mitmachen'].forEach((sel, n) => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + sy + parseFloat(getComputedStyle(el).paddingTop) + 10;
+      const i = mainY.findIndex(v => v >= y);
+      if (i < 0 || mainG[i] > totalG - 200) return;
+      /* am Rand läuft der Stängel teils aus dem Bild: Blüte so weit nach innen, dass sie ganz zu sehen ist */
+      const pr = narrow ? 20 : 30, x = mainPx[i][0], cx = Math.min(W - pr - 4, Math.max(pr + 4, x));
+      const at = pts[i].clone(), g = mainG[i];
+      at.x += (cx - x) * unit;
+      SC.push({ p: at.clone().setZ(at.z + 4 * unit), g, size: (narrow ? 5.5 : 8) * unit });
+      for (let k = 0; k < 5; k++) LX.push({ p: at.clone(), ang: k / 5 * Math.PI * 2 + 0.3 + n, tilt: 0.35, size: pr * unit, g: g - 20, ph: k + n, col: new THREE.Color(0xE2F06A), petal: true });
+    });
 
     /* Geometrie setzen */
     const geo = new THREE.BufferGeometry();
@@ -430,12 +446,14 @@ function bootVine(THREE, RoomEnvironment){
     geo.setIndex(out.I);
     stem.geometry.dispose(); stem.geometry = geo;
 
-    [dataLeaves, decoLeaves, buds].forEach(m => { if (m) { scene.remove(m); m.dispose(); } });
+    [dataLeaves, decoLeaves, buds, secCores].forEach(m => { if (m) { scene.remove(m); m.dispose(); } });
     dataLeaves = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LD.length));
     decoLeaves = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LX.length));
     BD = LD.filter(l => l.rot);
     buds = new THREE.InstancedMesh(budGeo, budMat, Math.max(1, BD.length));
-    [dataLeaves, decoLeaves, buds].forEach(m => { m.frustumCulled = false; scene.add(m); });
+    secCores = new THREE.InstancedMesh(budGeo, core.material, Math.max(1, SC.length));
+    secCores.count = SC.length;
+    [dataLeaves, decoLeaves, buds, secCores].forEach(m => { m.frustumCulled = false; scene.add(m); });
     LD.forEach((l, i) => { l.col = leafColor(l.ai, l.jit); dataLeaves.setColorAt(i, l.col); });
     LX.forEach((l, i) => decoLeaves.setColorAt(i, l.col));
     /* einmal in voller Größe setzen, damit die Hüllkugel für das Anklicken stimmt */
@@ -469,6 +487,14 @@ function bootVine(THREE, RoomEnvironment){
       buds.setMatrixAt(i, m4);
     });
     buds.instanceMatrix.needsUpdate = true;
+  }
+  function setCores(g){
+    SC.forEach((c, i) => {
+      const s = Math.max(1e-5, c.size * smooth(clamp01((g - c.g) / 80)));
+      m4.compose(c.p, q.identity(), sv.set(s, s, s));
+      secCores.setMatrixAt(i, m4);
+    });
+    secCores.instanceMatrix.needsUpdate = true;
   }
 
   /* Hover und Klick auf Blätter, nur im Bereich des Baums */
@@ -576,6 +602,7 @@ function bootVine(THREE, RoomEnvironment){
     setLeaves(dataLeaves, LD, G, t, hoverI);
     setLeaves(decoLeaves, LX, G, t, -1);
     setBuds(G);
+    setCores(G);
     core.scale.setScalar(Math.max(1e-5, coreS * smooth(clamp01((G - coreG) / 80))));
     twigTips.forEach(tt => tt.el && tt.el.classList.toggle('on', G > tt.g - 60));
     if (pType !== 'touch') {
