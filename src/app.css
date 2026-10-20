@@ -228,11 +228,13 @@ section[id],li[id]{scroll-margin-top:96px}
 #a-ranke{position:relative;height:clamp(1100px,150vh,1500px)}
 #treeSvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .gl-vine #treeSvg{display:none}
-.twig-lab{position:absolute;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);white-space:nowrap;transform:translate(0,-50%);pointer-events:none;transition:opacity .6s,transform .6s}
+.twig-lab{position:absolute;display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:inherit;font-family:inherit;white-space:nowrap;transform:translate(0,-50%);cursor:pointer;transition:opacity .6s,transform .6s,border-color .2s}
+.twig-lab:hover,.twig-lab.hot{border-color:var(--accent)}
+#a-ranke.twig-hot{cursor:pointer}
 .twig-lab.l{transform:translate(-100%,-50%)}
 .twig-lab b{color:var(--accent)}
-.gl-vine .twig-lab{opacity:0}
-.gl-vine .twig-lab.on{opacity:1}
+.gl-vine .twig-lab{opacity:0;pointer-events:none}
+.gl-vine .twig-lab.on{opacity:1;pointer-events:auto}
 
 /* Abschnitte */
 .section{display:grid;gap:clamp(28px,4vw,56px);padding-block:clamp(80px,11vw,160px)}

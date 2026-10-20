@@ -3,12 +3,15 @@
    CHROME=/pfad/zu/chrome npm test, falls Chrome woanders liegt
    Prüft: Installierbarkeit laut Chrome, Service Worker übernimmt, Start im Flugmodus, keine Fehler in der Konsole. */
 import puppeteer from 'puppeteer-core';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { start } from './serve.mjs';
 
 const SHOTS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'shots');
+/* Zahlen aus dem Katalog, damit der Test nach einem neuen Katalog nicht angepasst werden muss */
+const CAT = JSON.parse(await readFile(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'data', 'catalog.json'), 'utf8'));
+const N = CAT.artikel.length, NROT = CAT.artikel.filter(a => a.rot).length;
 const PORT = 8091, BASE = `http://localhost:${PORT}/`;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const results = [];
@@ -42,6 +45,8 @@ async function setOffline(page, on){
   }
 }
 const ready = page => page.waitForFunction(() => !document.documentElement.classList.contains('is-loading'), { timeout: 8000 }).catch(() => {});
+/* Katalog: alle Einträge da, Liste zu, bis jemand sucht oder filtert */
+const catalogOk = page => page.evaluate(n => document.querySelectorAll('#catList li[data-i]').length === n && document.getElementById('catList').hidden && document.getElementById('catCount').textContent.startsWith(n + ' Artikel'), N);
 const glLive = page => page.waitForFunction(() => document.documentElement.classList.contains('gl-vine') && document.documentElement.classList.contains('gl-stage'), { timeout: 15000 }).then(() => true, () => false);
 
 try {
@@ -50,7 +55,17 @@ try {
   await page.setViewport({ width: 1440, height: 900 });
   const errs = watch(page, 'Desktop');
   await page.goto(BASE, { waitUntil: 'networkidle0' });
-  check('Seite lädt, Katalog vollständig', (await page.$eval('#catCount', e => e.textContent)) === 'Alle 172 Artikel');
+  check('Seite lädt, Katalog vollständig', await catalogOk(page));
+  await page.type('#q', 'subnetting');
+  await sleep(300);
+  const hit = await page.evaluate(() => ({ open: !document.getElementById('catList').hidden, shown: document.querySelectorAll('#catList li[data-i]:not([hidden])').length, count: document.getElementById('catCount').textContent }));
+  await page.$eval('#q', e => { e.value = ''; e.dispatchEvent(new Event('input')); });
+  await sleep(300);
+  const shut = await page.evaluate(() => document.getElementById('catList').hidden);
+  await page.$eval('#chips [data-r="all"]', b => b.click());
+  const all = await page.evaluate(() => ({ open: !document.getElementById('catList').hidden, count: document.getElementById('catCount').textContent }));
+  await page.$eval('#chips [data-r="all"]', b => b.click());
+  check('Katalog öffnet beim Suchen und Filtern', hit.open && hit.shown > 0 && shut && all.open && all.count === `Alle ${N} Artikel` && await catalogOk(page), `${hit.count}, ${all.count}`);
   check('3D läuft (Bühne und Ranke)', await glLive(page));
   const cdp = await page.createCDPSession();
   const man = await cdp.send('Page.getAppManifest');
@@ -66,7 +81,7 @@ try {
   /* 2. Flugmodus: App muss komplett aus dem Speicher starten */
   await setOffline(page, true);
   await page.reload({ waitUntil: 'load' });
-  check('Start im Flugmodus', (await page.$eval('#catCount', e => e.textContent)) === 'Alle 172 Artikel');
+  check('Start im Flugmodus', await catalogOk(page));
   check('3D im Flugmodus', await glLive(page));
   await sleep(1500);
   await page.screenshot({ path: path.join(SHOTS, 'offline-desktop.png') });
@@ -93,7 +108,9 @@ try {
   await r.evaluate(() => navigator.serviceWorker.ready);
   await r.reload({ waitUntil: 'networkidle0' });
   await ready(r);
-  await r.evaluate(p => { const a = document.querySelector(`#catList .st[data-p="${p}"]`).closest('a'); a.closest('details').open = true; a.click(); }, LF31);
+  await r.type('#q', 'Fundament des Netzwerks');
+  await sleep(300);
+  await r.evaluate(p => { const a = document.querySelector(`#catList .st[data-p="${p}"]`).closest('a'); if (a.offsetParent) a.click(); }, LF31);
   await r.waitForFunction(() => document.querySelectorAll('#prose table').length > 2, { timeout: 15000 }).catch(() => {});
   const art = await r.evaluate(() => ({
     open: !document.getElementById('sheet').hidden, hash: location.hash, title: document.getElementById('sheetTitle').textContent,
@@ -129,12 +146,12 @@ try {
   await r.evaluate(() => window.FIAE.go('#/pruefung'));
   await sleep(400);
   const ex = await r.evaluate(() => ({ num: document.querySelector('.mb-num').textContent, rows: document.querySelectorAll('.exam-list li').length }));
-  check('Prüfungsmodus zählt richtig', /^1von 75 sitzen$/.test(ex.num.replace(/\s+/g, '')) || ex.num.includes('1') && ex.num.includes('75'), `${ex.num.trim()}, ${ex.rows} offene Einträge`);
+  check('Prüfungsmodus zählt richtig', ex.num.replace(/\s+/g, '') === `1von${NROT}sitzen` || ex.num.includes('1') && ex.num.includes(String(NROT)), `${ex.num.trim()}, ${ex.rows} offene Einträge`);
   await r.screenshot({ path: path.join(SHOTS, 'pruefungsmodus.png') });
   await r.evaluate(() => window.FIAE.go('#/stand'));
   await sleep(800);
   const sd = await r.evaluate(() => ({ nums: [...document.querySelectorAll('.stand-nums b')].map(b => b.textContent), off: document.getElementById('offInfo').textContent }));
-  check('Mein Stand zeigt Zahlen und Offline-Speicher', sd.nums[0] === '1' && sd.nums[1] === '1' && /\d+ von 172/.test(sd.off), `${sd.nums.join('/')}, ${sd.off}`);
+  check('Mein Stand zeigt Zahlen und Offline-Speicher', sd.nums[0] === '1' && sd.nums[1] === '1' && new RegExp(`\\d+ von ${N}`).test(sd.off), `${sd.nums.join('/')}, ${sd.off}`);
   await r.screenshot({ path: path.join(SHOTS, 'mein-stand.png') });
   check('Keine Fehler im Leser', rerrs.length === 0, rerrs.slice(0, 5).join(' | '));
 
@@ -167,6 +184,23 @@ try {
   }
   if (leaf) { await r.mouse.click(leaf.x, leaf.y); await sleep(800); }
   check('Klick auf ein Blatt öffnet den Artikel', leaf && await r.evaluate(() => !document.getElementById('sheet').hidden && location.hash.startsWith('#/artikel/')));
+
+  /* Klick auf einen Zweig (nicht auf ein Blatt) öffnet die Kachel seines Regals */
+  await r.evaluate(() => window.FIAE.closeSheet());
+  await sleep(600);
+  let twig = null;
+  const cand = await r.evaluate(() => {
+    const A = document.getElementById('a-ranke').getBoundingClientRect(), T = window.FIAE.tree, out = [];
+    T.twigs.forEach((t, i) => { if (T.labels[i].classList.contains('on')) for (let k = 2; k < 24; k += 2) out.push({ x: A.left + t.pts[k][0], y: A.top + t.pts[k][1], id: t.r.id }); });
+    return out.filter(p => p.y > 90 && p.y < innerHeight - 10 && p.x > 0 && p.x < innerWidth);
+  });
+  for (const p of cand) {
+    await r.mouse.move(p.x, p.y); await sleep(60);
+    const st = await r.evaluate(() => ({ tip: document.getElementById('tip').classList.contains('on'), hot: document.getElementById('a-ranke').classList.contains('twig-hot') }));
+    if (st.hot && !st.tip) { twig = p; break; }
+  }
+  if (twig) { await r.mouse.click(twig.x, twig.y); await sleep(1800); }
+  check('Klick auf einen Zweig öffnet die Regal-Kachel', twig && await r.evaluate(id => document.getElementById('r-' + id).classList.contains('open') && document.getElementById('sheet').hidden, twig.id), twig ? twig.id : 'kein Zweig gefunden');
 } catch (e) {
   check('Test lief durch', false, e.message);
 } finally {

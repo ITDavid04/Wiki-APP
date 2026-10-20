@@ -486,7 +486,7 @@ function bootVine(THREE, RoomEnvironment){
   addEventListener('fiae-stand', recolor);
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   const hiCol = new THREE.Color(0x8FE3B5);
-  let hoverI = -1, armed = -1;
+  let hoverI = -1, armed = -1, twigOn = false;
   function pick(){
     const A = document.getElementById('a-ranke').getBoundingClientRect();
     const hb = document.getElementById('top').getBoundingClientRect().bottom;
@@ -514,7 +514,13 @@ function bootVine(THREE, RoomEnvironment){
   addEventListener('click', e => {
     if (!built || e.target.closest('a,button,input,textarea,select,summary')) return;
     const i = pick();
-    if (i < 0) { armed = -1; return; }
+    if (i < 0) {
+      armed = -1;
+      /* kein Blatt getroffen: vielleicht ein Zweig, dann zur Kachel des Regals */
+      const tw = F.twigAt(pX, pY, pType === 'touch' ? 22 : 14);
+      if (tw) { F.hotTwig(null); F.openTile('r-' + tw); }
+      return;
+    }
     if (pType === 'touch' && armed !== i) { armed = i; setHover(i); return; }
     armed = -1;
     F.tip.hide();
@@ -568,7 +574,14 @@ function bootVine(THREE, RoomEnvironment){
     setBuds(G);
     core.scale.setScalar(Math.max(1e-5, coreS * smooth(clamp01((G - coreG) / 80))));
     twigTips.forEach(tt => tt.el && tt.el.classList.toggle('on', G > tt.g - 60));
-    if (pType !== 'touch') setHover(pick());
+    if (pType !== 'touch') {
+      setHover(pick());
+      const tw = hoverI < 0 ? F.twigAt(pX, pY) : null;
+      if (tw) F.hoverBlock = true;
+      else if (twigOn) F.hoverBlock = hoverI >= 0;
+      twigOn = !!tw;
+      F.hotTwig(tw);
+    }
     if (hoverI >= 0) F.tip.move(pX, pY);
     renderer.render(scene, camera);
   }

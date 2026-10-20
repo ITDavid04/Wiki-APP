@@ -239,8 +239,9 @@ function relayoutTree(){
   if (window.FIAE.tree && window.FIAE.tree.w === w && window.FIAE.tree.h === h) return window.FIAE.tree;
   const T = layoutTree(w, h);
   window.FIAE.tree = T;
+  /* tabindex -1: per Tastatur führt die Legende zu denselben Kacheln */
   labelsEl.innerHTML = T.twigs.map(t =>
-    `<span class="twig-lab micro${t.label.side > 0 ? ' l' : ''}" style="left:${t.label.x.toFixed(1)}px;top:${t.label.y.toFixed(1)}px">${esc(t.r.kurz)} <b>${t.r.n}</b></span>`
+    `<button type="button" tabindex="-1" data-tile="r-${t.r.id}" class="twig-lab micro${t.label.side > 0 ? ' l' : ''}" style="left:${t.label.x.toFixed(1)}px;top:${t.label.y.toFixed(1)}px">${esc(t.r.kurz)} <b>${t.r.n}</b></button>`
   ).join('');
   T.labels = [...labelsEl.children];
   drawTreeSvg(T);
@@ -248,6 +249,54 @@ function relayoutTree(){
 }
 window.FIAE.relayoutTree = relayoutTree;
 relayoutTree();
+
+/* Zweig unter dem Zeiger (Bildschirmkoordinaten): Regal-id oder null. Zählt Zweig und Triebe, nicht den Stamm.
+   Mit 3D nur Zweige, die schon gewachsen sind (ihre Beschriftung ist dann sichtbar). */
+function twigAt(px, py, tol = 14){
+  const T = window.FIAE.tree;
+  if (!T) return null;
+  const A = $('#a-ranke').getBoundingClientRect();
+  const x = px - A.left, y = py - A.top;
+  if (x < -tol || y < -tol || x > A.width + tol || y > A.height + tol) return null;
+  const gl = root.classList.contains('gl-vine');
+  let best = null, bd = tol * tol;
+  T.twigs.forEach((t, i) => {
+    if (gl && !T.labels[i].classList.contains('on')) return;
+    for (const pts of [t.pts, ...t.sprigs.map(s => s.pts)]) {
+      for (let k = 1; k < pts.length; k++) {
+        const [ax, ay] = pts[k - 1], [bx, by] = pts[k];
+        const dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy;
+        const u = L ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / L)) : 0;
+        const d = (ax + u * dx - x) ** 2 + (ay + u * dy - y) ** 2;
+        if (d < bd) { bd = d; best = t.r.id; }
+      }
+    }
+  });
+  return best;
+}
+window.FIAE.twigAt = twigAt;
+/* Zweig hervorheben (Beschriftung und Mauszeiger), wird auch von der 3D-Ranke benutzt */
+let twigHot = null;
+window.FIAE.hotTwig = id => {
+  if (id === twigHot) return;
+  twigHot = id;
+  (window.FIAE.tree.labels || []).forEach(l => l.classList.toggle('hot', l.dataset.tile === 'r-' + id));
+  $('#a-ranke').classList.toggle('twig-hot', !!id);
+};
+labelsEl.addEventListener('click', e => {
+  const b = e.target.closest('[data-tile]');
+  if (b) window.FIAE.openTile(b.dataset.tile);
+});
+/* Ohne 3D (Standbild) übernimmt die Seite Klick und Hervorheben selbst */
+$('#a-ranke').addEventListener('click', e => {
+  if (root.classList.contains('gl-vine') || e.target.closest('button')) return;
+  const id = twigAt(e.clientX, e.clientY, e.pointerType === 'touch' ? 22 : 14);
+  if (id) window.FIAE.openTile('r-' + id);
+});
+$('#a-ranke').addEventListener('pointermove', e => {
+  if (!root.classList.contains('gl-vine')) window.FIAE.hotTwig(e.pointerType === 'touch' ? null : twigAt(e.clientX, e.clientY));
+}, { passive: true });
+$('#a-ranke').addEventListener('pointerleave', () => { if (!root.classList.contains('gl-vine')) window.FIAE.hotTwig(null); });
 let rt = 0;
 addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { const before = window.FIAE.tree; relayoutTree(); if (window.FIAE.tree !== before) window.dispatchEvent(new Event('fiae-tree')); }, 160); });
 
@@ -335,10 +384,11 @@ $$('.tiles').forEach(list => {
 /* Katalog */
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss');
 const catList = $('#catList'), chipsEl = $('#chips'), qIn = $('#q');
-const state = { regal: 'all', rot: false, q: '', group: null };
+/* regal: null = nichts gewählt, dann bleibt die Liste zu, bis jemand sucht oder filtert */
+const state = { regal: null, rot: false, q: '', group: null };
 const CHEV = '<svg class="chev" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 chipsEl.innerHTML =
-  `<button class="chip" type="button" data-r="all" aria-pressed="true">Alle</button>` +
+  `<button class="chip" type="button" data-r="all" aria-pressed="false">Alle</button>` +
   REG.map(r => `<button class="chip" type="button" data-r="${r.id}" aria-pressed="false">${esc(r.kurz)}</button>`).join('') +
   `<button class="chip" type="button" data-rot aria-pressed="false"><span class="dot" aria-hidden="true"></span>nur mit Ampel</button>`;
 const items = [];
@@ -373,9 +423,10 @@ function hl(text, words){
 }
 function applyFilter(){
   const words = norm(state.q).split(/\s+/).filter(Boolean);
+  const active = state.regal !== null || state.rot || words.length > 0;
   let shown = 0;
   items.forEach(it => {
-    const ok = (state.regal === 'all' || it.a.r === state.regal) && (!state.rot || it.a.rot) && words.every(w => it.hay.includes(w));
+    const ok = (!state.regal || state.regal === 'all' || it.a.r === state.regal) && (!state.rot || it.a.rot) && words.every(w => it.hay.includes(w));
     it.li.hidden = !ok;
     if (ok) shown++;
     it.t.innerHTML = hl(it.a.t, words);
@@ -394,15 +445,17 @@ function applyFilter(){
   });
   $$('.chip[data-r]', chipsEl).forEach(c => c.setAttribute('aria-pressed', String(c.dataset.r === state.regal)));
   $('.chip[data-rot]', chipsEl).setAttribute('aria-pressed', String(state.rot));
-  $('#catCount').textContent = shown === D.artikel.length ? `Alle ${shown} Artikel` : `${nArt(shown)} von ${D.artikel.length}`;
-  $('#catEmpty').hidden = shown > 0;
+  catList.hidden = !active;
+  $('#catCount').textContent = !active ? `${D.artikel.length} Artikel. Tipp ein Stichwort oder wähl ein Regal.`
+    : shown === D.artikel.length ? `Alle ${shown} Artikel` : `${nArt(shown)} von ${D.artikel.length}`;
+  $('#catEmpty').hidden = !active || shown > 0;
 }
 chipsEl.addEventListener('click', e => {
   const c = e.target.closest('.chip');
   if (!c) return;
   state.group = null;
   if ('rot' in c.dataset) state.rot = !state.rot;
-  else state.regal = c.dataset.r;
+  else state.regal = state.regal === c.dataset.r ? null : c.dataset.r;
   applyFilter();
 });
 let qt = 0;
