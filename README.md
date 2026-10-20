@@ -25,8 +25,8 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 | Ordner | Inhalt |
 |---|---|
 | `src/` | Quelltext: `index.html`, `app.css`, `app.js` (Seite, Lernstand), `scene.js` (3D), `reader.js` (Lesen, Prüfungsmodus, Mein Stand), `sw.js` (Service Worker), Manifest, Icons |
-| `data/catalog.json` | Alle Artikel des Wikis mit Regal, Gruppe, Titel, Ampel und Link |
-| `tools/` | `build.mjs` (baut nach `docs/`), `serve.mjs` (Testserver), `test.mjs` (automatischer Test), `icons.py` (Icons) |
+| `data/catalog.json` | Alle Artikel des Wikis mit Regal, Gruppe, Titel, Ampel und Link, erzeugt mit `tools/catalog.mjs` |
+| `tools/` | `catalog.mjs` (Katalog aus dem Wiki), `build.mjs` (baut nach `docs/`), `serve.mjs` (Testserver), `test.mjs` (automatischer Test), `icons.py` (Icons) |
 | `docs/` | Die fertige App. Wird gebaut, nicht von Hand bearbeiten. GitHub Pages veröffentlicht von hier. |
 
 ## Bauen, testen, ansehen
@@ -55,10 +55,38 @@ nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages au
 
 ## Neue Artikel im Wiki
 
-`data/catalog.json` ist der Katalog vom Stand des Wikis (14.10.2026, 172 Artikel). Kommen Artikel dazu oder werden Dateien
-verschoben, muss er neu erzeugt und die App neu gebaut werden. Ein Skript dafür liegt hier noch nicht im Repository.
-Änderungen an bestehenden Artikeln brauchen keinen neuen Build: Die App zeigt zuerst die gespeicherte Fassung, holt im
-Hintergrund die aktuelle und zeigt sie beim nächsten Öffnen.
+`data/catalog.json` wird mit `tools/catalog.mjs` aus einem Klon des Wikis erzeugt (im Repository: Stand 14.10.2026,
+172 Artikel). Kommen Artikel dazu oder werden Dateien verschoben, bringst du sie so in die App:
+
+```bash
+git clone --depth 1 https://github.com/ITDavid04/Bibliothek-Lern-Wiki /tmp/wiki   # frischer Klon (im eigenen Klon reicht git pull)
+npm run catalog -- /tmp/wiki   # schreibt data/catalog.json und zeigt, was sich geändert hat
+npm run build                  # baut docs/ mit dem neuen Katalog
+npm test                       # muss grün sein
+git add data/catalog.json docs
+git commit -m "Katalog: Stand des Wikis aktualisiert"
+git push                       # GitHub Pages veröffentlicht, die App bietet „Neu laden“ an
+```
+
+Was das Skript dabei macht:
+
+- **Artikel** sind alle committeten `.md`-Dateien im Klon. `README.md`, `LICENSE` und ähnliche Dateien zählen nicht mit.
+  Nicht committete `.md`-Dateien meldet das Skript, sie fehlen im Katalog, bis sie im Wiki committet und gepusht sind
+  (die App lädt die Artikel von GitHub).
+- **Titel** ist die Überschrift in den ersten drei Textzeilen, sonst die erste Textzeile. Emojis und Fettschrift fallen weg,
+  Gedankenstriche werden zu Doppelpunkten. Passt das bei einer Datei nicht, kommt ihr Titel in die Tabelle `OVERRIDE`
+  oben im Skript.
+- **Ampel**: Die Datei enthält 🔴 oder das Wort ROT.
+- **Regal und Gruppe** kommen aus der Tabelle `GRUPPEN` oben im Skript (Ordner oder Datei im Wiki, der längste passende
+  Pfad gewinnt). Liegt ein Artikel in einem neuen Ordner, meldet das Skript ihn als **NICHT EINSORTIERT** und lässt ihn
+  weg, ohne abzubrechen. Dann eine Zeile in `GRUPPEN` ergänzen und das Skript noch einmal laufen lassen.
+- **Stand** ist das Datum des letzten Commits im Klon.
+- **Vergleich**: Am Ende listet das Skript neue und entfallene Artikel sowie geänderte Titel und Ampeln. Der Lernstand in der
+  App hängt am Pfad der Datei. Steht eine Datei unter „Entfallen“ und ihr neuer Name unter „Neu“, wurde sie umbenannt
+  oder verschoben, und ihr Lernstand beginnt in der App wieder bei null.
+
+Änderungen am Text bestehender Artikel brauchen keinen neuen Build: Die App zeigt zuerst die gespeicherte Fassung, holt im
+Hintergrund die aktuelle und zeigt sie beim nächsten Öffnen. Nur wenn sich Titel oder Ampel ändern, lohnt ein neuer Katalog.
 
 ## Regeln im Projekt
 

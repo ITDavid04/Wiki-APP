@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "build": "node tools/build.mjs",
+    "catalog": "node tools/catalog.mjs",
     "serve": "node tools/serve.mjs",
     "test": "node tools/test.mjs"
   },

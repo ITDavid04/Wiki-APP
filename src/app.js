@@ -10,7 +10,7 @@ const store = {
 };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
 
-/* Daten: aus dem Repository erzeugt (catalog.py), nichts von Hand */
+/* Daten: aus dem Wiki erzeugt (tools/catalog.mjs), nichts von Hand */
 const D = JSON.parse($('#catalog').textContent);
 const REG = D.regale;
 const share = r => r.n ? r.rot / r.n : 0;
