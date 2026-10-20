@@ -55,8 +55,10 @@ nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages au
 
 ## Neue Artikel im Wiki
 
-`data/catalog.json` ist der Katalog vom Stand des Wikis. Kommen Artikel dazu, muss er neu erzeugt und die App neu gebaut werden.
-Die Artikeltexte selbst lädt die App immer frisch aus dem Wiki, Änderungen an bestehenden Artikeln kommen also ohne neuen Build an.
+`data/catalog.json` ist der Katalog vom Stand des Wikis (14.10.2026, 172 Artikel). Kommen Artikel dazu oder werden Dateien
+verschoben, muss er neu erzeugt und die App neu gebaut werden. Ein Skript dafür liegt hier noch nicht im Repository.
+Änderungen an bestehenden Artikeln brauchen keinen neuen Build: Die App zeigt zuerst die gespeicherte Fassung, holt im
+Hintergrund die aktuelle und zeigt sie beim nächsten Öffnen.
 
 ## Regeln im Projekt
 
