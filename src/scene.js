@@ -421,20 +421,29 @@ function bootVine(THREE, RoomEnvironment){
     const end = pts[pts.length - 1];
     core.position.copy(end); core.position.z += 4 * unit; coreG = totalG - 40; coreS = (narrow ? 7 : 10) * unit;
     for (let k = 0; k < 5; k++) LX.push({ p: end.clone(), ang: k / 5 * Math.PI * 2 + 0.3, tilt: 0.35, size: (narrow ? 26 : 38) * unit, g: totalG - 60, ph: k, col: new THREE.Color(0xE2F06A), petal: true });
-    /* Kleinere Blüte je Abschnitt (01 Ranke bis 06 Mitmachen), am Stängel auf Höhe der Abschnittsnummer */
+    /* Blüte je Abschnitt (01 Ranke bis 06 Mitmachen) an einem kurzen Zweig, der vom Stängel zur Seitenmitte hin abgeht.
+       Sitzt auf Höhe der Abschnittsnummer; hat der Abschnitt einen eigenen Hintergrund (Prüfungsblock), knapp darüber. */
     SC = [];
+    const pr = narrow ? 40 : 60;
     ['#ranke', '#regale', '#lernfelder', '#katalog', '#pruefung', '#mitmachen'].forEach((sel, n) => {
       const el = document.querySelector(sel);
       if (!el) return;
-      const y = el.getBoundingClientRect().top + sy + parseFloat(getComputedStyle(el).paddingTop) + 10;
-      const i = mainY.findIndex(v => v >= y);
+      const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+      const solid = !/^(transparent|rgba\(0, 0, 0, 0\))$/.test(cs.backgroundColor);
+      const L0 = narrow ? 74 : 118, rise = L0 * 0.42;
+      const fy = solid ? r.top + sy - pr - 10 : r.top + sy + parseFloat(cs.paddingTop) + 10;
+      const i = mainY.findIndex(v => v >= fy + rise);
       if (i < 0 || mainG[i] > totalG - 200) return;
-      /* am Rand läuft der Stängel teils aus dem Bild: Blüte so weit nach innen, dass sie ganz zu sehen ist */
-      const pr = narrow ? 20 : 30, x = mainPx[i][0], cx = Math.min(W - pr - 4, Math.max(pr + 4, x));
-      const at = pts[i].clone(), g = mainG[i];
-      at.x += (cx - x) * unit;
-      SC.push({ p: at.clone().setZ(at.z + 4 * unit), g, size: (narrow ? 5.5 : 8) * unit });
-      for (let k = 0; k < 5; k++) LX.push({ p: at.clone(), ang: k / 5 * Math.PI * 2 + 0.3 + n, tilt: 0.35, size: pr * unit, g: g - 20, ph: k + n, col: new THREE.Color(0xE2F06A), petal: true });
+      const [x, y] = mainPx[i], z = pts[i].z / unit, dir = x > W / 2 ? -1 : 1;
+      /* lang genug, dass die Blüte ganz im Bild liegt */
+      const L = Math.max(L0, dir < 0 ? x - (W - pr - 4) : pr + 4 - x);
+      const bp = [];
+      for (let k = 0; k <= 10; k++) { const s = k / 10; bp.push([x + dir * L * s, y - rise * Math.sin(s * Math.PI / 2), z + s * 12]); }
+      const g0 = mainG[i], bl = lenPx(bp), gEnd = g0 + bl * 0.75;
+      tube(curveOf(bp), 16, 6, u => (2.8 - 1.6 * u) * sc, u => g0 + u * bl * 0.75, out);
+      const tip = V(...bp[10]);
+      SC.push({ p: tip.clone().setZ(tip.z + 4 * unit), g: gEnd, size: (narrow ? 11 : 16) * unit });
+      for (let k = 0; k < 5; k++) LX.push({ p: tip.clone(), ang: k / 5 * Math.PI * 2 + 0.3 + n, tilt: 0.35, size: pr * unit, g: gEnd - 20, ph: k + n, col: new THREE.Color(0xE2F06A), petal: true });
     });
 
     /* Geometrie setzen */
