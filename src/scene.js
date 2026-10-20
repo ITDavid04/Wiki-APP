@@ -151,6 +151,7 @@ function bootStage(THREE, RoundedBoxGeometry, RoomEnvironment){
   let last = performance.now(), running = false, visible = true;
   function step(){
     const now = performance.now();
+    if (F.sheetOpen) { last = now; return; }
     quality(now - last);
     const dt = Math.min(0.033, Math.max(0, (now - last) / 1000)); last = now;
     const t = now / 1000;
@@ -366,7 +367,6 @@ function bootVine(THREE, RoomEnvironment){
 
     /* Zweige (Regale) und Triebe (Gruppen) */
     LD = []; LX = []; BD = []; twigTips = [];
-    const greens = [0x2E8B57, 0x3FA16A, 0x1F7A57, 0x4BAF73, 0x2A7F50].map(c => new THREE.Color(c));
     T.twigs.forEach((tw, ti) => {
       const tp = tw.pts.map(p => [A.l + p[0], A.t + p[1], p[2]]);
       const g0 = gAt(tp[0][0], tp[0][1], trunkI0);
@@ -383,7 +383,7 @@ function bootVine(THREE, RoomEnvironment){
           LD.push({
             p: V(A.l + l.x, A.t + l.y, l.z), ang: -l.ang, tilt: l.tilt, size: l.size * unit,
             g: gs + l.s * sl * 0.75, ai: l.ai, rot: l.rot, ph: Math.random() * 6.28,
-            col: greens[(l.ai + k) % greens.length]
+            col: leafColor(l.ai), jit: ((l.ai * 7919) % 13) / 13 - 0.5
           });
         });
       });
@@ -436,7 +436,7 @@ function bootVine(THREE, RoomEnvironment){
     BD = LD.filter(l => l.rot);
     buds = new THREE.InstancedMesh(budGeo, budMat, Math.max(1, BD.length));
     [dataLeaves, decoLeaves, buds].forEach(m => { m.frustumCulled = false; scene.add(m); });
-    LD.forEach((l, i) => dataLeaves.setColorAt(i, l.col));
+    LD.forEach((l, i) => { l.col = leafColor(l.ai, l.jit); dataLeaves.setColorAt(i, l.col); });
     LX.forEach((l, i) => decoLeaves.setColorAt(i, l.col));
     /* einmal in voller Größe setzen, damit die Hüllkugel für das Anklicken stimmt */
     setLeaves(dataLeaves, LD, 1e9, 0, -1); dataLeaves.computeBoundingSphere();
@@ -472,6 +472,18 @@ function bootVine(THREE, RoomEnvironment){
   }
 
   /* Hover und Klick auf Blätter, nur im Bereich des Baums */
+  /* Lernstand: blass = noch nicht, grün = gelesen, dunkelgrün = sitzt (Farben aus app.js) */
+  const LEAF = F.LEAF.map(c => new THREE.Color(c));
+  function leafColor(ai, jit = 0){
+    const c = LEAF[F.stand.get(F.pathOf(F.D.artikel[ai]))].clone();
+    return c.offsetHSL(0, 0, jit * 0.05);
+  }
+  function recolor(){
+    if (!dataLeaves) return;
+    LD.forEach((l, i) => { l.col = leafColor(l.ai, l.jit); dataLeaves.setColorAt(i, i === hoverI ? hiCol : l.col); });
+    dataLeaves.instanceColor.needsUpdate = true;
+  }
+  addEventListener('fiae-stand', recolor);
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   const hiCol = new THREE.Color(0x8FE3B5);
   let hoverI = -1, armed = -1;
@@ -493,7 +505,8 @@ function bootVine(THREE, RoomEnvironment){
       dataLeaves.setColorAt(i, hiCol);
       const a = F.D.artikel[LD[i].ai], r = F.REG.find(x => x.id === a.r);
       const touch = pType === 'touch';
-      F.tip.show(`<b>${esc(a.t)}</b>${esc(r.name)} · ${esc(a.g)}${a.rot ? ', mit Prüfungs-Ampel' : ''}<br><span>${touch ? 'Nochmal tippen öffnet ihn auf GitHub' : 'Klick öffnet den Artikel auf GitHub'}</span>`, pX, pY);
+      const st = ['noch nicht gelesen', 'gelesen', 'sitzt'][F.stand.get(F.pathOf(a))];
+      F.tip.show(`<b>${esc(a.t)}</b>${esc(r.name)} · ${esc(a.g)}${a.rot ? ', mit Prüfungs-Ampel' : ''}<br><span>${st}, ${touch ? 'nochmal tippen zum Lesen' : 'klicken zum Lesen'}</span>`, pX, pY);
     } else F.tip.hide();
     dataLeaves.instanceColor.needsUpdate = true;
     F.hoverBlock = i >= 0;
@@ -504,7 +517,9 @@ function bootVine(THREE, RoomEnvironment){
     if (i < 0) { armed = -1; return; }
     if (pType === 'touch' && armed !== i) { armed = i; setHover(i); return; }
     armed = -1;
-    window.open(F.D.artikel[LD[i].ai].u, '_blank', 'noopener');
+    F.tip.hide();
+    const h = F.artUrl(F.D.artikel[LD[i].ai]);
+    if (F.go) F.go(h); else location.hash = h;
   });
 
   /* Neu bauen, wenn sich Fenster oder Seitenhöhe ändern */
@@ -527,6 +542,7 @@ function bootVine(THREE, RoomEnvironment){
   let last = performance.now(), running = false;
   function step(){
     const now = performance.now();
+    if (F.sheetOpen) { last = now; return; }
     quality(now - last);
     const dt = Math.min(0.033, Math.max(0, (now - last) / 1000)); last = now;
     const t = now / 1000;

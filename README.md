@@ -11,12 +11,20 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 - **Regale, Lernfelder, Katalog mit Suche, Prüfungsblock mit Ampel und Prüfungs-Kit, Mitmachen**
 - **App**: Manifest, Icons, Service Worker. Die App-Hülle wird beim ersten Besuch gespeichert, danach startet sie auch ohne Netz.
   Gibt es eine neue Version, erscheint unten „Neu laden“.
+- **Lesen in der App**: Artikel öffnen als eigene Seite (`#/artikel/<pfad>`, Zurück-Taste funktioniert). Markdown kommt von
+  `raw.githubusercontent.com`, wird mit marked umgewandelt und mit DOMPurify bereinigt. Ampel-Stellen (🔴 🟡 🟢) sind farbig
+  markiert, „Nur ROT“ blendet Gelb und Grün aus. Einmal geöffnete Artikel bleiben offline verfügbar.
+- **Lernstand**: pro Artikel „Noch nicht“, „Gelesen“, „Sitzt“; bis zum Ende gelesen setzt automatisch „Gelesen“.
+  Die Blätter der Ranke zeigen den Stand (blass, grün, dunkelgrün).
+- **Prüfungsmodus** (`#/pruefung`): alle Artikel mit Ampel zum Abhaken, mit Fortschritt und „Nächsten offenen öffnen“.
+- **Mein Stand** (`#/stand`): Fortschritt pro Regal, Weiterlesen, alle Artikel offline speichern, Lernstand sichern und wiederherstellen.
+- **Handy**: untere Leiste mit Start, Suchen, Prüfung, Mein Stand.
 
 ## Aufbau
 
 | Ordner | Inhalt |
 |---|---|
-| `src/` | Quelltext: `index.html`, `app.css`, `app.js` (Seite), `scene.js` (3D), `sw.js` (Service Worker), Manifest, Icons |
+| `src/` | Quelltext: `index.html`, `app.css`, `app.js` (Seite, Lernstand), `scene.js` (3D), `reader.js` (Lesen, Prüfungsmodus, Mein Stand), `sw.js` (Service Worker), Manifest, Icons |
 | `data/catalog.json` | Alle Artikel des Wikis mit Regal, Gruppe, Titel, Ampel und Link |
 | `tools/` | `build.mjs` (baut nach `docs/`), `serve.mjs` (Testserver), `test.mjs` (automatischer Test), `icons.py` (Icons) |
 | `docs/` | Die fertige App. Wird gebaut, nicht von Hand bearbeiten. GitHub Pages veröffentlicht von hier. |
@@ -40,6 +48,15 @@ oder das Chrome-Menü „Zum Startbildschirm hinzufügen“ installierbar. Jeder
 
 Wichtig: Über GitHub Pages ist die App öffentlich. Impressum und Datenschutz sind noch Platzhalter und gehören vor dem
 breiten Teilen ausgefüllt.
+
+Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. Der Lernstand liegt
+nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
+`raw.githubusercontent.com`; dabei sieht GitHub wie bei jedem Webserver die IP-Adresse.
+
+## Neue Artikel im Wiki
+
+`data/catalog.json` ist der Katalog vom Stand des Wikis. Kommen Artikel dazu, muss er neu erzeugt und die App neu gebaut werden.
+Die Artikeltexte selbst lädt die App immer frisch aus dem Wiki, Änderungen an bestehenden Artikeln kommen also ohne neuen Build an.
 
 ## Regeln im Projekt
 

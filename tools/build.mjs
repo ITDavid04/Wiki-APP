@@ -60,11 +60,11 @@ noDashes('src/index.html', html);
 if (!html.includes('/*CATALOG*/')) throw new Error('Platzhalter /*CATALOG*/ fehlt');
 html = html.replace('/*CATALOG*/', () => catJs);
 await put('index.html', html);
-for (const f of ['app.css', 'app.js', 'scene.js']) {
+for (const f of ['app.css', 'app.js', 'scene.js', 'reader.js']) {
   const code = await read(path.join(SRC, f));
   noDashes('src/' + f, code);
   if (f === 'app.css') await put(f, code);
-  else await put(f, await mini(code, f === 'scene.js'));
+  else await put(f, await mini(code, f !== 'app.js'));
 }
 await copy(path.join(SRC, 'manifest.webmanifest'), 'manifest.webmanifest');
 for (const f of await readdir(path.join(SRC, 'icons'))) await copy(path.join(SRC, 'icons', f), 'icons/' + f);

@@ -14,7 +14,40 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '
 const D = JSON.parse($('#catalog').textContent);
 const REG = D.regale;
 const share = r => r.n ? r.rot / r.n : 0;
-window.FIAE = { D, REG, scrollTo: null, openTile: null, loadStep: null, tree: null, relayoutTree: null, hoverBlock: false, tip: null };
+window.FIAE = { D, REG, scrollTo: null, openTile: null, loadStep: null, tree: null, relayoutTree: null, hoverBlock: false, tip: null, sheetOpen: false, closeSheet: null, lenis: null };
+
+/* Lernstand: bleibt nur auf diesem Gerät (localStorage). Schlüssel ist der Pfad der Datei im Wiki,
+   damit der Stand auch nach einem neuen Katalog stimmt. 0 = noch nicht, 1 = gelesen, 2 = sitzt */
+const pathOf = a => decodeURIComponent(a.u.split('/blob/main/')[1] || a.u);
+const idxByPath = new Map(D.artikel.map((a, i) => [pathOf(a), i]));
+const STAND_KEY = 'lernwiki-stand-v1', LAST_KEY = 'lernwiki-zuletzt-v1';
+let standData = {};
+try { standData = JSON.parse(store.get(STAND_KEY) || '{}') || {}; } catch (e) { standData = {}; }
+const Stand = {
+  get(p){ return (standData[p] && standData[p].s) || 0; },
+  set(p, s){
+    if (s) standData[p] = { s, t: Date.now() }; else delete standData[p];
+    store.set(STAND_KEY, JSON.stringify(standData));
+    window.dispatchEvent(new CustomEvent('fiae-stand', { detail: { p, s } }));
+  },
+  all(){ return standData; },
+  replace(obj){
+    standData = obj && typeof obj === 'object' ? obj : {};
+    store.set(STAND_KEY, JSON.stringify(standData));
+    window.dispatchEvent(new CustomEvent('fiae-stand', { detail: {} }));
+  },
+  count(filter){
+    let g = 0, s = 0;
+    D.artikel.forEach(a => { if (filter && !filter(a)) return; const v = this.get(pathOf(a)); if (v >= 1) g++; if (v === 2) s++; });
+    return { gelesen: g, sitzt: s };
+  },
+  recent(){ try { return (JSON.parse(store.get(LAST_KEY) || '[]') || []).filter(p => idxByPath.has(p)); } catch (e) { return []; } },
+  touch(p){ const r = this.recent().filter(x => x !== p); r.unshift(p); store.set(LAST_KEY, JSON.stringify(r.slice(0, 6))); }
+};
+const artUrl = a => '#/artikel/' + encodeURIComponent(pathOf(a));
+/* Blattfarben der Ranke nach Lernstand: blass = noch nicht, grün = gelesen, dunkelgrün = sitzt */
+const LEAF = ['#A8D9B9', '#3FA16A', '#1F6E4E'];
+Object.assign(window.FIAE, { stand: Stand, pathOf, artUrl, LEAF, byPath: p => D.artikel[idxByPath.get(p)], indexOfPath: p => idxByPath.get(p) });
 
 /* Zahlen */
 const lfMit = D.lf.filter(l => l.a).length;
@@ -186,14 +219,13 @@ function drawTreeSvg(T){
   svg.setAttribute('viewBox', `0 0 ${T.w} ${T.h}`);
   const line = (pts, wd, col) => `<polyline points="${pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="${wd}" stroke-linecap="round" stroke-linejoin="round"/>`;
   const leafD = s => `M0 0C${.25 * s} ${.32 * s} ${.7 * s} ${.3 * s} ${s} 0C${.7 * s} ${-.3 * s} ${.25 * s} ${-.32 * s} 0 0Z`;
-  const greens = ['#2E8B57', '#3FA16A', '#1F7A57', '#4BAF73'];
   let out = line(T.trunk, 7, '#2C7A50');
   T.twigs.forEach(t => {
     out += line(t.pts, 3.2, '#2C7A50');
     t.sprigs.forEach(sp => {
       out += line(sp.pts, 1.6, '#2C7A50');
       sp.leaves.forEach((l, k) => {
-        out += `<path d="${leafD(l.size)}" fill="${greens[(l.ai + k) % greens.length]}" transform="translate(${l.x.toFixed(1)} ${l.y.toFixed(1)}) rotate(${(l.ang * 180 / Math.PI).toFixed(1)})"/>`;
+        out += `<path d="${leafD(l.size)}" fill="${LEAF[Stand.get(pathOf(D.artikel[l.ai]))]}" transform="translate(${l.x.toFixed(1)} ${l.y.toFixed(1)}) rotate(${(l.ang * 180 / Math.PI).toFixed(1)})"/>`;
         if (l.rot) out += `<circle cx="${l.x.toFixed(1)}" cy="${l.y.toFixed(1)}" r="${(l.size * 0.16).toFixed(1)}" fill="#E5483A"/>`;
       });
     });
@@ -263,7 +295,7 @@ D.lf.forEach(l => {
   const arts = D.artikel.filter(a => a.lf === l.n);
   const pill = l.a ? `<span class="pill ok">${CHECK}${nArt(l.a)}</span>` : `<span class="pill wip">${RING}noch leer</span>`;
   const body = l.a
-    ? `<ul class="alist">${arts.slice(0, 4).map(a => `<li><a href="${esc(a.u)}" target="_blank" rel="noopener" title="${esc(a.t)}">${esc(a.t)}${NEWTAB}</a></li>`).join('')}</ul>` +
+    ? `<ul class="alist">${arts.slice(0, 4).map(a => `<li><a href="${artUrl(a)}" title="${esc(a.t)}">${esc(a.t)}</a></li>`).join('')}</ul>` +
       `<button class="tlink" type="button" data-cat="lf:${l.n}">${l.a > 4 ? `Alle ${l.a} im Katalog` : 'Im Katalog zeigen'} ${ARR}</button>`
     : `<p class="empty-note">Hier liegt noch nichts. Magst du den ersten Artikel schreiben?</p>` +
       `<a class="tlink" href="#mitmachen">So machst du mit ${ARR}</a>`;
@@ -316,7 +348,7 @@ catList.innerHTML = REG.map(r => {
     const lfo = D.lf.find(l => 'LF' + l.n === g) || {};
     const label = r.id === 'lf' ? lfo.k + ' ' + (lfo.titel || '') : g;
     return `<details class="cat-group" data-g="${esc(g)}"><summary><span>${esc(label)}</span><span class="n"><span class="cnt">${arts.length}</span>${CHEV}</span></summary><ul>` +
-      arts.map(a => `<li data-i="${D.artikel.indexOf(a)}"><a href="${esc(a.u)}" target="_blank" rel="noopener">${a.rot ? '<span class="dot" aria-label="mit Ampel" role="img"></span>' : '<span class="nodot"></span>'}<span class="t">${esc(a.t)}</span>${EXT}${NEWTAB}</a></li>`).join('') +
+      arts.map(a => `<li data-i="${D.artikel.indexOf(a)}"><a href="${artUrl(a)}">${a.rot ? '<span class="dot" aria-label="mit Ampel" role="img"></span>' : '<span class="nodot"></span>'}<span class="t">${esc(a.t)}</span><span class="st" data-p="${esc(pathOf(a))}"></span></a></li>`).join('') +
       `</ul></details>`;
   }).join('');
   return `<div class="cat-regal" data-r="${r.id}"><h3>${esc(r.name)} <small class="rc"></small></h3><div class="cat-groups">${groups}</div></div>`;
@@ -381,7 +413,7 @@ applyFilter();
 let lenis = null;
 if (window.Lenis && !reduce.matches) {
   const coarse = matchMedia('(pointer:coarse)').matches;
-  try { lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, autoResize: true, syncTouch: coarse, syncTouchLerp: 0.09, touchInertiaExponent: 1.7, allowNestedScroll: true }); } catch(e) { lenis = null; }
+  try { lenis = window.FIAE.lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, autoResize: true, syncTouch: coarse, syncTouchLerp: 0.09, touchInertiaExponent: 1.7, allowNestedScroll: true }); } catch(e) { lenis = null; }
 }
 function scrollToEl(el, center){
   if (!el) return;
@@ -421,7 +453,8 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-cat]');
   if (b) { e.preventDefault(); showInCatalog(b.dataset.cat); return; }
   const a = e.target.closest('a[href^="#"]');
-  if (!a) return;
+  if (!a || a.getAttribute('href').startsWith('#/')) return;
+  if (window.FIAE.sheetOpen && window.FIAE.closeSheet) window.FIAE.closeSheet();
   const id = a.getAttribute('href').slice(1);
   if (a.dataset.open) { e.preventDefault(); window.FIAE.openTile(a.dataset.open); return; }
   const el = id === 'main' ? document.body : document.getElementById(id);
@@ -432,6 +465,20 @@ document.addEventListener('click', e => {
   if (a.dataset.focus) setTimeout(() => $('#' + a.dataset.focus).focus({ preventScroll: true }), reduce.matches ? 0 : 1100);
   if (id !== 'main') history.replaceState(null, '', '#' + id);
 });
+
+/* Lernstand sichtbar machen: Katalog, Ranke-Text, Weiterlesen */
+const ST_TXT = ['', 'gelesen', 'sitzt'];
+function paintStand(){
+  $$('#catList .st').forEach(el => { const v = Stand.get(el.dataset.p); el.textContent = ST_TXT[v]; el.className = 'st s' + v; });
+  const c = Stand.count();
+  $('#standLine').innerHTML = `Dein Stand: <b>${c.gelesen}</b> von ${D.artikel.length} gelesen, <b>${c.sitzt}</b> sitzen.`;
+  const last = Stand.recent()[0], la = last && window.FIAE.byPath(last);
+  const res = $('#resume');
+  if (la) { res.hidden = false; res.href = artUrl(la); $('#resumeT').textContent = la.t; } else res.hidden = true;
+  if (window.FIAE.tree) drawTreeSvg(window.FIAE.tree);
+}
+paintStand();
+addEventListener('fiae-stand', paintStand);
 
 /* Hinweisfeld */
 const toast = $('#toast'), toastText = $('#toastText'), toastBtn = $('#toastBtn');
