@@ -244,19 +244,6 @@ section[id],li[id]{scroll-margin-top:96px}
 .sec-head h2{font-size:clamp(2.4rem,6vw,5.4rem);letter-spacing:-.05em}
 .sec-head p{color:var(--muted);font-size:1.15rem;max-width:44ch}
 
-/* Wegweiser */
-.ways{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
-.ways li{border-bottom:1px solid var(--line)}
-.way{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) auto;align-items:center;gap:12px 40px;padding:30px 8px;text-decoration:none;isolation:isolate;transition:padding .45s cubic-bezier(.7,0,.2,1),color .3s}
-.way::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:var(--r);background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .45s cubic-bezier(.7,0,.2,1)}
-.way:hover{padding-inline:28px;color:var(--accent-ink)}
-.way:hover::before{transform:none}
-.way h3{font-size:clamp(2rem,4.4vw,3.8rem);letter-spacing:-.045em}
-.way p{color:var(--muted);max-width:46ch;transition:color .3s}
-.way:hover p{color:inherit}
-.way .circ{display:grid;place-items:center;width:64px;height:64px;border-radius:99px;border:1.5px solid currentColor;transition:transform .45s cubic-bezier(.7,0,.2,1),background-color .3s}
-.way:hover .circ{transform:rotate(-45deg);background:var(--accent-ink);color:var(--accent)}
-
 /* Kacheln (Regale und Lernfelder) */
 .tiles{display:grid;gap:14px;list-style:none;padding:0;margin:0}
 .tiles.reg{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -538,9 +525,6 @@ html.sheet-open body{overflow:hidden}
   .ranke-copy{position:static}
   #a-ranke{height:1350px}
   .sec-head{grid-template-columns:minmax(0,1fr)}
-  .way{grid-template-columns:minmax(0,1fr) auto;padding-block:24px}
-  .way p{grid-column:1}
-  .way .circ{grid-row:1 / span 2;grid-column:2;width:52px;height:52px}
   .tiles.reg{grid-template-columns:repeat(2,minmax(0,1fr))}
   .tiles.lfg{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ampel,.steps{grid-template-columns:minmax(0,1fr)}

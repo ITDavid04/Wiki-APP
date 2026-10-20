@@ -55,14 +55,13 @@
 <div class="menu" id="menu" hidden>
   <nav aria-label="Hauptmenü">
     <a href="#ranke">Die Ranke <small>01</small></a>
-    <a href="#start">Wegweiser <small>02</small></a>
-    <a href="#regale">Regale <small>03</small></a>
-    <a href="#lernfelder">Lernfelder <small>04</small></a>
-    <a href="#katalog" data-focus="q">Suchen <small>05</small></a>
-    <a href="#pruefung">Prüfung <small>06</small></a>
+    <a href="#regale">Regale <small>02</small></a>
+    <a href="#lernfelder">Lernfelder <small>03</small></a>
+    <a href="#katalog" data-focus="q">Suchen <small>04</small></a>
+    <a href="#pruefung">Prüfung <small>05</small></a>
     <a href="#/pruefung">Prüfungsmodus <small>App</small></a>
     <a href="#/stand">Mein Stand <small>App</small></a>
-    <a href="#mitmachen">Mitmachen <small>07</small></a>
+    <a href="#mitmachen">Mitmachen <small>06</small></a>
     <a id="ghLink" href="https://github.com/ITDavid04/Bibliothek-Lern-Wiki" target="_blank" rel="noopener">GitHub <small>Repo</small></a>
     <button type="button" class="menu-install" data-install hidden>App installieren <small>Startbildschirm</small></button>
   </nav>
@@ -86,8 +85,10 @@
     <div class="intro-side reveal">
       <p class="lead">Das ist die Bibliothek unseres Lernteams aus der <strong>Umschulung FIAE und FISI</strong>. Lernfelder, Prüfungsvorbereitung, Grundlagen, Systeme und KI an einem Ort, <mark>und beim Prüfungsstoff steht dran, wie wichtig er ist.</mark></p>
       <div class="cta-row">
-        <a class="btn" href="#start">Lernweg wählen <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-        <a class="link" href="#katalog" data-focus="q">Direkt suchen</a>
+        <a class="btn" href="#lf1" data-open="lf1">Neu hier: Start mit LF1 <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="link" href="#pruefung">Prüfung naht</a>
+        <a class="link" href="#katalog" data-focus="q">Thema suchen</a>
+        <a class="link" href="#regale">Stöbern</a>
         <a class="pillbtn micro resume" id="resume" href="#" hidden>Weiterlesen: <span id="resumeT"></span></a>
         <button type="button" class="pillbtn micro" data-install hidden>App installieren <span class="dot1" aria-hidden="true"></span></button>
       </div>
@@ -123,23 +124,9 @@
     </div>
   </section>
 
-  <section class="section" id="start" aria-labelledby="h-start">
-    <div class="sec-head reveal">
-      <p class="eyebrow micro">02 · Wegweiser</p>
-      <h2 id="h-start">Wo willst du anfangen?</h2>
-      <p>Such dir den Weg aus, der gerade zu dir passt. Wechseln kannst du jederzeit.</p>
-    </div>
-    <ul class="ways">
-      <li class="reveal"><a class="way" href="#lf1" data-open="lf1"><h3>Neu hier</h3><p>Starte mit LF1. Dort geht es um den Betrieb und deine Rolle darin, ganz ohne Vorwissen.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
-      <li class="reveal"><a class="way" href="#pruefung"><h3>Prüfung naht</h3><p>Spickzettel, Übungsblätter mit Lösungen und die Ampel, mit der du weißt, was zuerst dran ist.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
-      <li class="reveal"><a class="way" href="#katalog" data-focus="q"><h3>Thema suchen</h3><p>Tipp ein Stichwort ein, zum Beispiel Subnetting, SQL oder Prompt, und spring direkt zum Artikel.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
-      <li class="reveal"><a class="way" href="#regale"><h3>Stöbern</h3><p>Sechs Regale von den Lernfeldern bis zur KI, jedes mit seinen Themen auf einen Blick.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
-    </ul>
-  </section>
-
   <section class="section" id="regale" aria-labelledby="h-reg">
     <div class="sec-head reveal">
-      <p class="eyebrow micro">03 · Regale</p>
+      <p class="eyebrow micro">02 · Regale</p>
       <h2 id="h-reg">Sechs Regale. Deck sie auf.</h2>
       <p>Grün heißt: viel Prüfungsstoff.</p>
     </div>
@@ -148,7 +135,7 @@
 
   <section class="section" id="lernfelder" aria-labelledby="h-lf">
     <div class="sec-head reveal">
-      <p class="eyebrow micro">04 · Lernfelder</p>
+      <p class="eyebrow micro">03 · Lernfelder</p>
       <h2 id="h-lf">Zwölf Lernfelder. Eins nach dem anderen.</h2>
       <p>Grün heißt: Hier liegen schon Artikel. Ab LF10 folgt das Wiki der Fachrichtung Anwendungsentwicklung, darum das kleine a.</p>
     </div>
@@ -157,9 +144,9 @@
 
   <section class="section" id="katalog" aria-labelledby="h-cat">
     <div class="sec-head reveal">
-      <p class="eyebrow micro">05 · Suchen</p>
+      <p class="eyebrow micro">04 · Suchen</p>
       <h2 id="h-cat">Alles finden.</h2>
-      <p id="catIntro">Jeder Artikel aus dem Repository, direkt verlinkt. Ein roter Punkt heißt: Der Artikel hat eine Prüfungs-Ampel.</p>
+      <p id="catIntro">Jeder Artikel aus dem Repository, direkt verlinkt. Ein roter Punkt heißt: Der Artikel hat eine <a class="link" href="#pruefung">Prüfungs-Ampel</a>.</p>
     </div>
     <div class="cat-tools">
       <label class="search">
@@ -176,7 +163,7 @@
 
   <section class="band" id="pruefung" aria-labelledby="h-pr">
     <div class="reveal" style="display:grid;gap:20px">
-      <p class="eyebrow micro">06 · Prüfung</p>
+      <p class="eyebrow micro">05 · Prüfung</p>
       <h2 id="h-pr">Wenn es ernst wird: ROT zuerst.</h2>
       <p class="lead">Viele Artikel haben bei jeder wichtigen Aussage eine Ampelfarbe. So weißt du sofort, <mark>was du für die Prüfung sicher können musst</mark> und was erstmal warten darf.</p>
     </div>
@@ -202,7 +189,7 @@
 
   <section class="section" id="mitmachen" aria-labelledby="h-mit">
     <div class="sec-head reveal">
-      <p class="eyebrow micro">07 · Mitmachen</p>
+      <p class="eyebrow micro">06 · Mitmachen</p>
       <h2 id="h-mit">Die Bibliothek lebt von allen.</h2>
       <p>Alle im Lernteam dürfen Artikel ergänzen und verbessern. Hast du etwas gut erklärt bekommen oder selbst herausgefunden? Dann gehört es hier rein.</p>
     </div>
