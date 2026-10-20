@@ -55,7 +55,7 @@ nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages au
 
 ## Neue Artikel im Wiki
 
-`data/catalog.json` wird mit `tools/catalog.mjs` aus einem Klon des Wikis erzeugt (im Repository: Stand 14.10.2026,
+`data/catalog.json` wird mit `tools/catalog.mjs` aus einem Klon des Wikis erzeugt (im Repository: Stand 20.10.2026,
 172 Artikel). Kommen Artikel dazu oder werden Dateien verschoben, bringst du sie so in die App:
 
 ```bash

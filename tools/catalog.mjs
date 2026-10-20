@@ -57,7 +57,7 @@ const GRUPPEN = [
   ['Lernmaterial_Lernfelder/Lernfeld_5', 'lf', 'LF5', 5],
   ['Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk', 'lf', 'LF6', 6],
   ['Lernmaterial_Lernfelder/Lernfeld_7', 'lf', 'LF7', 7],
-  ['Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md', 'lf', 'LF8', 8],
+  ['Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems', 'lf', 'LF8', 8],
   ['Lernmaterial_Lernfelder/Lernfeld_9', 'lf', 'LF9', 9],
   ['Lernmaterial_Lernfelder/Lernfeld_10', 'lf', 'LF10', 10],
   ['Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Übungsblätter_AP1_AP2_WISO', 'ap', 'Übungsblätter AP1, AP2, WISO'],

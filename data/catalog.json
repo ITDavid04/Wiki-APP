@@ -1,6 +1,6 @@
 {
  "repo": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki",
- "stand": "2026-10-14",
+ "stand": "2026-10-20",
  "regale": [
   {
    "id": "lf",
@@ -708,7 +708,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/LF8.1_Client-Server-Architektur_OOP_Design_Patterns.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.1_Client-Server-Architektur_OOP_Design_Patterns.md"
   },
   {
    "t": "LF8.2: UI/UX-Engineering & Ergonomisches Prototyping",
@@ -716,7 +716,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/LF8.2_UX-Engineering_Ergonomisches_Prototyping.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.2_UX-Engineering_Ergonomisches_Prototyping.md"
   },
   {
    "t": "LF8.3: Datenqualität, heterogene Datenintegration & ETL-Pipelines",
@@ -724,7 +724,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/LF8.3_%20Datenqualit%C3%A4t%2C%20heterogene%20Datenintegration%20%26%20ETL-Pipelines.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.3_%20Datenqualit%C3%A4t%2C%20heterogene%20Datenintegration%20%26%20ETL-Pipelines.md"
   },
   {
    "t": "LF8.4: Verteilte Systeme, API-Paradigmen & Datenvalidierung",
@@ -732,7 +732,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/LF8.4_%20Verteilte_Systeme_API-Paradigmen_Datenvalidierung.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.4_%20Verteilte_Systeme_API-Paradigmen_Datenvalidierung.md"
   },
   {
    "t": "LF8.5: Datenbanken & Normalisierung",
@@ -740,7 +740,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/LF8.5_Datenbanken_%26_Normalisierung.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.5_Datenbanken_%26_Normalisierung.md"
   },
   {
    "t": "LF8.6: Code-Qualität, Statische/Dynamische Sicherheitstests & Test-Strategien",
@@ -748,7 +748,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/LF8.6_Code-Qualit%C3%A4t_Sicherheitstest_Test-Strategien.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.6_Code-Qualit%C3%A4t_Sicherheitstest_Test-Strategien.md"
   },
   {
    "t": "MVC-Architektur in TypeScript",
@@ -756,7 +756,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/MVC-Architektur_in_TypeScript.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/MVC-Architektur_in_TypeScript.md"
   },
   {
    "t": "Python vs. TypeScript & MVC-Architekturen (Django, Angular, NestJS)",
@@ -764,7 +764,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/Python_vs_Typescript_MVC_Architekturen.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/Python_vs_Typescript_MVC_Architekturen.md"
   },
   {
    "t": "Das Entkopplungsprinzip in der IT",
@@ -772,7 +772,7 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems.md/Recherche_LF8.1_Das_Entkopplungsprinzip%20_IT.md"
+   "u": "https://github.com/ITDavid04/Bibliothek-Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/Recherche_LF8.1_Das_Entkopplungsprinzip%20_IT.md"
   },
   {
    "t": "Einstieg zu LF9: Warum diese Serie FISI-fokussiert ist",
