@@ -1,6 +1,6 @@
 /* 3D, zwei Ebenen:
    1. Bühne: zwölf Lernfeld-Würfel im Stil von Version 3 (grün = hat Artikel, weiß gestrichelt = noch leer), stoßen sich von der Maus ab.
-   2. Ranke: feste Ebene hinter dem Inhalt. Ein Stängel wächst beim Scrollen von der Bühne bis zum Fuß, im Abschnitt "Die Ranke"
+   2. Ranke: feste Ebene hinter dem Inhalt. Ein Stängel wächst beim Scrollen von der Bühne bis zum Fuß (und beim Hochscrollen zurück), im Abschnitt "Die Ranke"
       trägt er sechs Zweige mit einem Blatt pro Artikel. Wachstum über die Bogenlänge in Pixeln (aG), im Shader zur Spitze hin verjüngt. */
 const F = window.FIAE;
 const LF = F.D.lf;
@@ -563,10 +563,14 @@ function bootVine(THREE, RoomEnvironment){
     }
     const g = U.uGrow.value, diff = target - g;
     if (reduce.matches) U.uGrow.value = target;
-    else if (diff > 0) U.uGrow.value = g + Math.min(diff, Math.max(diff * 2.2 * dt, 260 * dt), (diff > 3000 ? 4200 : 1700) * dt);
+    else if (Math.abs(diff) > 0.5) {
+      /* wächst beim Runterscrollen und läuft beim Hochscrollen im selben Tempo zurück */
+      const d = Math.abs(diff);
+      U.uGrow.value = g + Math.sign(diff) * Math.min(d, Math.max(d * 2.2 * dt, 260 * dt), (d > 3000 ? 4200 : 1700) * dt);
+    }
     const G = U.uGrow.value;
     frameN++;
-    const idle = sy === lastSy && G >= target - 0.5;
+    const idle = sy === lastSy && Math.abs(G - target) <= 0.5;
     lastSy = sy;
     if (coarse && idle && hoverI < 0 && (frameN & 1)) return;
     setLeaves(dataLeaves, LD, G, t, hoverI);

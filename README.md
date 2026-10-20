@@ -7,7 +7,7 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 ## Was drin ist
 
 - **Bühne** mit zwölf Lernfeld-Würfeln (three.js), grün = Lernfeld hat Artikel, weiß gestrichelt = noch leer
-- **Die Ranke**: eine 3D-Ranke wächst beim Scrollen durch die Seite; im Abschnitt „Die Ranke“ ist jedes Blatt ein Artikel, ein Klick auf einen Zweig öffnet die Kachel seiner Abteilung
+- **Die Ranke**: eine 3D-Ranke wächst beim Scrollen durch die Seite und läuft beim Hochscrollen wieder zurück; im Abschnitt „Die Ranke“ ist jedes Blatt ein Artikel, ein Klick auf einen Zweig öffnet die Kachel seiner Abteilung
 - **Abteilungen, Lernfelder, Katalog mit Suche, Prüfungsblock mit Ampel und Prüfungs-Kit, Mitmachen**. Die Liste im Katalog
   erscheint erst, wenn du suchst, eine Abteilung wählst oder in einer Kachel „Im Katalog zeigen“ drückst.
 - **App**: Manifest, Icons, Service Worker. Die App-Hülle wird beim ersten Besuch gespeichert, danach startet sie auch ohne Netz.
