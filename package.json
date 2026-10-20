@@ -1,0 +1,24 @@
+{
+  "name": "wiki-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bibliothek Lern-Wiki als installierbare Web-App (PWA)",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "serve": "node tools/serve.mjs",
+    "test": "node tools/test.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/hanken-grotesk": "5.2.6",
+    "dompurify": "3.2.7",
+    "lenis": "1.3.26",
+    "marked": "15.0.12",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "puppeteer-core": "24.10.0",
+    "terser": "5.31.0"
+  }
+}

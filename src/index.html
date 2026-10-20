@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bibliothek Lern-Wiki</title>
+<meta name="description" content="Die Bibliothek unseres Lernteams aus der Umschulung FIAE und FISI als App: jedes Blatt der Ranke ist ein Artikel, mit Prüfungs-Ampel.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#EFF1EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1512" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lern-Wiki">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/hanken-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="app.css">
+<script>
+/* Früh: Ladebildschirm nur mit JS und ohne reduzierte Bewegung, nie länger als 3,5 s */
+(function(){
+  var d = document.documentElement;
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    d.classList.add('is-loading');
+    setTimeout(function(){ d.classList.remove('is-loading'); }, 3500);
+  }
+})();
+</script>
+<script type="application/json" id="catalog">/*CATALOG*/</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-row" id="loaderRow"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <p>Moin. Die Ranke wird gegossen.</p>
+</div>
+
+<a class="skip" href="#main">Zum Inhalt</a>
+
+<header class="top" id="top">
+  <div class="top-in">
+    <a class="brand" href="#main" aria-label="Bibliothek Lern-Wiki, zum Anfang"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Bibliothek Lern-Wiki</a>
+    <p class="top-intro">Die Bibliothek unseres Lernteams aus der Umschulung FIAE und FISI.</p>
+    <div class="actions">
+      <button class="ibtn" id="themeBtn" type="button" aria-label="Hell oder dunkel wechseln" title="Hell oder dunkel">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+      </button>
+      <a class="pillbtn dark micro hide-s" href="#katalog" data-focus="q">Suchen <span class="dot1" aria-hidden="true"></span></a>
+      <button class="pillbtn micro" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu">Menü <span class="dots" aria-hidden="true"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <nav aria-label="Hauptmenü">
+    <a href="#ranke">Die Ranke <small>01</small></a>
+    <a href="#start">Wegweiser <small>02</small></a>
+    <a href="#regale">Regale <small>03</small></a>
+    <a href="#lernfelder">Lernfelder <small>04</small></a>
+    <a href="#katalog" data-focus="q">Suchen <small>05</small></a>
+    <a href="#pruefung">Prüfung <small>06</small></a>
+    <a href="#mitmachen">Mitmachen <small>07</small></a>
+    <a id="ghLink" href="https://github.com/ITDavid04/Bibliothek-Lern-Wiki" target="_blank" rel="noopener">GitHub <small>Repo</small></a>
+    <button type="button" class="menu-install" data-install hidden>App installieren <small>Startbildschirm</small></button>
+  </nav>
+</div>
+
+<main id="main" class="wrap">
+  <section class="hero" aria-labelledby="hello">
+    <div class="stage" id="stage">
+      <div class="poster" id="posterStage" aria-hidden="true"></div>
+      <div class="stage-copy">
+        <p class="micro">Umschulung FIAE und FISI</p>
+        <h1 class="hello" id="hello"><span class="w" style="--i:0">Moin,</span> <span class="w" style="--i:1">schön,</span> <span class="w" style="--i:2">dass</span> <span class="w" style="--i:3">du</span> <span class="w" style="--i:4">da</span> <span class="w" style="--i:5">bist.</span></h1>
+      </div>
+      <p class="stage-hint micro" aria-hidden="true">Jeder Würfel ist ein Lernfeld</p>
+    </div>
+    <div class="rule micro" aria-hidden="true"><i>+</i><b></b><span>Scroll weiter, die Ranke wächst mit</span><b></b><i>+</i></div>
+  </section>
+
+  <section class="intro" id="idee" aria-labelledby="h-idee">
+    <h2 class="huge reveal" id="h-idee"><span class="ind">Ein Wiki,</span> das mit uns wächst.</h2>
+    <div class="intro-side reveal">
+      <p class="lead">Das ist die Bibliothek unseres Lernteams aus der <strong>Umschulung FIAE und FISI</strong>. Lernfelder, Prüfungsvorbereitung, Grundlagen, Systeme und KI an einem Ort, <mark>und beim Prüfungsstoff steht dran, wie wichtig er ist.</mark></p>
+      <div class="cta-row">
+        <a class="btn" href="#start">Lernweg wählen <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="link" href="#katalog" data-focus="q">Direkt suchen</a>
+        <button type="button" class="pillbtn micro" data-install hidden>App installieren <span class="dot1" aria-hidden="true"></span></button>
+      </div>
+      <div class="stats" aria-label="Stand der Bibliothek">
+        <div><b data-stat="artikel"></b><span>Artikel im Repository</span></div>
+        <div><b data-stat="regale"></b><span>Regale</span></div>
+        <div><b data-stat="lf"></b><span>Lernfeldern mit Artikeln</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ranke" id="ranke" aria-labelledby="h-ranke">
+    <div class="ranke-copy">
+      <p class="eyebrow micro">01 · Die Ranke</p>
+      <h2 id="h-ranke">Jedes Blatt ist ein Artikel.</h2>
+      <p class="lead"><span data-stat="regale"></span> Zweige, einer pro Regal, daran <span data-stat="artikel"></span> Blätter. Wo eine rote Knospe sitzt, hat der Artikel eine Prüfungs-Ampel. Fahr über ein Blatt, dann siehst du den Titel. Ein Klick öffnet den Artikel auf GitHub.</p>
+      <p class="touch-note" id="touchNote" hidden>Auf dem Handy: einmal tippen zeigt den Titel, ein zweites Mal öffnet den Artikel.</p>
+      <ul class="legend" id="legend" aria-label="Die sechs Regale"></ul>
+    </div>
+    <div id="a-ranke" aria-hidden="true">
+      <svg id="treeSvg"></svg>
+      <div id="twigLabels"></div>
+    </div>
+  </section>
+
+  <section class="section" id="start" aria-labelledby="h-start">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">02 · Wegweiser</p>
+      <h2 id="h-start">Wo willst du anfangen?</h2>
+      <p>Such dir den Weg aus, der gerade zu dir passt. Wechseln kannst du jederzeit.</p>
+    </div>
+    <ul class="ways">
+      <li class="reveal"><a class="way" href="#lf1" data-open="lf1"><h3>Neu hier</h3><p>Starte mit LF1. Dort geht es um den Betrieb und deine Rolle darin, ganz ohne Vorwissen.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
+      <li class="reveal"><a class="way" href="#pruefung"><h3>Prüfung naht</h3><p>Spickzettel, Übungsblätter mit Lösungen und die Ampel, mit der du weißt, was zuerst dran ist.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
+      <li class="reveal"><a class="way" href="#katalog" data-focus="q"><h3>Thema suchen</h3><p>Tipp ein Stichwort ein, zum Beispiel Subnetting, SQL oder Prompt, und spring direkt zum Artikel.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
+      <li class="reveal"><a class="way" href="#regale"><h3>Stöbern</h3><p>Sechs Regale von den Lernfeldern bis zur KI, jedes mit seinen Themen auf einen Blick.</p><span class="circ" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></li>
+    </ul>
+  </section>
+
+  <section class="section" id="regale" aria-labelledby="h-reg">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">03 · Regale</p>
+      <h2 id="h-reg">Sechs Regale. Deck sie auf.</h2>
+      <p>Jede Kachel ist zugedeckt. Fahr mit der Maus darüber oder tipp sie an, dann siehst du, was drinsteht. Grün heißt: viel Prüfungsstoff.</p>
+    </div>
+    <ol class="tiles reg" id="tilesReg"></ol>
+  </section>
+
+  <section class="section" id="lernfelder" aria-labelledby="h-lf">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">04 · Lernfelder</p>
+      <h2 id="h-lf">Zwölf Lernfelder. Eins nach dem anderen.</h2>
+      <p>Grün heißt: Hier liegen schon Artikel. Ab LF10 folgt das Wiki der Fachrichtung Anwendungsentwicklung, darum das kleine a.</p>
+    </div>
+    <ol class="tiles lfg" id="tilesLf"></ol>
+  </section>
+
+  <section class="section" id="katalog" aria-labelledby="h-cat">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">05 · Suchen</p>
+      <h2 id="h-cat">Alles finden.</h2>
+      <p id="catIntro">Jeder Artikel aus dem Repository, direkt verlinkt. Ein roter Punkt heißt: Der Artikel hat eine Prüfungs-Ampel.</p>
+    </div>
+    <div class="cat-tools">
+      <label class="search">
+        <span class="sr">Artikel durchsuchen</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Stichwort, zum Beispiel Subnetting, SQL, Prompt" autocomplete="off" enterkeyhint="search">
+      </label>
+      <div class="chips" id="chips" role="group" aria-label="Nach Regal filtern"></div>
+      <p class="cat-count" id="catCount" aria-live="polite"></p>
+    </div>
+    <div class="cat-list" id="catList"></div>
+    <p class="cat-empty" id="catEmpty" hidden>Nichts gefunden. Versuch ein anderes Wort oder einen anderen Filter, oder schau <a href="https://github.com/ITDavid04/Bibliothek-Lern-Wiki" target="_blank" rel="noopener">direkt im Repository</a> nach.</p>
+  </section>
+
+  <section class="band" id="pruefung" aria-labelledby="h-pr">
+    <div class="reveal" style="display:grid;gap:20px">
+      <p class="eyebrow micro">06 · Prüfung</p>
+      <h2 id="h-pr">Wenn es ernst wird: ROT zuerst.</h2>
+      <p class="lead">Viele Artikel haben bei jeder wichtigen Aussage eine Ampelfarbe. So weißt du sofort, <mark>was du für die Prüfung sicher können musst</mark> und was erstmal warten darf.</p>
+    </div>
+    <div class="bignums reveal">
+      <div><b data-stat="rot"></b><span>Artikel mit Prüfungs-Ampel</span></div>
+      <div><b data-stat="pruef"></b><span>Artikel im Regal Prüfung</span></div>
+      <div><b data-stat="lf"></b><span>Lernfelder mit Artikeln</span></div>
+    </div>
+    <ul class="ampel">
+      <li class="rot reveal"><span class="lamp" aria-hidden="true"></span><b>ROT</b><p>Prüfungsstoff. Kommt in AP1 oder im Fachgespräch dran. Das lernst du sicher.</p></li>
+      <li class="gelb reveal"><span class="lamp" aria-hidden="true"></span><b>GELB</b><p>Kontextwissen. Hilft dir, ROT zu verstehen und im Gespräch ruhig zu antworten.</p></li>
+      <li class="gruen reveal"><span class="lamp" aria-hidden="true"></span><b>GRÜN</b><p>Nice to know. Für Neugierige, darf beim ersten Lesen warten.</p></li>
+    </ul>
+    <div class="kit reveal">
+      <h3>Dein Prüfungs-Kit</h3>
+      <ul id="kit"></ul>
+    </div>
+  </section>
+
+  <section class="section" id="mitmachen" aria-labelledby="h-mit">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">07 · Mitmachen</p>
+      <h2 id="h-mit">Die Bibliothek lebt von allen.</h2>
+      <p>Alle im Lernteam dürfen Artikel ergänzen und verbessern. Hast du etwas gut erklärt bekommen oder selbst herausgefunden? Dann gehört es hier rein.</p>
+    </div>
+    <ol class="steps">
+      <li class="reveal"><b>Passenden Ordner wählen</b><p>Die Ordner folgen den Lernfeldern und Themen. Fehlt einer, darfst du ihn anlegen.</p></li>
+      <li class="reveal"><b>In Markdown schreiben</b><p>Neu bei Markdown? Der <a id="mdLink" href="https://github.com/ITDavid04/Bibliothek-Lern-Wiki" target="_blank" rel="noopener">Schreib-Guide</a> zeigt dir alles, was du brauchst.</p></li>
+      <li class="reveal"><b>Kurz sagen, was du geändert hast</b><p>Eine knappe Commit-Nachricht reicht. Vor großen Umbauten sprichst du kurz mit dem Team.</p></li>
+    </ol>
+    <div class="reveal"><a class="btn" href="https://github.com/ITDavid04/Bibliothek-Lern-Wiki" target="_blank" rel="noopener">Zum Repository auf GitHub <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p class="foot-big">Viel Erfolg bei der Prüfung.<span class="end-anchor" id="a-end" aria-hidden="true"></span></p>
+  <div class="foot-row">
+    <span id="footStand">Bibliothek Lern-Wiki für Umschüler</span>
+    <span><span class="ph">Impressum folgt</span> <span class="ph">Datenschutz folgt</span></span>
+  </div>
+</footer>
+
+<div class="tip" id="tip" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden>
+  <span id="toastText"></span>
+  <button type="button" class="pillbtn dark micro" id="toastBtn" hidden></button>
+  <button type="button" class="toast-x" id="toastX" aria-label="Hinweis schließen"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+</div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<script src="vendor/lenis.min.js"></script>
+<script src="app.js"></script>
+<script type="module" src="scene.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Bibliothek Lern-Wiki",
+  "short_name": "Lern-Wiki",
+  "description": "Die Bibliothek unseres Lernteams aus der Umschulung FIAE und FISI: Lernfelder, Prüfung, Grundlagen, Systeme und KI, mit Prüfungs-Ampel.",
+  "lang": "de",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0F1A15",
+  "theme_color": "#EFF1EC",
+  "categories": ["education", "books"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
