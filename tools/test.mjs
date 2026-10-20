@@ -185,7 +185,7 @@ try {
   if (leaf) { await r.mouse.click(leaf.x, leaf.y); await sleep(800); }
   check('Klick auf ein Blatt öffnet den Artikel', leaf && await r.evaluate(() => !document.getElementById('sheet').hidden && location.hash.startsWith('#/artikel/')));
 
-  /* Klick auf einen Zweig (nicht auf ein Blatt) öffnet die Kachel seines Regals */
+  /* Klick auf einen Zweig (nicht auf ein Blatt) öffnet die Kachel seiner Abteilung */
   await r.evaluate(() => window.FIAE.closeSheet());
   await sleep(600);
   let twig = null;
@@ -200,7 +200,7 @@ try {
     if (st.hot && !st.tip) { twig = p; break; }
   }
   if (twig) { await r.mouse.click(twig.x, twig.y); await sleep(1800); }
-  check('Klick auf einen Zweig öffnet die Regal-Kachel', twig && await r.evaluate(id => document.getElementById('r-' + id).classList.contains('open') && document.getElementById('sheet').hidden, twig.id), twig ? twig.id : 'kein Zweig gefunden');
+  check('Klick auf einen Zweig öffnet die Kachel der Abteilung', twig && await r.evaluate(id => document.getElementById('r-' + id).classList.contains('open') && document.getElementById('sheet').hidden, twig.id), twig ? twig.id : 'kein Zweig gefunden');
 } catch (e) {
   check('Test lief durch', false, e.message);
 } finally {

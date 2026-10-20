@@ -190,7 +190,7 @@ async function openArticle(p){
   const end = document.createElement('section');
   end.className = 'art-end';
   end.innerHTML = `<h2 class="micro">Wie sitzt das Thema?</h2>${statusBar(p)}` +
-    (next && next.k !== i ? `<a class="next" href="${F.artUrl(next.x)}"><span class="micro">Weiter im Regal ${esc(r.kurz)}</span><b>${esc(next.x.t)}</b>${ICON.arr}</a>` : '') +
+    (next && next.k !== i ? `<a class="next" href="${F.artUrl(next.x)}"><span class="micro">Weiter in der Abteilung ${esc(r.kurz)}</span><b>${esc(next.x.t)}</b>${ICON.arr}</a>` : '') +
     `<p class="src">Quelle: <a href="${esc(blobUrl(p))}" target="_blank" rel="noopener">${esc(p)}</a> im Wiki auf GitHub</p>`;
   body.appendChild(end);
   wireStatus(end, p);
@@ -288,8 +288,8 @@ function renderExam(){
     (nextOpen ? `<a class="btn" href="${F.artUrl(nextOpen.a)}">Nächsten offenen öffnen <span class="ar">${ICON.arr}</span></a>` : `<p class="callout">Alles abgehakt. Stark! Viel Erfolg bei der Prüfung.</p>`) +
     `<div class="chips exam-chips" role="group" aria-label="Filter">` +
       chip('f', ['offen', 'Offen'], examState.filter === 'offen') + chip('f', ['sitzt', 'Sitzt'], examState.filter === 'sitzt') + chip('f', ['alle', 'Alle'], examState.filter === 'alle') +
-    `</div><div class="chips exam-chips" role="group" aria-label="Regal">` +
-      chip('r', ['all', 'Alle Regale'], examState.regal === 'all') + regale.map(r => chip('r', [r.id, r.kurz], examState.regal === r.id)).join('') +
+    `</div><div class="chips exam-chips" role="group" aria-label="Abteilung">` +
+      chip('r', ['all', 'Alle Abteilungen'], examState.regal === 'all') + regale.map(r => chip('r', [r.id, r.kurz], examState.regal === r.id)).join('') +
     `</div>` +
     (shown.length ? regale.filter(r => shown.some(o => o.a.r === r.id)).map(r =>
       `<section class="exam-group"><h2>${esc(r.name)} <small>${shown.filter(o => o.a.r === r.id).length}</small></h2><ul class="exam-list">` +

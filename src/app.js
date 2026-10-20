@@ -324,9 +324,9 @@ REG.forEach((r, i) => {
   li.id = 'r-' + r.id;
   const pill = `<span class="pill ok">${nArt(r.n)}</span>`;
   li.innerHTML =
-    cover(li.id, String(i + 1).padStart(2, '0'), r.name, `Regal ${r.name}, ${nArt(r.n)}`, pill) +
+    cover(li.id, String(i + 1).padStart(2, '0'), r.name, `Abteilung ${r.name}, ${nArt(r.n)}`, pill) +
     `<div class="detail" id="d-${li.id}">` +
-      `<div class="d-top"><span class="d-nr">Regal ${String(i + 1).padStart(2, '0')}</span>${pill}</div>` +
+      `<div class="d-top"><span class="d-nr">Abteilung ${String(i + 1).padStart(2, '0')}</span>${pill}</div>` +
       `<h3>${esc(r.name)}</h3>` +
       `<p class="sub">${esc(r.sub)}</p>` +
       `<div class="meter"><div class="bar"><i style="--w:${Math.round(share(r) * 100)}%"></i></div><span>${ampelText(r.rot, r.n)}</span></div>` +
@@ -446,7 +446,7 @@ function applyFilter(){
   $$('.chip[data-r]', chipsEl).forEach(c => c.setAttribute('aria-pressed', String(c.dataset.r === state.regal)));
   $('.chip[data-rot]', chipsEl).setAttribute('aria-pressed', String(state.rot));
   catList.hidden = !active;
-  $('#catCount').textContent = !active ? `${D.artikel.length} Artikel. Tipp ein Stichwort oder wähl ein Regal.`
+  $('#catCount').textContent = !active ? `${D.artikel.length} Artikel. Tipp ein Stichwort oder wähl eine Abteilung.`
     : shown === D.artikel.length ? `Alle ${shown} Artikel` : `${nArt(shown)} von ${D.artikel.length}`;
   $('#catEmpty').hidden = !active || shown > 0;
 }

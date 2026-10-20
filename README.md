@@ -7,9 +7,9 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 ## Was drin ist
 
 - **Bühne** mit zwölf Lernfeld-Würfeln (three.js), grün = Lernfeld hat Artikel, weiß gestrichelt = noch leer
-- **Die Ranke**: eine 3D-Ranke wächst beim Scrollen durch die Seite; im Abschnitt „Die Ranke“ ist jedes Blatt ein Artikel, ein Klick auf einen Zweig öffnet die Kachel seines Regals
-- **Regale, Lernfelder, Katalog mit Suche, Prüfungsblock mit Ampel und Prüfungs-Kit, Mitmachen**. Die Liste im Katalog
-  erscheint erst, wenn du suchst, ein Regal wählst oder in einer Kachel „Im Katalog zeigen“ drückst.
+- **Die Ranke**: eine 3D-Ranke wächst beim Scrollen durch die Seite; im Abschnitt „Die Ranke“ ist jedes Blatt ein Artikel, ein Klick auf einen Zweig öffnet die Kachel seiner Abteilung
+- **Abteilungen, Lernfelder, Katalog mit Suche, Prüfungsblock mit Ampel und Prüfungs-Kit, Mitmachen**. Die Liste im Katalog
+  erscheint erst, wenn du suchst, eine Abteilung wählst oder in einer Kachel „Im Katalog zeigen“ drückst.
 - **App**: Manifest, Icons, Service Worker. Die App-Hülle wird beim ersten Besuch gespeichert, danach startet sie auch ohne Netz.
   Gibt es eine neue Version, erscheint unten „Neu laden“.
 - **Lesen in der App**: Artikel öffnen als eigene Seite (`#/artikel/<pfad>`, Zurück-Taste funktioniert). Markdown kommt von
@@ -18,7 +18,7 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 - **Lernstand**: pro Artikel „Noch nicht“, „Gelesen“, „Sitzt“; bis zum Ende gelesen setzt automatisch „Gelesen“.
   Die Blätter der Ranke zeigen den Stand (blass, grün, dunkelgrün).
 - **Prüfungsmodus** (`#/pruefung`): alle Artikel mit Ampel zum Abhaken, mit Fortschritt und „Nächsten offenen öffnen“.
-- **Mein Stand** (`#/stand`): Fortschritt pro Regal, Weiterlesen, alle Artikel offline speichern, Lernstand sichern und wiederherstellen.
+- **Mein Stand** (`#/stand`): Fortschritt pro Abteilung, Weiterlesen, alle Artikel offline speichern, Lernstand sichern und wiederherstellen.
 - **Handy**: untere Leiste mit Start, Suchen, Prüfung, Mein Stand.
 
 ## Aufbau
@@ -26,7 +26,7 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 | Ordner | Inhalt |
 |---|---|
 | `src/` | Quelltext: `index.html`, `app.css`, `app.js` (Seite, Lernstand), `scene.js` (3D), `reader.js` (Lesen, Prüfungsmodus, Mein Stand), `sw.js` (Service Worker), Manifest, Icons |
-| `data/catalog.json` | Alle Artikel des Wikis mit Regal, Gruppe, Titel, Ampel und Link, erzeugt mit `tools/catalog.mjs` |
+| `data/catalog.json` | Alle Artikel des Wikis mit Abteilung, Gruppe, Titel, Ampel und Link, erzeugt mit `tools/catalog.mjs` |
 | `tools/` | `catalog.mjs` (Katalog aus dem Wiki), `build.mjs` (baut nach `docs/`), `serve.mjs` (Testserver), `test.mjs` (automatischer Test), `icons.py` (Icons) |
 | `docs/` | Die fertige App. Wird gebaut, nicht von Hand bearbeiten. GitHub Pages veröffentlicht von hier. |
 
@@ -78,7 +78,7 @@ Was das Skript dabei macht:
   Gedankenstriche werden zu Doppelpunkten. Passt das bei einer Datei nicht, kommt ihr Titel in die Tabelle `OVERRIDE`
   oben im Skript.
 - **Ampel**: Die Datei enthält 🔴 oder das Wort ROT.
-- **Regal und Gruppe** kommen aus der Tabelle `GRUPPEN` oben im Skript (Ordner oder Datei im Wiki, der längste passende
+- **Abteilung und Gruppe** kommen aus der Tabelle `GRUPPEN` oben im Skript (Ordner oder Datei im Wiki, der längste passende
   Pfad gewinnt). Liegt ein Artikel in einem neuen Ordner, meldet das Skript ihn als **NICHT EINSORTIERT** und lässt ihn
   weg, ohne abzubrechen. Dann eine Zeile in `GRUPPEN` ergänzen und das Skript noch einmal laufen lassen.
 - **Stand** ist das Datum des letzten Commits im Klon.

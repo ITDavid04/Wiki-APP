@@ -55,7 +55,7 @@
 <div class="menu" id="menu" hidden>
   <nav aria-label="Hauptmenü">
     <a href="#ranke">Die Ranke <small>01</small></a>
-    <a href="#regale">Regale <small>02</small></a>
+    <a href="#regale">Abteilungen <small>02</small></a>
     <a href="#lernfelder">Lernfelder <small>03</small></a>
     <a href="#katalog" data-focus="q">Suchen <small>04</small></a>
     <a href="#pruefung">Prüfung <small>05</small></a>
@@ -94,7 +94,7 @@
       </div>
       <div class="stats" aria-label="Stand der Bibliothek">
         <div><b data-stat="artikel"></b><span>Artikel im Repository</span></div>
-        <div><b data-stat="regale"></b><span>Regale</span></div>
+        <div><b data-stat="regale"></b><span>Abteilungen</span></div>
         <div><b data-stat="lf"></b><span>Lernfeldern mit Artikeln</span></div>
       </div>
     </div>
@@ -104,7 +104,7 @@
     <div class="ranke-copy">
       <p class="eyebrow micro">01 · Die Ranke</p>
       <h2 id="h-ranke">Jedes Blatt ist ein Artikel.</h2>
-      <p class="lead"><span data-stat="regale"></span> Zweige, einer pro Regal, daran <span data-stat="artikel"></span> Blätter. Wo eine rote Knospe sitzt, hat der Artikel eine Prüfungs-Ampel.</p>
+      <p class="lead"><span data-stat="regale"></span> Zweige, einer pro Abteilung, daran <span data-stat="artikel"></span> Blätter. Wo eine rote Knospe sitzt, hat der Artikel eine Prüfungs-Ampel.</p>
       <a class="tlink" href="#pruefung"><span class="dot" aria-hidden="true"></span>Was der rote Punkt heißt <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       <div class="stand-box">
         <p class="stand-line" id="standLine"></p>
@@ -116,7 +116,7 @@
         <a class="tlink" href="#/stand">Mein Stand ansehen</a>
       </div>
       <p class="touch-note" id="touchNote" hidden>Auf dem Handy: einmal tippen zeigt den Titel, ein zweites Mal öffnet den Artikel.</p>
-      <ul class="legend" id="legend" aria-label="Die sechs Regale"></ul>
+      <ul class="legend" id="legend" aria-label="Die sechs Abteilungen"></ul>
     </div>
     <div id="a-ranke" aria-hidden="true">
       <svg id="treeSvg"></svg>
@@ -126,8 +126,8 @@
 
   <section class="section" id="regale" aria-labelledby="h-reg">
     <div class="sec-head reveal">
-      <p class="eyebrow micro">02 · Regale</p>
-      <h2 id="h-reg">Sechs Regale. Deck sie auf.</h2>
+      <p class="eyebrow micro">02 · Abteilungen</p>
+      <h2 id="h-reg">Sechs Abteilungen. Deck sie auf.</h2>
       <p>Grün heißt: viel Prüfungsstoff.</p>
     </div>
     <ol class="tiles reg" id="tilesReg"></ol>
@@ -154,7 +154,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
         <input id="q" type="search" placeholder="Stichwort, zum Beispiel Subnetting, SQL, Prompt" autocomplete="off" enterkeyhint="search">
       </label>
-      <div class="chips" id="chips" role="group" aria-label="Nach Regal filtern"></div>
+      <div class="chips" id="chips" role="group" aria-label="Nach Abteilung filtern"></div>
       <p class="cat-count" id="catCount" aria-live="polite"></p>
     </div>
     <div class="cat-list" id="catList"></div>
@@ -169,7 +169,7 @@
     </div>
     <div class="bignums reveal">
       <div><b data-stat="rot"></b><span>Artikel mit Prüfungs-Ampel</span></div>
-      <div><b data-stat="pruef"></b><span>Artikel im Regal Prüfung</span></div>
+      <div><b data-stat="pruef"></b><span>Artikel in der Abteilung Prüfung</span></div>
       <div><b data-stat="lf"></b><span>Lernfelder mit Artikeln</span></div>
     </div>
     <ul class="ampel">
