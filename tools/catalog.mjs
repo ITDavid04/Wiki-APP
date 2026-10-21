@@ -1,6 +1,7 @@
 /* Erzeugt data/catalog.json aus einem lokalen Klon des Wikis (ohne Abhängigkeiten).
    Aufruf: npm run catalog -- /pfad/zum/wiki-klon
            node tools/catalog.mjs /pfad/zum/wiki-klon [ziel.json]   (ohne ziel.json: data/catalog.json)
+           --streng: mit Fehler enden, wenn Artikel NICHT EINSORTIERT sind (so nutzt es der Workflow auf GitHub)
    Regeln:
    - Artikel = jede committete .md-Datei im Klon, außer README, LICENSE und Co. (WEG)
    - Titel = Überschrift in den ersten drei Textzeilen, sonst die erste Textzeile. Rauten, Fettschrift und Emojis am
@@ -109,7 +110,9 @@ const LINKS = {
 /* Keine Artikel: Dateien rund ums Repository selbst, egal in welchem Ordner */
 const WEG = /^(readme|license|licence|changelog|contributing|code_of_conduct|security)(\.md)?$/i;
 
-const [wiki, ziel = path.join(ROOT, 'data', 'catalog.json')] = process.argv.slice(2);
+const args = process.argv.slice(2);
+const streng = args.includes('--streng');
+const [wiki, ziel = path.join(ROOT, 'data', 'catalog.json')] = args.filter(a => !a.startsWith('--'));
 if (!wiki) {
   console.error('Aufruf: npm run catalog -- /pfad/zum/wiki-klon');
   process.exit(1);
@@ -248,4 +251,9 @@ if (alt && Array.isArray(alt.artikel)) {
   liste('Entfallen (bei Umbenennung geht der Lernstand dieser Datei verloren)', [...vorher.keys()].filter(p => !jetzt.has(p)));
   liste('Titel geändert', [...jetzt].filter(([p, a]) => vorher.has(p) && vorher.get(p).t !== a.t).map(([p, a]) => `${vorher.get(p).t} -> ${a.t}`));
   liste('Ampel geändert', [...jetzt].filter(([p, a]) => vorher.has(p) && vorher.get(p).rot !== a.rot).map(([p, a]) => `${a.t}: ${a.rot ? 'jetzt mit Ampel' : 'jetzt ohne Ampel'}`));
+}
+
+if (streng && ohne.length) {
+  console.error(`\nAbbruch (--streng): ${ohne.length} Artikel ohne Zeile in GRUPPEN, siehe NICHT EINSORTIERT.`);
+  process.exitCode = 1;
 }

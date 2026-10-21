@@ -222,3 +222,5 @@ __marimo__/
 # Node / App
 node_modules/
 tools/shots/
+# Die gebaute App: entsteht mit npm run build, GitHub Actions baut sie beim Veröffentlichen selbst
+/docs/

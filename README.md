@@ -28,7 +28,8 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 | `src/` | Quelltext: `index.html`, `app.css`, `app.js` (Seite, Lernstand), `scene.js` (3D), `reader.js` (Lesen, Prüfungsmodus, Mein Stand), `sw.js` (Service Worker), Manifest, Icons |
 | `data/catalog.json` | Alle Artikel des Wikis mit Abteilung, Gruppe, Titel, Ampel und Link, erzeugt mit `tools/catalog.mjs` |
 | `tools/` | `catalog.mjs` (Katalog aus dem Wiki), `build.mjs` (baut nach `docs/`), `serve.mjs` (Testserver), `test.mjs` (automatischer Test), `icons.py` (Icons) |
-| `docs/` | Die fertige App. Wird gebaut, nicht von Hand bearbeiten. GitHub Pages veröffentlicht von hier. |
+| `.github/workflows/pages.yml` | Veröffentlichen über GitHub Actions: Katalog, Bauen, Testen, Hochladen |
+| `docs/` | Die fertige App, entsteht mit `npm run build`. Liegt nicht im Repository, GitHub Actions baut sie beim Veröffentlichen selbst. |
 
 ## Bauen, testen, ansehen
 
@@ -39,13 +40,26 @@ npm test          # prüft Installierbarkeit, Service Worker, Start im Flugmodus
 npm run serve     # http://localhost:8080
 ```
 
-`npm test` nutzt das installierte Chrome (`/usr/bin/google-chrome`, sonst `CHROME=/pfad npm test`).
+`npm test` nutzt das installierte Chrome (`/usr/bin/google-chrome`, sonst `CHROME=/pfad npm test`). Mit `CI=1 npm test`
+läuft der Test wie auf GitHub: 3D in Software statt auf der Grafikkarte.
 
-## Veröffentlichen (GitHub Pages)
+## Veröffentlichen (GitHub Pages über GitHub Actions)
 
-Einmalig im Repository: **Settings → Pages → Build and deployment → Deploy from a branch**, Branch `main`, Ordner `/docs`.
-Danach ist die App unter `https://itdavid04.github.io/Wiki-APP/` erreichbar und auf dem Handy über „App installieren“
-oder das Chrome-Menü „Zum Startbildschirm hinzufügen“ installierbar. Jeder Push mit neuem `docs/` ist ein Update.
+Einmalig im Repository: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+Danach erledigt der Workflow `.github/workflows/pages.yml` alles, bei jedem Push auf `main`, jede Nacht um 2:30 Uhr UTC
+und auf Knopfdruck (**Actions → App veröffentlichen → Run workflow**):
+
+1. Wiki frisch klonen und den Katalog erzeugen (`tools/catalog.mjs --streng`)
+2. App bauen (`npm run build`)
+3. Testen (`npm test`, 3D läuft dort in Software)
+4. `docs/` zu GitHub Pages hochladen
+
+Schlägt ein Schritt fehl, bleibt die bisherige Fassung online und GitHub schickt eine Mail. Was sich am Katalog geändert
+hat (neu, entfallen, Titel, Ampel), steht in der Zusammenfassung des Laufs. Bei einem fehlgeschlagenen Test hängen dort
+auch die Bildschirmfotos.
+
+Die App ist unter `https://itdavid04.github.io/Wiki-APP/` erreichbar und auf dem Handy über „App installieren“ oder das
+Chrome-Menü „Zum Startbildschirm hinzufügen“ installierbar. Nach jedem Update bietet sie „Neu laden“ an.
 
 Wichtig: Über GitHub Pages ist die App öffentlich. Impressum und Datenschutz sind noch Platzhalter und gehören vor dem
 breiten Teilen ausgefüllt.
@@ -56,18 +70,24 @@ nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages au
 
 ## Neue Artikel im Wiki
 
-`data/catalog.json` wird mit `tools/catalog.mjs` aus einem Klon des Wikis erzeugt (im Repository: Stand 20.10.2026,
-172 Artikel). Kommen Artikel dazu oder werden Dateien verschoben, bringst du sie so in die App:
+Neue oder verschobene Artikel kommen von selbst in die App: spätestens nach dem nächtlichen Lauf, sofort über
+**Run workflow**. Der Workflow erzeugt den Katalog dabei jedes Mal frisch aus dem Wiki.
+
+Nur wenn ein Artikel in einem **neuen Ordner** liegt, bricht der Lauf mit „NICHT EINSORTIERT“ ab. Dann in `tools/catalog.mjs`
+eine Zeile in `GRUPPEN` ergänzen und pushen, der Push startet den Lauf neu.
+
+Lokal ansehen, wie die App mit dem aktuellen Wiki aussieht:
 
 ```bash
 git clone --depth 1 https://github.com/ITDavid04/Bibliothek-Lern-Wiki /tmp/wiki   # frischer Klon (im eigenen Klon reicht git pull)
 npm run catalog -- /tmp/wiki   # schreibt data/catalog.json und zeigt, was sich geändert hat
 npm run build                  # baut docs/ mit dem neuen Katalog
 npm test                       # muss grün sein
-git add data/catalog.json docs
-git commit -m "Katalog: Stand des Wikis aktualisiert"
-git push                       # GitHub Pages veröffentlicht, die App bietet „Neu laden“ an
+npm run serve                  # http://localhost:8080
 ```
+
+`data/catalog.json` im Repository (Stand 20.10.2026, 172 Artikel) dient der lokalen Vorschau und den Tests. Online nimmt
+der Workflow immer den frischen Katalog. Committen musst du ihn nur, wenn du lokal den neuen Stand als Grundlage willst.
 
 Was das Skript dabei macht:
 
@@ -80,14 +100,15 @@ Was das Skript dabei macht:
 - **Ampel**: Die Datei enthält 🔴 oder das Wort ROT.
 - **Abteilung und Gruppe** kommen aus der Tabelle `GRUPPEN` oben im Skript (Ordner oder Datei im Wiki, der längste passende
   Pfad gewinnt). Liegt ein Artikel in einem neuen Ordner, meldet das Skript ihn als **NICHT EINSORTIERT** und lässt ihn
-  weg, ohne abzubrechen. Dann eine Zeile in `GRUPPEN` ergänzen und das Skript noch einmal laufen lassen.
+  weg, ohne abzubrechen. Mit `--streng` (so im Workflow) endet es dann mit Fehler. Abhilfe: eine Zeile in `GRUPPEN`
+  ergänzen und das Skript noch einmal laufen lassen.
 - **Stand** ist das Datum des letzten Commits im Klon.
 - **Vergleich**: Am Ende listet das Skript neue und entfallene Artikel sowie geänderte Titel und Ampeln. Der Lernstand in der
   App hängt am Pfad der Datei. Steht eine Datei unter „Entfallen“ und ihr neuer Name unter „Neu“, wurde sie umbenannt
   oder verschoben, und ihr Lernstand beginnt in der App wieder bei null.
 
-Änderungen am Text bestehender Artikel brauchen keinen neuen Build: Die App zeigt zuerst die gespeicherte Fassung, holt im
-Hintergrund die aktuelle und zeigt sie beim nächsten Öffnen. Nur wenn sich Titel oder Ampel ändern, lohnt ein neuer Katalog.
+Änderungen am Text bestehender Artikel brauchen keinen neuen Lauf: Die App zeigt zuerst die gespeicherte Fassung, holt im
+Hintergrund die aktuelle und zeigt sie beim nächsten Öffnen. Geänderte Titel oder Ampeln kommen mit dem nächsten Lauf.
 
 ## Regeln im Projekt
 
@@ -99,4 +120,4 @@ Hintergrund die aktuelle und zeigt sie beim nächsten Öffnen. Nur wenn sich Tit
 ## Lizenzen
 
 Code: MIT (siehe `LICENSE`). Mitgelieferte Bibliotheken (three.js, Lenis, marked, DOMPurify) und die Schrift
-Hanken Grotesk (SIL Open Font License) liegen mit ihren Lizenzen in `docs/vendor/LICENSES/`.
+Hanken Grotesk (SIL Open Font License) liegen mit ihren Lizenzen in der gebauten App unter `docs/vendor/LICENSES/`.

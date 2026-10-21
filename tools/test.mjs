@@ -1,6 +1,7 @@
 /* Automatischer Test der gebauten App in docs/ mit dem installierten Chrome (puppeteer-core).
    npm test                     -> alle Prüfungen, Bildschirmfotos nach tools/shots/
    CHROME=/pfad/zu/chrome npm test, falls Chrome woanders liegt
+   CI=1 npm test               -> wie auf GitHub: 3D in Software statt auf der Grafikkarte
    Prüft: Installierbarkeit laut Chrome, Service Worker übernimmt, Start im Flugmodus, keine Fehler in der Konsole. */
 import puppeteer from 'puppeteer-core';
 import { mkdir, readFile } from 'node:fs/promises';
@@ -19,10 +20,14 @@ const check = (name, pass, info = '') => { results.push({ name, pass: !!pass, in
 
 await mkdir(SHOTS, { recursive: true });
 const server = await start(PORT);
+/* Auf GitHub (CI=true) gibt es keine Grafikkarte: 3D dann in Software (SwiftShader), ohne Sandbox in der Wegwerf-VM */
+const GPU = process.env.CI
+  ? ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox']
+  : ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=vulkan', '--enable-features=Vulkan', '--use-gl=angle'];
 const browser = await puppeteer.launch({
   executablePath: process.env.CHROME || '/usr/bin/google-chrome',
   headless: 'new',
-  args: ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=vulkan', '--enable-features=Vulkan', '--use-gl=angle']
+  args: GPU
 });
 
 function watch(page, label){

@@ -1,4 +1,4 @@
-/* Baut die App nach docs/ (von dort veröffentlicht GitHub Pages).
+/* Baut die App nach docs/ (nicht im Repository; der Workflow .github/workflows/pages.yml lädt docs/ zu GitHub Pages hoch).
    Aufruf: npm run build
    - setzt den Katalog (data/catalog.json) in index.html ein
    - kopiert Bibliotheken aus node_modules nach docs/vendor, verkleinert die großen mit terser, legt Lizenzen bei
