@@ -49,6 +49,22 @@ const artUrl = a => '#/artikel/' + encodeURIComponent(pathOf(a));
 const LEAF = ['#A8D9B9', '#3FA16A', '#1F6E4E'];
 Object.assign(window.FIAE, { stand: Stand, pathOf, artUrl, LEAF, byPath: p => D.artikel[idxByPath.get(p)], indexOfPath: p => idxByPath.get(p) });
 
+/* Erfolge: ein Lernfeld ist geschafft, wenn es Artikel hat und alle sitzen. Das wird immer aus dem Lernstand berechnet.
+   Gemerkt wird nur, was schon gefeiert wurde (Lernfeld: Zahl seiner Artikel beim Feiern). So kommt die Feier nicht bei jedem
+   Laden, aber wieder, wenn ein neuer Artikel dazukam und das Lernfeld erneut geschafft ist. Bleibt auch nur auf dem Gerät. */
+const ERFOLG_KEY = 'lernwiki-erfolge-v1';
+const lfArts = new Map(D.lf.map(l => [l.n, D.artikel.filter(a => a.lf === l.n)]));
+const lfZiel = D.lf.filter(l => lfArts.get(l.n).length);
+let gefeiert = {};
+try { gefeiert = JSON.parse(store.get(ERFOLG_KEY) || '{}') || {}; } catch (e) { gefeiert = {}; }
+const Erfolg = {
+  ziel: lfZiel,
+  of(n){ const arts = lfArts.get(n) || []; return { sitzt: arts.filter(a => Stand.get(pathOf(a)) === 2).length, n: arts.length }; },
+  done(n){ const k = this.of(n); return k.n > 0 && k.sitzt === k.n; },
+  list(){ return lfZiel.filter(l => this.done(l.n)); }
+};
+window.FIAE.erfolg = Erfolg;
+
 /* Zahlen */
 const lfMit = D.lf.filter(l => l.a).length;
 const rotAll = D.artikel.filter(a => a.rot).length;
@@ -75,6 +91,7 @@ $('#posterStage').innerHTML = D.lf.map((l, i) => {
   const p = POS[i % POS.length];
   return `<i${l.a ? '' : ' class="wip"'} style="left:calc(${p[0]}% - 48px);top:${p[1]}%;transform:rotate(${p[2]}deg)"></i>`;
 }).join('');
+const posterI = $$('#posterStage i');
 
 /* Legende der Regale neben der Ranke */
 $('#legend').innerHTML = REG.map((r, i) =>
@@ -180,6 +197,7 @@ function layoutTree(w, h){
     };
     const m = r.gruppen.length;
     const sprigs = r.gruppen.map(([g, n], j) => {
+      const lfo = r.id === 'lf' ? D.lf.find(l => 'LF' + l.n === g) : null;
       const s0 = 0.16 + 0.76 * (j + 0.5) / m;
       const b = at(s0);
       const upDown = j % 2 ? 1 : -1;
@@ -206,7 +224,7 @@ function layoutTree(w, h){
           tilt: (R() - 0.5) * 1.3, s, ai: o.ai, rot: !!o.a.rot
         };
       });
-      return { g, s0, pts: sp, len: Ls, leaves };
+      return { g, s0, pts: sp, len: Ls, leaves, lf: lfo ? lfo.n : null };
     });
     return { r, i, side, yc, len: L, pts, label, sprigs };
   });
@@ -219,6 +237,12 @@ function drawTreeSvg(T){
   svg.setAttribute('viewBox', `0 0 ${T.w} ${T.h}`);
   const line = (pts, wd, col) => `<polyline points="${pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="${wd}" stroke-linecap="round" stroke-linejoin="round"/>`;
   const leafD = s => `M0 0C${.25 * s} ${.32 * s} ${.7 * s} ${.3 * s} ${s} 0C${.7 * s} ${-.3 * s} ${.25 * s} ${-.32 * s} 0 0Z`;
+  /* Blüte an der Triebspitze eines geschafften Lernfelds */
+  const bloom = ([x, y], s, n) => {
+    let o = '';
+    for (let k = 0; k < 5; k++) o += `<path d="${leafD(s)}" fill="#E2F06A" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(k * 72 + n * 57) % 360})"/>`;
+    return o + `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(s * 0.3).toFixed(1)}" fill="#F2C14E"/>`;
+  };
   let out = line(T.trunk, 7, '#2C7A50');
   T.twigs.forEach(t => {
     out += line(t.pts, 3.2, '#2C7A50');
@@ -228,6 +252,7 @@ function drawTreeSvg(T){
         out += `<path d="${leafD(l.size)}" fill="${LEAF[Stand.get(pathOf(D.artikel[l.ai]))]}" transform="translate(${l.x.toFixed(1)} ${l.y.toFixed(1)}) rotate(${(l.ang * 180 / Math.PI).toFixed(1)})"/>`;
         if (l.rot) out += `<circle cx="${l.x.toFixed(1)}" cy="${l.y.toFixed(1)}" r="${(l.size * 0.16).toFixed(1)}" fill="#E5483A"/>`;
       });
+      if (sp.lf && Erfolg.done(sp.lf)) out += bloom(sp.pts[sp.pts.length - 1], T.leafBase * 1.3, sp.lf);
     });
   });
   svg.innerHTML = out;
@@ -308,9 +333,9 @@ const ARR = '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
 const nArt = n => n === 1 ? '1 Artikel' : `${n} Artikel`;
 const ampelText = (rot, n) => !n ? 'noch keine Artikel' : rot ? `${rot} von ${n} mit Prüfungs-Ampel` : 'ohne Ampel, zum Stöbern und Vertiefen';
 
-function cover(id, nr, title, label, pill){
+function cover(id, nr, title, label, pill, extra = ''){
   return `<button class="cover" type="button" aria-expanded="false" aria-controls="d-${id}" aria-label="${esc(label)}. Kachel aufdecken">` +
-    `<span class="c-nr" aria-hidden="true">${nr}</span>` +
+    `<span class="c-nr" aria-hidden="true">${nr}</span>${extra}` +
     `<span class="c-title" aria-hidden="true">${esc(title)}</span>` +
     `<span class="c-foot" aria-hidden="true">${pill}<span class="c-hint">${UP}aufdecken</span></span>` +
   `</button>`;
@@ -337,21 +362,23 @@ REG.forEach((r, i) => {
 });
 
 const tilesLf = $('#tilesLf');
+const lfPill = n => `<span class="pill ok">${CHECK}${nArt(n)}</span>`;
 D.lf.forEach(l => {
   const li = document.createElement('li');
   li.className = 'tile reveal' + (l.a ? ' full' : '');
   li.id = 'lf' + l.n;
   const arts = D.artikel.filter(a => a.lf === l.n);
-  const pill = l.a ? `<span class="pill ok">${CHECK}${nArt(l.a)}</span>` : `<span class="pill wip">${RING}noch leer</span>`;
+  const pill = l.a ? lfPill(l.a) : `<span class="pill wip">${RING}noch leer</span>`;
   const body = l.a
     ? `<ul class="alist">${arts.slice(0, 4).map(a => `<li><a href="${artUrl(a)}" title="${esc(a.t)}">${esc(a.t)}</a></li>`).join('')}</ul>` +
       `<button class="tlink" type="button" data-cat="lf:${l.n}">${l.a > 4 ? `Alle ${l.a} im Katalog` : 'Im Katalog zeigen'} ${ARR}</button>`
     : `<p class="empty-note">Hier liegt noch nichts. Magst du den ersten Artikel schreiben?</p>` +
       `<a class="tlink" href="#mitmachen">So machst du mit ${ARR}</a>`;
   li.innerHTML =
-    cover(li.id, String(l.n).padStart(2, '0'), l.titel, `${l.k} ${l.titel}, ${l.a ? nArt(l.a) : 'noch leer'}`, pill) +
+    cover(li.id, String(l.n).padStart(2, '0'), l.titel, `${l.k} ${l.titel}, ${l.a ? nArt(l.a) : 'noch leer'}`, pill,
+      l.a ? `<span class="c-done" aria-hidden="true">${CHECK}<span>geschafft</span></span>` : '') +
     `<div class="detail" id="d-${li.id}">` +
-      `<div class="d-top"><span class="d-nr">${l.k}</span>${pill}</div>` +
+      `<div class="d-top"><span class="d-nr">${l.k}</span>${l.a ? `<span class="lf-st">${pill}</span>` : pill}</div>` +
       `<h3>${esc(l.titel)}</h3>` +
       (l.a ? `<div class="meter"><div class="bar"><i style="--w:${Math.round(l.rot / l.a * 100)}%"></i></div><span>${ampelText(l.rot, l.a)}</span></div>` : '') +
       body +
@@ -529,6 +556,20 @@ function paintStand(){
   const res = $('#resume');
   if (la) { res.hidden = false; res.href = artUrl(la); $('#resumeT').textContent = la.t; } else res.hidden = true;
   if (window.FIAE.tree) drawTreeSvg(window.FIAE.tree);
+  paintErfolg();
+}
+/* Geschaffte Lernfelder: Stempel auf der Kachel, Stand oben im Detail, Häkchen am Würfel im Standbild */
+function paintErfolg(){
+  D.lf.forEach((l, i) => {
+    const k = Erfolg.of(l.n), li = document.getElementById('lf' + l.n);
+    if (!k.n || !li) return;
+    const done = k.sitzt === k.n;
+    li.classList.toggle('done', done);
+    $('.cover', li).setAttribute('aria-label', `${l.k} ${l.titel}, ${nArt(k.n)}${done ? ', geschafft' : ''}. Kachel aufdecken`);
+    $('.lf-st', li).innerHTML = done ? `<span class="pill done">${CHECK}${k.n === 1 ? 'sitzt' : `alle ${k.n} sitzen`}</span>`
+      : k.sitzt ? `<span class="pill part">${k.sitzt} von ${k.n} sitzen</span>` : lfPill(k.n);
+    if (posterI[i]) posterI[i].classList.toggle('done', done);
+  });
 }
 paintStand();
 addEventListener('fiae-stand', paintStand);
@@ -548,6 +589,61 @@ function showToast(text, action, onAction, ms){
 function hideToast(){ toast.hidden = true; }
 $('#toastX').addEventListener('click', hideToast);
 window.FIAE.toast = showToast;
+
+/* Feier, wenn ein Lernfeld geschafft ist: nur beim Wechsel von offen auf geschafft durch einen Klick (Stand.set mit p).
+   Laden, Wiederherstellen und Zurücksetzen (Stand.replace, ohne p) feiern nicht; Zurücksetzen vergisst auch die Feiern. */
+const fest = $('#erfolg'), festBurst = $('#erfolgBurst');
+const FEST_COL = [LEAF[1], LEAF[2], '#4BAF73', '#E2F06A', '#E2F06A'];
+let doneNow = new Set(Erfolg.list().map(l => l.n));
+const merk = (key, n) => { gefeiert[key] = n; store.set(ERFOLG_KEY, JSON.stringify(gefeiert)); };
+addEventListener('fiae-stand', e => {
+  const before = doneNow;
+  doneNow = new Set(Erfolg.list().map(l => l.n));
+  const alle = doneNow.size === lfZiel.length;
+  const p = e.detail && e.detail.p;
+  if (!p) {
+    if (!Object.keys(Stand.all()).length) { gefeiert = {}; store.set(ERFOLG_KEY, '{}'); return; }
+    doneNow.forEach(n => { const k = Erfolg.of(n).n; if ((gefeiert[n] || 0) < k) merk(n, k); });
+    if (alle) merk('alle', lfZiel.length);
+    return;
+  }
+  const a = window.FIAE.byPath(p), n = a && a.lf;
+  if (e.detail.s !== 2 || !doneNow.has(n) || before.has(n)) return;
+  const k = Erfolg.of(n).n;
+  if ((gefeiert[n] || 0) >= k) return;
+  merk(n, k);
+  const gesamt = alle && (gefeiert.alle || 0) < lfZiel.length;
+  if (gesamt) merk('alle', lfZiel.length);
+  feiern(D.lf.find(l => l.n === n), k, gesamt);
+});
+function feiern(l, k, gesamt){
+  hideToast();
+  const titel = gesamt ? 'Alle Lernfelder geschafft!' : `${l.k} geschafft!`;
+  const sub = gesamt ? `In allen ${lfZiel.length} Lernfeldern mit Artikeln sitzt jeder Artikel. Viel Erfolg bei der Prüfung!`
+    : `${l.titel}: ${k === 1 ? 'der Artikel sitzt' : `alle ${k} Artikel sitzen`}. Stark!`;
+  $('#erfolgKicker').textContent = gesamt ? `${l.k} war das letzte` : 'Lernfeld geschafft';
+  $('#erfolgTitle').textContent = titel;
+  $('#erfolgSub').textContent = sub;
+  fest.classList.toggle('gesamt', gesamt);
+  fest.hidden = false;
+  fest.classList.remove('in'); void fest.offsetWidth; fest.classList.add('in');
+  /* Blätter in den Farben der Ranke und gelbe Blütenblätter fliegen aus dem Häkchen, bei reduzierter Bewegung nicht */
+  let leaves = '';
+  if (!reduce.matches) for (let i = 0, n = gesamt ? 26 : 14; i < n; i++) {
+    const w = -Math.PI / 2 + (i / (n - 1) - 0.5) * Math.PI * 0.95 + (Math.random() - 0.5) * 0.25, d = 70 + Math.random() * (gesamt ? 150 : 90);
+    leaves += `<i style="--x:${(Math.cos(w) * d).toFixed(0)}px;--y:${(Math.sin(w) * d).toFixed(0)}px;--r:${(Math.random() * 540 - 270).toFixed(0)}deg;--d:${(120 + Math.random() * 160).toFixed(0)}ms;--c:${FEST_COL[i % FEST_COL.length]}"></i>`;
+  }
+  festBurst.innerHTML = leaves;
+  /* Ansage: im Artikel und im Prüfungsmodus über die Region in der offenen Seite, sonst über die auf der Startseite */
+  const live = window.FIAE.sheetOpen ? $('#sheetLive') : $('#erfolgLive');
+  live.textContent = '';
+  setTimeout(() => { live.textContent = `${titel} ${sub}`; }, 80);
+}
+function festZu(){ fest.hidden = true; festBurst.innerHTML = ''; }
+$('#erfolgOk').addEventListener('click', festZu);
+$('#erfolgStand').addEventListener('click', festZu);
+/* Escape schließt zuerst die Feier, die offene Seite bleibt */
+addEventListener('keydown', e => { if (e.key === 'Escape' && !fest.hidden) { e.stopImmediatePropagation(); festZu(); } }, true);
 
 /* App: Service Worker (offline und Updates), Installieren, Hinweis bei fehlendem Netz */
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;

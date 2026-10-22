@@ -329,6 +329,13 @@ async function renderStand(){
   const c = Stand.count();
   const n = D.artikel.length;
   const recent = Stand.recent().map(p => F.byPath(p)).filter(Boolean).slice(0, 5);
+  const E = F.erfolg, ziel = E.ziel, geschafft = E.list().length;
+  /* Lernfelder mit Artikeln: geschaffte gelb mit Häkchen, die anderen mit Zahl; führt zur Kachel auf der Startseite */
+  const lfChips = ziel.map(l => {
+    const k = E.of(l.n), done = k.sitzt === k.n;
+    return `<li><a class="lf-chip${done ? ' done' : ''}" href="#lf${l.n}" data-open="lf${l.n}" title="${esc(l.titel)}" aria-label="${esc(`${l.k} ${l.titel}, ${done ? 'geschafft' : `${k.sitzt} von ${k.n} sitzen`}`)}">` +
+      `${done ? ICON.check : ''}<b>${l.k}</b>${done ? '' : `<span>${k.sitzt}/${k.n}</span>`}</a></li>`;
+  }).join('');
   const rows = REG.map(r => {
     const k = Stand.count(a => a.r === r.id);
     const g = Math.round((k.gelesen - k.sitzt) / r.n * 100), s = Math.round(k.sitzt / r.n * 100);
@@ -336,12 +343,14 @@ async function renderStand(){
       `<div class="bar two" aria-hidden="true"><i class="s" style="--w:${s}%"></i><i class="g" style="--w:${g}%"></i></div></li>`;
   }).join('');
   body.innerHTML =
-    `<header class="art-head"><p class="eyebrow micro">Mein Stand</p><h1 id="sheetTitle" tabindex="-1">${c.gelesen ? 'Deine Ranke wächst.' : 'Deine Ranke wartet.'}</h1>` +
+    `<header class="art-head"><p class="eyebrow micro">Mein Stand</p><h1 id="sheetTitle" tabindex="-1">${geschafft === ziel.length ? 'Alle Lernfelder geschafft.' : c.gelesen ? 'Deine Ranke wächst.' : 'Deine Ranke wartet.'}</h1>` +
     `<p class="lead">Dein Lernstand bleibt auf diesem Gerät. Niemand sonst sieht ihn, und es braucht kein Konto.</p></header>` +
     `<div class="stand-nums"><div><b>${c.gelesen}</b><span>von ${n} gelesen</span></div><div><b>${c.sitzt}</b><span>sitzen</span></div>` +
-    `<div><b>${Stand.count(a => a.rot).sitzt}</b><span>von ${D.artikel.filter(a => a.rot).length} mit Ampel sitzen</span></div></div>` +
+    `<div><b>${Stand.count(a => a.rot).sitzt}</b><span>von ${D.artikel.filter(a => a.rot).length} mit Ampel sitzen</span></div>` +
+    `<div id="lfDone"><b>${geschafft}</b><span>von ${ziel.length} Lernfeldern geschafft</span></div></div>` +
     `<ul class="regal-bars">${rows}</ul>` +
     `<ul class="leaf-key micro"><li><i style="--c:${F.LEAF[2]}"></i>sitzt</li><li><i style="--c:${F.LEAF[1]}"></i>gelesen</li><li><i style="--c:${F.LEAF[0]}"></i>noch nicht</li></ul>` +
+    `<section class="block"><h2>Lernfelder</h2><p>Ein Lernfeld ist geschafft, wenn alle seine Artikel sitzen.</p><ul class="lf-chips">${lfChips}</ul></section>` +
     (recent.length ? `<section class="block"><h2>Weiterlesen</h2><ul class="exam-list plain">${recent.map(a => {
       const v = Stand.get(F.pathOf(a));
       return `<li class="s${v}"><a href="${F.artUrl(a)}"><span class="t">${esc(a.t)}</span><span class="g micro">${esc(regOf(a).kurz)} · ${esc(groupLabel(a))}${v ? ' · ' + ['', 'gelesen', 'sitzt'][v] : ''}</span></a></li>`;

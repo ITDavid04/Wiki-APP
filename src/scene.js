@@ -75,7 +75,7 @@ function bootStage(THREE, RoundedBoxGeometry, RoomEnvironment){
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 100);
   camera.position.set(0, 0, CZ);
 
-  function labelTex(l){
+  function labelTex(l, done){
     const c = document.createElement('canvas'); c.width = c.height = 512;
     const g = c.getContext('2d');
     const green = '#1F7A57';
@@ -92,6 +92,13 @@ function bootStage(THREE, RoundedBoxGeometry, RoomEnvironment){
     g.fillText(nr, 256, 268);
     g.font = '600 46px "Hanken Grotesk", system-ui, sans-serif';
     g.fillText('LF', 256, 112);
+    /* geschafft: gelbes Häkchen unter der Nummer */
+    if (done) {
+      g.fillStyle = '#E2F06A';
+      g.beginPath(); g.arc(256, 404, 56, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = '#0F1A15'; g.lineWidth = 15; g.lineCap = g.lineJoin = 'round';
+      g.beginPath(); g.moveTo(229, 406); g.lineTo(248, 425); g.lineTo(284, 387); g.stroke();
+    }
     const t = new THREE.CanvasTexture(c);
     t.colorSpace = THREE.SRGBColorSpace;
     t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
@@ -100,7 +107,7 @@ function bootStage(THREE, RoundedBoxGeometry, RoomEnvironment){
   const geo = new RoundedBoxGeometry(1, 1, 1, 6, 0.16);
   const blocks = LF.map((l, i) => {
     const m = new THREE.MeshPhysicalMaterial({
-      map: labelTex(l), roughness: l.a ? 0.22 : 0.35, metalness: 0,
+      map: labelTex(l, false), roughness: l.a ? 0.22 : 0.35, metalness: 0,
       clearcoat: 1, clearcoatRoughness: 0.12, sheen: l.a ? 0 : 0.4,
       emissive: new THREE.Color(0x5FD3A2), emissiveIntensity: 0
     });
@@ -108,8 +115,24 @@ function bootStage(THREE, RoundedBoxGeometry, RoomEnvironment){
     mesh.userData.lf = l;
     scene.add(mesh);
     const seed = i * 1.618 + 0.4;
-    return { mesh, l, i, seed, pos: new THREE.Vector3((i - 5.5) * 1.4, 12 + i, -4), vel: new THREE.Vector3(), s: 0.001, rot: new THREE.Euler(seed, seed * 2, seed * .5), spin: new THREE.Vector3(), hover: 0 };
+    return { mesh, l, i, seed, done: false, pos: new THREE.Vector3((i - 5.5) * 1.4, 12 + i, -4), vel: new THREE.Vector3(), s: 0.001, rot: new THREE.Euler(seed, seed * 2, seed * .5), spin: new THREE.Vector3(), hover: 0 };
   });
+  /* Geschafftes Lernfeld: Häkchen auf dem Würfel und ein gelber Schimmer an den Kanten; wird es gerade geschafft, dreht er sich einmal */
+  function paintDone(first){
+    blocks.forEach(b => {
+      const d = F.erfolg.done(b.l.n);
+      if (d === b.done) return;
+      b.done = d;
+      const m = b.mesh.material;
+      m.map.dispose(); m.map = labelTex(b.l, d);
+      m.sheen = d ? 1 : (b.l.a ? 0 : 0.4);
+      m.sheenColor.set(d ? 0xE2F06A : 0x000000);
+      m.sheenRoughness = d ? 0.35 : 1;
+      if (d && !first && !reduce.matches) b.spin.y += 9;
+    });
+  }
+  paintDone(true);
+  addEventListener('fiae-stand', () => paintDone(false));
 
   let W = 1, H = 1, unit = 1, narrow = false;
   function resize(){
@@ -185,7 +208,7 @@ function bootStage(THREE, RoundedBoxGeometry, RoomEnvironment){
       b.mesh.position.copy(b.pos);
       b.mesh.rotation.set(b.rot.x, b.rot.y, b.rot.z);
       b.mesh.scale.setScalar(Math.max(0.001, b.s * (1 + b.hover * 0.1)));
-      b.mesh.material.emissiveIntensity = b.hover * 0.35;
+      b.mesh.material.emissiveIntensity = b.hover * 0.35 + (b.done ? 0.14 : 0);
     });
     ray.setFromCamera(ndc, camera);
     const hit = inside ? ray.intersectObjects(meshes, false)[0] : null;
@@ -194,7 +217,7 @@ function bootStage(THREE, RoundedBoxGeometry, RoomEnvironment){
       hovered = next; F.hoverBlock = !!hovered;
       if (hovered) {
         const l = hovered.userData.lf;
-        const info = l.a ? `${l.a === 1 ? '1 Artikel' : l.a + ' Artikel'}${l.rot ? `, ${l.rot} mit Ampel` : ''}` : 'noch leer';
+        const info = l.a ? `${l.a === 1 ? '1 Artikel' : l.a + ' Artikel'}${l.rot ? `, ${l.rot} mit Ampel` : ''}${F.erfolg.done(l.n) ? ', geschafft' : ''}` : 'noch leer';
         F.tip.show(`<b>${l.k}</b>${esc(l.titel)}<br><span>${info}, klicken zum Aufdecken</span>`, pX, pY);
       } else F.tip.hide();
     }
@@ -256,8 +279,11 @@ function bootVine(THREE, RoomEnvironment){
   scene.add(core);
   let coreG = 0, coreS = 0;
 
-  let dataLeaves = null, decoLeaves = null, buds = null, secCores = null;
+  let dataLeaves = null, decoLeaves = null, buds = null, secCores = null, lfPetals = null, lfCores = null;
   let SC = [];                             /* Blütenmitten der Abschnitte */
+  let LB = [];                             /* Blüten an den Trieben geschaffter Lernfelder */
+  let lfDone = new Set(F.erfolg.list().map(l => l.n));
+  addEventListener('fiae-stand', () => { lfDone = new Set(F.erfolg.list().map(l => l.n)); });
   let LD = [], LX = [], BD = [];           /* Blattdaten: Artikel, Deko, Knospen */
   let mainY = [], mainG = [], totalG = 0;  /* für die Zuordnung Scrollposition zu Wachstum */
   let twigTips = [];
@@ -367,7 +393,7 @@ function bootVine(THREE, RoomEnvironment){
     const trunkI0 = Math.max(0, Math.floor(mainPx.findIndex(p => p[1] >= trunk[0][1]) - 5));
 
     /* Zweige (Regale) und Triebe (Gruppen) */
-    LD = []; LX = []; BD = []; twigTips = [];
+    LD = []; LX = []; BD = []; LB = []; twigTips = [];
     T.twigs.forEach((tw, ti) => {
       const tp = tw.pts.map(p => [A.l + p[0], A.t + p[1], p[2]]);
       const g0 = gAt(tp[0][0], tp[0][1], trunkI0);
@@ -387,6 +413,11 @@ function bootVine(THREE, RoomEnvironment){
             col: leafColor(l.ai), jit: ((l.ai * 7919) % 13) / 13 - 0.5
           });
         });
+        /* Spitze des Triebs: hier blüht es, wenn das Lernfeld geschafft ist (k: 0 zu, 1 offen) */
+        if (sp.lf) {
+          const tp = spp[spp.length - 1];
+          LB.push({ n: sp.lf, p: V(tp[0], tp[1], tp[2] + 8), g: gs + sl * 0.75, size: T.leafBase * 1.3 * unit, k: lfDone.has(sp.lf) ? 1 : 0 });
+        }
       });
     });
 
@@ -455,16 +486,21 @@ function bootVine(THREE, RoomEnvironment){
     geo.setIndex(out.I);
     stem.geometry.dispose(); stem.geometry = geo;
 
-    [dataLeaves, decoLeaves, buds, secCores].forEach(m => { if (m) { scene.remove(m); m.dispose(); } });
+    [dataLeaves, decoLeaves, buds, secCores, lfPetals, lfCores].forEach(m => { if (m) { scene.remove(m); m.dispose(); } });
     dataLeaves = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LD.length));
     decoLeaves = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LX.length));
     BD = LD.filter(l => l.rot);
     buds = new THREE.InstancedMesh(budGeo, budMat, Math.max(1, BD.length));
     secCores = new THREE.InstancedMesh(budGeo, core.material, Math.max(1, SC.length));
     secCores.count = SC.length;
-    [dataLeaves, decoLeaves, buds, secCores].forEach(m => { m.frustumCulled = false; scene.add(m); });
+    lfPetals = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LB.length * 5));
+    lfCores = new THREE.InstancedMesh(budGeo, core.material, Math.max(1, LB.length));
+    lfPetals.count = LB.length * 5; lfCores.count = LB.length;
+    [dataLeaves, decoLeaves, buds, secCores, lfPetals, lfCores].forEach(m => { m.frustumCulled = false; scene.add(m); });
     LD.forEach((l, i) => { l.col = leafColor(l.ai, l.jit); dataLeaves.setColorAt(i, l.col); });
     LX.forEach((l, i) => decoLeaves.setColorAt(i, l.col));
+    const petalCol = new THREE.Color(0xE2F06A);
+    for (let i = 0; i < LB.length * 5; i++) lfPetals.setColorAt(i, petalCol);
     /* einmal in voller Größe setzen, damit die Hüllkugel für das Anklicken stimmt */
     setLeaves(dataLeaves, LD, 1e9, 0, -1); dataLeaves.computeBoundingSphere();
     built = true;
@@ -504,6 +540,28 @@ function bootVine(THREE, RoomEnvironment){
       secCores.setMatrixAt(i, m4);
     });
     secCores.instanceMatrix.needsUpdate = true;
+  }
+  /* Blüte am Trieb: wächst mit der Ranke und geht auf, sobald das Lernfeld geschafft ist (und zu, wenn nicht mehr) */
+  function setBlooms(g, dt){
+    LB.forEach((b, i) => {
+      const tgt = lfDone.has(b.n) ? 1 : 0;
+      b.k = reduce.matches ? tgt : b.k + (tgt - b.k) * Math.min(1, dt * 2.4);
+      const k = smooth(clamp01((g - b.g) / 80)) * smooth(clamp01(b.k));
+      const s = Math.max(1e-5, b.size * k);
+      for (let j = 0; j < 5; j++) {
+        qz.setFromAxisAngle(AZ, j / 5 * Math.PI * 2 + b.n + (1 - k) * 0.8);
+        qx.setFromAxisAngle(AX, 0.35);
+        q.multiplyQuaternions(qz, qx);
+        m4.compose(b.p, q, sv.set(s, s, s));
+        lfPetals.setMatrixAt(i * 5 + j, m4);
+      }
+      const c = Math.max(1e-5, b.size * 0.3 * k);
+      pv.copy(b.p); pv.z += 2 * unit;
+      m4.compose(pv, q.identity(), sv.set(c, c, c));
+      lfCores.setMatrixAt(i, m4);
+    });
+    lfPetals.instanceMatrix.needsUpdate = true;
+    lfCores.instanceMatrix.needsUpdate = true;
   }
 
   /* Hover und Klick auf Blätter, nur im Bereich des Baums */
@@ -612,6 +670,7 @@ function bootVine(THREE, RoomEnvironment){
     setLeaves(decoLeaves, LX, G, t, -1);
     setBuds(G);
     setCores(G);
+    setBlooms(G, dt);
     core.scale.setScalar(Math.max(1e-5, coreS * smooth(clamp01((G - coreG) / 80))));
     twigTips.forEach(tt => tt.el && tt.el.classList.toggle('on', G > tt.g - 60));
     if (pType !== 'touch') {

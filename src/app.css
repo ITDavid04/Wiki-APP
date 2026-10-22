@@ -170,6 +170,35 @@ section[id],li[id]{scroll-margin-top:96px}
 .toast-x{display:grid;place-items:center;width:34px;height:34px;flex:none;border:0;border-radius:99px;background:var(--bg-2);color:var(--ink);cursor:pointer}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,16px)}}
 
+/* Feier: Lernfeld geschafft */
+.erfolg{position:fixed;z-index:46;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:flex-start;gap:16px;width:min(440px,calc(100vw - 32px));padding:18px 18px 16px;border-radius:24px;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.24)}
+.erfolg[hidden]{display:none}
+.erfolg.in{animation:festIn .55s cubic-bezier(.2,.9,.25,1.15)}
+@keyframes festIn{from{opacity:0;transform:translate(-50%,28px) scale(.94)}}
+.erfolg-mark{position:relative;flex:none;width:56px;height:56px}
+.erfolg-mark circle{fill:var(--mark)}
+.erfolg-mark path{fill:none;stroke:var(--mark-ink);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:34;stroke-dashoffset:34}
+.erfolg.in .erfolg-mark svg{animation:festPop .5s .05s cubic-bezier(.2,.9,.3,1.4) both}
+.erfolg.in .erfolg-mark path{animation:festCheck .45s .3s cubic-bezier(.6,0,.3,1) forwards}
+@keyframes festPop{from{transform:scale(.3)}}
+@keyframes festCheck{to{stroke-dashoffset:0}}
+.erfolg-burst{position:absolute;left:28px;top:28px;width:0;height:0;pointer-events:none}
+.erfolg-burst i{position:absolute;left:-7px;top:-4px;width:14px;height:9px;border-radius:1px 10px;background:var(--c);opacity:0;animation:festFly 1.5s cubic-bezier(.2,.7,.3,1) var(--d) forwards}
+@keyframes festFly{
+  0%{opacity:0;transform:translate(0,0) rotate(0) scale(.4)}
+  12%{opacity:1}
+  70%{opacity:1;transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1)}
+  100%{opacity:0;transform:translate(calc(var(--x) * 1.15),calc(var(--y) + 46px)) rotate(calc(var(--r) * 1.4)) scale(.9)}
+}
+.erfolg-txt{display:grid;gap:4px;min-width:0}
+.erfolg-kicker{color:var(--accent)}
+.erfolg-txt h2{font-size:1.55rem;font-weight:500;letter-spacing:-.035em;line-height:1.1}
+.erfolg-sub{color:var(--muted);font-size:.95rem;line-height:1.4}
+.erfolg-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.erfolg-btns .pillbtn{height:36px}
+.erfolg-btns .pillbtn:not(.dark){border:1.5px solid var(--line)}
+.erfolg.gesamt h2{font-size:1.75rem}
+
 /* Bühne */
 .hero{display:grid;gap:14px;padding-top:calc(72px + env(safe-area-inset-top,0px))}
 .stage{position:relative;height:clamp(500px,calc(100svh - 190px),860px);border-radius:28px;overflow:hidden;background:var(--stage);color:var(--stage-ink);isolation:isolate}
@@ -191,6 +220,7 @@ section[id],li[id]{scroll-margin-top:96px}
 .gl-stage .poster{opacity:0}
 .poster i{position:absolute;width:clamp(48px,7vw,96px);aspect-ratio:1;border-radius:18%;background:#1F7A57;box-shadow:0 18px 30px rgba(0,0,0,.3)}
 .poster i.wip{background:#F6F8F4;border:2px dashed #1F7A57}
+.poster i.done::after{content:"";position:absolute;right:-9%;top:-9%;width:36%;aspect-ratio:1;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.25);background:#E2F06A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%230F1A15' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/68% no-repeat}
 
 /* Einleitung im lusion-Stil: riesige Überschrift, erste Zeile eingerückt */
 .intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,5vw,72px) clamp(16px,4vw,64px);padding-block:clamp(110px,14vw,210px) clamp(70px,9vw,130px)}
@@ -285,6 +315,11 @@ section[id],li[id]{scroll-margin-top:96px}
 .pill.ok{background:var(--accent);color:var(--accent-ink)}
 .full .cover .pill.ok{background:var(--accent-ink);color:var(--accent)}
 .pill.wip{border:1.5px dashed currentColor;opacity:.8}
+/* Geschafftes Lernfeld: Stempel auf dem Deckblatt, Zeile im Detail */
+.c-done{position:absolute;top:22px;right:22px;display:none;align-items:center;gap:6px;padding:5px 12px 5px 9px;border-radius:99px;background:var(--mark);color:var(--mark-ink);font-weight:600;font-size:.82rem;box-shadow:0 6px 16px rgba(0,0,0,.18);transform:rotate(-4deg)}
+.tile.done .c-done{display:inline-flex}
+.pill.part{background:var(--accent-soft);color:var(--accent)}
+.pill.done{background:var(--mark);color:var(--mark-ink)}
 .c-hint{display:inline-flex;align-items:center;gap:6px;opacity:.75}
 .tile.open .cover{transform:translateY(calc(-100% - 2px))}
 @media (hover:hover){.tile:hover .cover{transform:translateY(calc(-100% - 2px))}}
@@ -472,7 +507,7 @@ html.sheet-open body{overflow:hidden}
 .tick input{display:grid;place-items:center;width:26px;height:26px;margin:0;border:2px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;-webkit-appearance:none;appearance:none}
 .tick input:checked{background:var(--accent);border-color:var(--accent)}
 .tick input:checked::after{content:"";width:12px;height:6px;border:solid var(--accent-ink);border-width:0 0 3px 3px;transform:translateY(-2px) rotate(-45deg)}
-.stand-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:24px}
+.stand-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:24px}
 .stand-nums div{display:grid;align-content:start;gap:6px;padding:16px;border-radius:18px;background:var(--card);border:1px solid var(--line)}
 .stand-nums b{font-size:2.4rem;font-weight:400;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums}
 .stand-nums span{color:var(--muted);font-size:.88rem;line-height:1.3}
@@ -481,6 +516,12 @@ html.sheet-open body{overflow:hidden}
 .regal-bars .rr{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px}
 .regal-bars .rr b{font-weight:500}
 .regal-bars .rr span{color:var(--muted);font-size:.88rem}
+.lf-chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.lf-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border:1.5px solid var(--line);border-radius:99px;text-decoration:none;font-size:.9rem}
+.lf-chip b{font-weight:600}
+.lf-chip span{color:var(--muted);font-variant-numeric:tabular-nums}
+.lf-chip:hover{border-color:var(--accent)}
+.lf-chip.done{background:var(--mark);border-color:var(--mark);color:var(--mark-ink)}
 .bar.two{display:flex;height:10px}
 .bar.two i{height:100%;width:var(--w);border-radius:0}
 .bar.two i.s{background:#1F6E4E}
@@ -539,7 +580,7 @@ html.sheet-open body{overflow:hidden}
   .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .sheet-body{padding-bottom:calc(130px + env(safe-area-inset-bottom,0px))}
   .stand-nums{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .stand-nums div:last-child{grid-column:1 / -1}
+  .erfolg{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 }
 @media (max-width:560px){
   .st-chip{display:none}
@@ -551,6 +592,8 @@ html.sheet-open body{overflow:hidden}
   .tiles.lfg .c-nr{font-size:3.4rem}
   .tiles.lfg .c-title{font-size:.98rem}
   .tiles.lfg .c-hint{display:none}
+  .tiles.lfg .c-done{top:14px;right:14px;padding:6px}
+  .tiles.lfg .c-done span{display:none}
   .tiles.lfg .detail{padding:16px 14px 14px;gap:9px}
   .tiles.lfg .detail h3{font-size:1.02rem}
   .tiles.lfg .alist{font-size:.86rem;gap:5px}
@@ -564,5 +607,7 @@ html.sheet-open body{overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .erfolg-burst{display:none}
+  .erfolg-mark path{stroke-dashoffset:0}
 }
 @media (hover:none),(pointer:coarse){.cursor{display:none}}

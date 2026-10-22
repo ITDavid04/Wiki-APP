@@ -18,7 +18,11 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 - **Lernstand**: pro Artikel „Noch nicht“, „Gelesen“, „Sitzt“; bis zum Ende gelesen setzt automatisch „Gelesen“.
   Die Blätter der Ranke zeigen den Stand (blass, grün, dunkelgrün).
 - **Prüfungsmodus** (`#/pruefung`): alle Artikel mit Ampel zum Abhaken, mit Fortschritt und „Nächsten offenen öffnen“.
-- **Mein Stand** (`#/stand`): Fortschritt pro Abteilung, Weiterlesen, alle Artikel offline speichern, Lernstand sichern und wiederherstellen.
+- **Mein Stand** (`#/stand`): Fortschritt pro Abteilung und Lernfeld, Weiterlesen, alle Artikel offline speichern, Lernstand sichern und wiederherstellen.
+- **Erfolge**: Ein Lernfeld ist geschafft, wenn es Artikel hat und alle sitzen. In dem Moment gibt es einmal eine kleine Feier
+  (Karte mit Blätterflug, Ansage für Screenreader, ohne Animation bei reduzierter Bewegung). Danach trägt die Kachel einen Stempel,
+  der Würfel ein Häkchen, am Trieb in der Ranke blüht es, und Mein Stand zählt mit. Sind alle Lernfelder mit Artikeln geschafft,
+  gibt es eine eigene Feier. Kommt ein neuer Artikel dazu, ist das Lernfeld wieder offen.
 - **Handy**: untere Leiste mit Start, Suchen, Prüfung, Mein Stand.
 
 ## Aufbau
@@ -64,8 +68,8 @@ Chrome-Menü „Zum Startbildschirm hinzufügen“ installierbar. Nach jedem Upd
 Wichtig: Über GitHub Pages ist die App öffentlich. Impressum und Datenschutz sind noch Platzhalter und gehören vor dem
 breiten Teilen ausgefüllt.
 
-Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. Der Lernstand liegt
-nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
+Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. Der Lernstand und
+welche Erfolge schon gefeiert wurden liegen nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
 `raw.githubusercontent.com`; dabei sieht GitHub wie bei jedem Webserver die IP-Adresse.
 
 ## Neue Artikel im Wiki

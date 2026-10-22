@@ -206,6 +206,77 @@ try {
   }
   if (twig) { await r.mouse.click(twig.x, twig.y); await sleep(1800); }
   check('Klick auf einen Zweig öffnet die Kachel der Abteilung', twig && await r.evaluate(id => document.getElementById('r-' + id).classList.contains('open') && document.getElementById('sheet').hidden, twig.id), twig ? twig.id : 'kein Zweig gefunden');
+
+  /* 7. Erfolg, wenn ein Lernfeld geschafft ist. Eigener Browser-Kontext, damit der Lernstand von oben unberührt bleibt. */
+  const pathOf = a => decodeURIComponent(a.u.split('/blob/main/')[1] || a.u);
+  const LF1 = CAT.artikel.filter(a => a.lf === 1).map(pathOf);
+  const ZIEL = CAT.lf.filter(l => CAT.artikel.some(a => a.lf === l.n)).length;
+  const ctx = await browser.createBrowserContext();
+  const ep = await ctx.newPage();
+  const eerrs = watch(ep, 'Erfolg');
+  await ep.setViewport({ width: 1280, height: 860 });
+  /* zählt, wie oft die Feier aufgeht */
+  await ep.evaluateOnNewDocument(() => addEventListener('DOMContentLoaded', () => {
+    window.__feiern = 0;
+    const el = document.getElementById('erfolg');
+    new MutationObserver(() => { if (!el.hidden) window.__feiern++; }).observe(el, { attributes: true, attributeFilter: ['hidden'] });
+  }));
+  await ep.goto(BASE, { waitUntil: 'networkidle0' });
+  const setStand = (page, paths) => page.evaluate(ps => localStorage.setItem('lernwiki-stand-v1', JSON.stringify(Object.fromEntries(ps.map(p => [p, { s: 2, t: 1 }])))), paths);
+  await setStand(ep, LF1);
+  await ep.reload({ waitUntil: 'networkidle0' });
+  await ready(ep);
+  const t1 = await ep.evaluate(() => ({ done: document.getElementById('lf1').classList.contains('done'), n: document.querySelectorAll('#tilesLf .tile.done').length, st: document.querySelector('#lf1 .lf-st').textContent, feiern: window.__feiern }));
+  check('Geschafftes Lernfeld: Kachel zeigt es, keine Feier beim Laden', t1.done && t1.n === 1 && t1.feiern === 0, `${t1.st}, ${t1.feiern} Feiern`);
+  await ep.evaluate(() => window.FIAE.go('#/stand'));
+  await sleep(500);
+  const s1 = await ep.evaluate(() => ({ num: document.getElementById('lfDone').textContent, chip: document.querySelector('.lf-chip[data-open="lf1"]').classList.contains('done') }));
+  check('Mein Stand zählt geschaffte Lernfelder', s1.num.replace(/\s+/g, '') === `1von${ZIEL}Lernfelderngeschafft` && s1.chip, s1.num);
+
+  /* letzten Artikel von LF1 im Prüfungsmodus abhaken: genau eine Feier, auch nach Abwählen und erneutem Abhaken */
+  await setStand(ep, LF1.slice(0, -1));
+  await ep.reload({ waitUntil: 'networkidle0' });
+  await ready(ep);
+  await ep.evaluate(() => window.FIAE.go('#/pruefung'));
+  await sleep(400);
+  await ep.evaluate(() => document.querySelector('.exam-chips [data-f="alle"]').click());
+  const tick = () => ep.evaluate(p => document.querySelector(`input[data-p="${p}"]`).click(), LF1[LF1.length - 1]);
+  await tick();
+  await sleep(1600);
+  const f1 = await ep.evaluate(() => ({ open: !document.getElementById('erfolg').hidden, title: document.getElementById('erfolgTitle').textContent, live: document.getElementById('sheetLive').textContent, feiern: window.__feiern, merk: localStorage.getItem('lernwiki-erfolge-v1') }));
+  await ep.screenshot({ path: path.join(SHOTS, 'erfolg-feier.png') });
+  await ep.keyboard.press('Escape');
+  const f2 = await ep.evaluate(() => ({ zu: document.getElementById('erfolg').hidden, sheet: !document.getElementById('sheet').hidden }));
+  await tick(); await sleep(200); await tick(); await sleep(400);
+  const f3 = await ep.evaluate(() => ({ zu: document.getElementById('erfolg').hidden, feiern: window.__feiern }));
+  check('Letzten Artikel abhaken: Feier mit Ansage', f1.open && f1.title === 'LF1 geschafft!' && f1.live.includes('LF1 geschafft!') && JSON.parse(f1.merk)['1'] === LF1.length, `${f1.title} ${f1.merk}`);
+  check('Escape schließt die Feier, Prüfungsmodus bleibt offen', f2.zu && f2.sheet);
+  check('Feier kommt nur einmal', f3.zu && f3.feiern === 1, `${f3.feiern} Feiern`);
+
+  /* Wiederherstellen einer Sicherung mit geschafftem Lernfeld: keine Feier */
+  const LF2 = CAT.artikel.filter(a => a.lf === 2).map(pathOf);
+  await ep.evaluate(ps => { const all = { ...window.FIAE.stand.all() }; ps.forEach(p => { all[p] = { s: 2, t: 1 }; }); window.FIAE.stand.replace(all); }, LF2);
+  await sleep(300);
+  const w1 = await ep.evaluate(() => ({ feiern: window.__feiern, lf2: document.getElementById('lf2').classList.contains('done') }));
+  check('Wiederherstellen feiert nicht', w1.feiern === 1 && w1.lf2, `${w1.feiern} Feiern`);
+
+  /* Alle Lernfelder geschafft: eigene Feier */
+  const rest = CAT.artikel.filter(a => a.lf).map(pathOf).filter(p => !LF1.includes(p) && !LF2.includes(p));
+  await ep.evaluate(ps => ps.forEach(p => window.FIAE.stand.set(p, 2)), rest);
+  await sleep(1600);
+  const g1 = await ep.evaluate(() => ({ open: !document.getElementById('erfolg').hidden, title: document.getElementById('erfolgTitle').textContent, gesamt: document.getElementById('erfolg').classList.contains('gesamt') }));
+  check('Alle Lernfelder geschafft: eigene Feier', g1.open && g1.gesamt && g1.title === 'Alle Lernfelder geschafft!', g1.title);
+  await ep.screenshot({ path: path.join(SHOTS, 'erfolg-gesamt.png') });
+  await ep.click('#erfolgOk');
+  await ep.evaluate(() => window.FIAE.closeSheet());
+  await sleep(600);
+  const nDone = await ep.evaluate(() => document.querySelectorAll('#tilesLf .tile.done').length);
+  check('Alle Kacheln mit Artikeln zeigen geschafft', nDone === ZIEL, `${nDone} von ${ZIEL}`);
+  await ep.evaluate(() => { const el = document.getElementById('lernfelder'); window.scrollTo(0, el.getBoundingClientRect().top + scrollY); });
+  await sleep(1800);
+  await ep.screenshot({ path: path.join(SHOTS, 'erfolg-kacheln.png') });
+  check('Keine Fehler beim Erfolg', eerrs.length === 0, eerrs.slice(0, 5).join(' | '));
+  await ctx.close();
 } catch (e) {
   check('Test lief durch', false, e.message);
 } finally {

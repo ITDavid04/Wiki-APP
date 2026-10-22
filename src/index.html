@@ -220,6 +220,7 @@
   <div class="sheet-scroll" id="sheetScroll">
     <div class="sheet-body" id="sheetBody"></div>
   </div>
+  <p class="sr" id="sheetLive" aria-live="polite"></p>
 </div>
 
 <nav class="tabbar" id="tabbar" aria-label="App-Navigation">
@@ -235,6 +236,22 @@
   <button type="button" class="pillbtn dark micro" id="toastBtn" hidden></button>
   <button type="button" class="toast-x" id="toastX" aria-label="Hinweis schließen"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
 </div>
+<section class="erfolg" id="erfolg" aria-labelledby="erfolgTitle" hidden>
+  <div class="erfolg-mark" aria-hidden="true">
+    <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="28"/><path d="M17 29l7.5 7.5L40 21"/></svg>
+    <div class="erfolg-burst" id="erfolgBurst"></div>
+  </div>
+  <div class="erfolg-txt">
+    <p class="micro erfolg-kicker" id="erfolgKicker"></p>
+    <h2 id="erfolgTitle"></h2>
+    <p class="erfolg-sub" id="erfolgSub"></p>
+    <div class="erfolg-btns">
+      <button type="button" class="pillbtn dark micro" id="erfolgOk">Weiter</button>
+      <a class="pillbtn micro" id="erfolgStand" href="#/stand">Mein Stand</a>
+    </div>
+  </div>
+</section>
+<p class="sr" id="erfolgLive" aria-live="polite"></p>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <script src="vendor/lenis.min.js"></script>
