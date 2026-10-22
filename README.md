@@ -26,6 +26,12 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 - **Bienen**: Jeder gelesene Artikel bekommt eine Biene, sie steht im Katalog, im Prüfungsmodus und in Mein Stand für „gelesen“.
   Beim ersten Gelesen oder Sitzt eines Artikels fliegt sie einmal ein (am Artikelende oder in der Zeile im Prüfungsmodus).
   In der Ranke summen Bienen um die Blüten der geschafften Lernfelder, ohne WebGL sitzt eine daneben.
+- **Leseausweis** (in Mein Stand): 17 Stempel für Meilensteine, jeder mit Datum wie im Leihstempel. Bienen (1, 5, 10, 25, 75, 100
+  und alle Artikel gelesen), KI-Anfänger, KI-Profi und KI-Nerd (Sammlung „Anfänger bis Nerd“ und Abteilung KI), Erstes Lernfeld,
+  Prüfungsreif (alle Artikel mit Ampel sitzen), Dranbleiber und Dauerbrenner (7 und 15 Lerntage), Backup-Profi, Funkloch-sicher
+  und Nachteule. Offene Stempel sind blass zu sehen, mit Bedingung und Fortschritt. Ein neuer Stempel bekommt eine kleine Karte,
+  die wartet, bis keine Biene mehr fliegt und keine Lernfeld-Feier mehr offen ist. Stempel bleiben, nur Zurücksetzen löscht sie;
+  die Sicherung nimmt sie mit.
 - **Handy**: untere Leiste mit Start, Suchen, Prüfung, Mein Stand.
 
 ## Aufbau
@@ -72,7 +78,7 @@ Wichtig: Über GitHub Pages ist die App öffentlich. Impressum und Datenschutz s
 breiten Teilen ausgefüllt.
 
 Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. Der Lernstand samt
-Erfolgen und Bienen liegt nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
+Erfolgen, Bienen, Stempeln und Lerntagen liegt nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
 `raw.githubusercontent.com`; dabei sieht GitHub wie bei jedem Webserver die IP-Adresse.
 
 ## Neue Artikel im Wiki

@@ -333,12 +333,24 @@ function openStand(){
   tools.innerHTML = '';
   renderStand();
   focusTitle();
+  /* von der Stempel-Karte: gleich zum Leseausweis */
+  const ziel = F.standZiel && $('#' + F.standZiel, body);
+  F.standZiel = null;
+  if (ziel) scrollEl.scrollTop = ziel.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop - 72;
 }
 async function renderStand(){
   const c = Stand.count();
   const n = D.artikel.length;
   const recent = Stand.recent().map(p => F.byPath(p)).filter(Boolean).slice(0, 5);
   const E = F.erfolg, ziel = E.ziel, geschafft = E.list().length;
+  /* Leseausweis: verdiente Stempel mit Datum und Text, offene blass mit Bedingung und Fortschritt */
+  const S = F.stempel, hat = S.alle();
+  const nStempel = S.liste.filter(s => hat[s.id]).length;
+  const ausweis = S.liste.map(s => {
+    const t = hat[s.id], w = !t && s.wert ? s.wert() : null;
+    return `<li class="stempel${t ? ' on' : ''}" data-id="${s.id}" style="--c:${S.farbe(s)};--r:${S.dreh(s)}deg">${S.svg(s, t)}<b>${esc(s.name)}</b>` +
+      `<span>${esc(t ? s.text : s.offen)}${w ? `<span class="fort">${Math.min(w[0], w[1])} von ${w[1]}</span>` : ''}</span></li>`;
+  }).join('');
   /* Lernfelder mit Artikeln: geschaffte gelb mit Häkchen, die anderen mit Zahl; führt zur Kachel auf der Startseite */
   const lfChips = ziel.map(l => {
     const k = E.of(l.n), done = k.sitzt === k.n;
@@ -360,6 +372,7 @@ async function renderStand(){
     `<ul class="regal-bars">${rows}</ul>` +
     `<ul class="leaf-key micro"><li><i style="--c:${F.LEAF[2]}"></i>sitzt</li><li><i style="--c:${F.LEAF[1]}"></i>gelesen</li><li><i style="--c:${F.LEAF[0]}"></i>noch nicht</li></ul>` +
     `<section class="block"><h2>Lernfelder</h2><p>Ein Lernfeld ist geschafft, wenn alle seine Artikel sitzen.</p><ul class="lf-chips">${lfChips}</ul></section>` +
+    `<section class="block" id="ausweis"><h2>Dein Leseausweis</h2><p id="ausweisZahl">${nStempel} von ${S.liste.length} Stempeln</p><ul class="stempel-grid">${ausweis}</ul></section>` +
     (recent.length ? `<section class="block"><h2>Weiterlesen</h2><ul class="exam-list plain">${recent.map(a => {
       const v = Stand.get(F.pathOf(a));
       return `<li class="s${v}"><a href="${F.artUrl(a)}"><span class="t">${esc(a.t)}</span><span class="g micro">${esc(regOf(a).kurz)} · ${esc(groupLabel(a))}${v ? ' · ' + F.stMark(v) : ''}</span></a></li>`;
@@ -374,6 +387,7 @@ async function renderStand(){
       `<a href="${esc(D.repo)}" target="_blank" rel="noopener">Wiki auf GitHub</a>. Bibliotheken und Schrift mit ihren Lizenzen liegen in <a href="vendor/LICENSES/README.txt" target="_blank" rel="noopener">vendor/LICENSES</a>.</p></section>`;
 
   const cnt = await articleCacheCount();
+  if (cnt === n) F.stempel.gib('offline', true);
   const info = $('#offInfo', body);
   if (info) info.textContent = cnt === null ? 'Offline-Speicher ist in diesem Browser nicht verfügbar.' :
     `${cnt} von ${n} Artikeln sind auf diesem Gerät gespeichert.` + (navigator.serviceWorker && !navigator.serviceWorker.controller ? ' Der Speicher wird beim nächsten Start aktiv.' : '');
@@ -408,10 +422,14 @@ async function saveAll(){
   saving = false;
   const o = $('#saveProg');
   if (o) o.textContent = failed ? `Fertig, ${failed} Artikel ließen sich nicht laden.` : 'Fertig. Alle Artikel gehen jetzt auch offline.';
-  if (sheet.dataset.kind === 'stand') { const cnt = await articleCacheCount(); const info = $('#offInfo'); if (info && cnt !== null) info.textContent = `${cnt} von ${D.artikel.length} Artikeln sind auf diesem Gerät gespeichert.`; }
+  const cnt = await articleCacheCount();
+  if (cnt === D.artikel.length) F.stempel.gib('offline');
+  if (sheet.dataset.kind === 'stand') { const info = $('#offInfo'); if (info && cnt !== null) info.textContent = `${cnt} von ${D.artikel.length} Artikeln sind auf diesem Gerät gespeichert.`; }
 }
 function exportStand(){
-  const data = { app: 'lernwiki', version: 1, gesichert: new Date().toISOString(), stand: Stand.all() };
+  F.stempel.gib('backup');
+  /* Stempel und Lerntage kommen mit in die Sicherung */
+  const data = { app: 'lernwiki', version: 1, gesichert: new Date().toISOString(), stand: Stand.all(), stempel: F.stempel.alle(), tage: F.stempel.tage() };
   const blob = new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -431,6 +449,7 @@ async function importStand(e){
       if (!v || ![1, 2].includes(v.s)) continue;
       if (!merged[p] || merged[p].s < v.s) { merged[p] = { s: v.s, t: Number(v.t) || Date.now() }; n++; }
     }
+    F.stempel.merge(data.stempel, data.tage);
     Stand.replace(merged);
     F.toast && F.toast(`Wiederhergestellt: ${n} Einträge übernommen.`, null, null, 4000);
   } catch (err) {
@@ -445,6 +464,13 @@ addEventListener('fiae-stand', e => {
   if (kind === 'artikel') { const p = decodeURIComponent(location.hash.slice(10)); paintStatus(p); }
   else if (kind === 'pruefung') { const y = scrollEl.scrollTop; renderExam(); scrollEl.scrollTop = y; }
   else if (kind === 'stand' && !saving) { const y = scrollEl.scrollTop; renderStand().then(() => { scrollEl.scrollTop = y; }); }
+});
+
+/* Neuer Stempel ohne Änderung am Lernstand (Sichern, Offline): Mein Stand auffrischen */
+addEventListener('fiae-stempel', () => {
+  if (!F.sheetOpen || sheet.dataset.kind !== 'stand' || saving) return;
+  const y = scrollEl.scrollTop;
+  renderStand().then(() => { scrollEl.scrollTop = y; });
 });
 
 /* Start: direkt mit #/... geöffnet (Lesezeichen, geteilter Link) */

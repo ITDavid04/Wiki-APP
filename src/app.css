@@ -25,6 +25,8 @@
   --stage-ink:#EEF3EF;
   --stage-muted:#9FB2A8;
   --rot:#E5483A;
+  --ink-honig:#A87500;
+  --ink-blau:#2E68A8;
   --rot-band:#FF6F61;
   --gelb:#F2C14E;
   --gruen:#5CCB8F;
@@ -52,6 +54,8 @@
     --band-line:rgba(232,243,236,.14);
     --stage:#08100C;
     --rot:#FF7A6C;
+    --ink-honig:#E8B931;
+    --ink-blau:#7FB2EA;
     --ph:#E8C873;
     color-scheme:dark;
   }
@@ -75,6 +79,8 @@
   --band-line:rgba(232,243,236,.14);
   --stage:#08100C;
   --rot:#FF7A6C;
+  --ink-honig:#E8B931;
+  --ink-blau:#7FB2EA;
   --ph:#E8C873;
   color-scheme:dark;
 }
@@ -213,6 +219,32 @@ section[id],li[id]{scroll-margin-top:96px}
 .erfolg-btns .pillbtn{height:36px}
 .erfolg-btns .pillbtn:not(.dark){border:1.5px solid var(--line)}
 .erfolg.gesamt h2{font-size:1.75rem}
+/* Karte für einen neuen Stempel: der Stempel drückt sich statt des Häkchens auf */
+.erfolg-stempel{display:none}
+.erfolg.stempelkarte .erfolg-mark > svg{display:none}
+.erfolg.stempelkarte .erfolg-stempel{display:block;width:68px;height:68px;margin:-6px}
+.erfolg.stempelkarte .erfolg-stempel .stempel-svg{width:100%;height:100%}
+.erfolg.stempelkarte.in .erfolg-stempel .stempel-svg{animation:stempelDrauf .55s .12s cubic-bezier(.3,1.3,.5,1) both}
+@keyframes stempelDrauf{0%{opacity:0;transform:scale(2.2) rotate(-28deg)}55%{opacity:1;transform:scale(.9) rotate(var(--r))}100%{transform:scale(1) rotate(var(--r))}}
+
+/* Leseausweis in Mein Stand */
+.stempel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px 14px;justify-self:stretch;list-style:none;padding:0;margin:4px 0 0}
+.stempel{display:grid;justify-items:center;align-content:start;gap:4px;text-align:center}
+.stempel b{margin-top:6px;font-weight:600;font-size:.95rem;line-height:1.25}
+.stempel > span{color:var(--muted);font-size:.82rem;line-height:1.4}
+.stempel .fort{display:block;margin-top:3px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.stempel-svg{display:block;width:96px;height:96px;color:var(--c);transform:rotate(var(--r));overflow:visible}
+.stempel:not(.on) .stempel-svg{color:var(--muted);opacity:.38;transform:none}
+.stempel:not(.on) .r1{stroke-dasharray:5 5}
+.stempel-svg .r1{fill:none;stroke:currentColor;stroke-width:3.2}
+.stempel-svg .r2{fill:none;stroke:currentColor;stroke-width:1.4}
+.stempel-svg .arc{fill:currentColor;font-size:9px;font-weight:700;letter-spacing:1.5px;text-anchor:middle}
+.stempel-svg .ico{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.stempel-svg .ico .f,.stempel-svg .dot{fill:currentColor}
+.stempel-svg .num{fill:currentColor;font-size:29px;font-weight:700;letter-spacing:-1px;text-anchor:middle}
+.stempel-svg .num.n3{font-size:24px}
+.stempel-svg .num2{fill:currentColor;font-size:15px;font-weight:700;text-anchor:middle}
+.stempel-svg .ki{fill:currentColor;font-size:11px;font-weight:800;letter-spacing:.5px;text-anchor:middle}
 
 /* Bühne */
 .hero{display:grid;gap:14px;padding-top:calc(72px + env(safe-area-inset-top,0px))}
@@ -597,6 +629,7 @@ html.sheet-open body{overflow:hidden}
   .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   .sheet-body{padding-bottom:calc(130px + env(safe-area-inset-bottom,0px))}
   .stand-nums{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .stempel-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
   .erfolg{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 }
 @media (max-width:560px){
@@ -625,6 +658,7 @@ html.sheet-open body{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .erfolg-burst{display:none}
+  .erfolg.stempelkarte.in .erfolg-stempel .stempel-svg{animation:none}
   .erfolg-mark path{stroke-dashoffset:0}
 }
 @media (hover:none),(pointer:coarse){.cursor{display:none}}

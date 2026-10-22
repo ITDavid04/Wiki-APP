@@ -4,7 +4,7 @@
    CI=1 npm test               -> wie auf GitHub: 3D in Software statt auf der Grafikkarte
    Prüft: Installierbarkeit laut Chrome, Service Worker übernimmt, Start im Flugmodus, keine Fehler in der Konsole. */
 import puppeteer from 'puppeteer-core';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { start } from './serve.mjs';
@@ -182,6 +182,8 @@ try {
   await m.evaluate(() => window.FIAE.closeSheet());
   await r.bringToFront();
   await r.evaluate(() => window.FIAE.closeSheet());
+  /* die Stempel-Karte vom ersten Artikel zur Seite legen, sie liegt sonst über der Ranke */
+  await r.evaluate(() => { if (!document.getElementById('erfolg').hidden) document.getElementById('erfolgOk').click(); });
   await r.evaluate(() => { const el = document.querySelector('#ranke'); window.scrollTo(0, el.getBoundingClientRect().top + scrollY + 40); });
   await sleep(5000);
   const box = await r.evaluate(() => { const b = document.querySelector('#a-ranke').getBoundingClientRect(); return { l: b.left, t: Math.max(80, b.top), r: b.right, b: Math.min(innerHeight, b.bottom) }; });
@@ -218,11 +220,11 @@ try {
   const ep = await ctx.newPage();
   const eerrs = watch(ep, 'Erfolg');
   await ep.setViewport({ width: 1280, height: 860 });
-  /* zählt, wie oft die Feier aufgeht */
+  /* zählt, wie oft die Lernfeld-Feier aufgeht (Stempel-Karten zählen nicht) */
   await ep.evaluateOnNewDocument(() => addEventListener('DOMContentLoaded', () => {
     window.__feiern = 0;
     const el = document.getElementById('erfolg');
-    new MutationObserver(() => { if (!el.hidden) window.__feiern++; }).observe(el, { attributes: true, attributeFilter: ['hidden'] });
+    new MutationObserver(() => { if (!el.hidden && el.dataset.art !== 'stempel') window.__feiern++; }).observe(el, { attributes: true, attributeFilter: ['hidden'] });
   }));
   await ep.goto(BASE, { waitUntil: 'networkidle0' });
   const setStand = (page, paths) => page.evaluate(ps => localStorage.setItem('lernwiki-stand-v1', JSON.stringify(Object.fromEntries(ps.map(p => [p, { s: 2, t: 1 }])))), paths);
@@ -249,9 +251,10 @@ try {
   const f1 = await ep.evaluate(() => ({ open: !document.getElementById('erfolg').hidden, title: document.getElementById('erfolgTitle').textContent, live: document.getElementById('sheetLive').textContent, feiern: window.__feiern, merk: localStorage.getItem('lernwiki-erfolge-v1') }));
   await ep.screenshot({ path: path.join(SHOTS, 'erfolg-feier.png') });
   await ep.keyboard.press('Escape');
-  const f2 = await ep.evaluate(() => ({ zu: document.getElementById('erfolg').hidden, sheet: !document.getElementById('sheet').hidden }));
+  /* zu heißt hier: keine Lernfeld-Karte mehr offen (eine Stempel-Karte darf danach kommen) */
+  const f2 = await ep.evaluate(() => ({ zu: (f => f.hidden || f.dataset.art === 'stempel')(document.getElementById('erfolg')), sheet: !document.getElementById('sheet').hidden }));
   await tick(); await sleep(200); await tick(); await sleep(400);
-  const f3 = await ep.evaluate(() => ({ zu: document.getElementById('erfolg').hidden, feiern: window.__feiern }));
+  const f3 = await ep.evaluate(() => ({ zu: (f => f.hidden || f.dataset.art === 'stempel')(document.getElementById('erfolg')), feiern: window.__feiern }));
   check('Letzten Artikel abhaken: Feier mit Ansage', f1.open && f1.title === 'LF1 geschafft!' && f1.live.includes('LF1 geschafft!') && JSON.parse(f1.merk)['1'] === LF1.length, `${f1.title} ${f1.merk}`);
   check('Escape schließt die Feier, Prüfungsmodus bleibt offen', f2.zu && f2.sheet);
   check('Feier kommt nur einmal', f3.zu && f3.feiern === 1, `${f3.feiern} Feiern`);
@@ -323,6 +326,75 @@ try {
   check('Katalog und Stand zeigen die Biene', b3.cat && b3.line, JSON.stringify(b3));
   check('Keine Fehler bei den Bienen', berrs.length === 0, berrs.slice(0, 5).join(' | '));
   await ctx2.close();
+
+  /* 9. Leseausweis: Stempel. Eigener Browser-Kontext. Die Zeitzone wird fest auf Tag gestellt (für die Nachteule später auf Nacht),
+     damit der Test zu jeder Uhrzeit gleich läuft, auch beim nächtlichen Lauf auf GitHub. */
+  const zone = ok => { const h = new Date().getUTCHours(); for (let o = -12; o <= 14; o++) if (ok((h + o + 24) % 24)) return o >= 0 ? `Etc/GMT-${o}` : `Etc/GMT+${-o}`; };
+  const TAG = zone(l => l >= 11 && l < 16), NACHT = zone(l => l === 23 || l < 2);
+  const ctx3 = await browser.createBrowserContext();
+  const sp = await ctx3.newPage();
+  const serrs = watch(sp, 'Stempel');
+  await sp.setViewport({ width: 1280, height: 860 });
+  await sp.emulateTimezone(TAG);
+  /* Sichern lädt eine Datei herunter; im Test nicht */
+  await (await browser.target().createCDPSession()).send('Browser.setDownloadBehavior', { behavior: 'deny', browserContextId: ctx3.id }).catch(() => {});
+  await sp.goto(BASE, { waitUntil: 'networkidle0' });
+  await ready(sp);
+  const N_ST = await sp.evaluate(() => window.FIAE.stempel.liste.length);
+  await sp.evaluate(() => window.FIAE.go('#/stand'));
+  await sleep(500);
+  const k0 = await sp.evaluate(() => ({ alle: document.querySelectorAll('#ausweis .stempel').length, on: document.querySelectorAll('#ausweis .stempel.on').length }));
+  check('Leseausweis zeigt alle Stempel, noch keiner verdient', k0.alle === N_ST && N_ST >= 17 && k0.on === 0, `${k0.alle} Stempel`);
+  /* neun Artikel an neun verschiedenen Tagen gelesen, jeweils mittags: Stempel kommen beim Laden still dazu */
+  const P10 = CAT.artikel.slice(0, 10).map(pathOf);
+  await sp.evaluate(ps => { const o = {}; ps.slice(0, 9).forEach((p, i) => { o[p] = { s: 1, t: new Date(2026, 8, 1 + i, 12).getTime() }; }); localStorage.setItem('lernwiki-stand-v1', JSON.stringify(o)); }, P10);
+  await sp.reload({ waitUntil: 'networkidle0' });
+  await ready(sp);
+  await sleep(600);
+  const k1 = await sp.evaluate(() => ({ hat: Object.keys(window.FIAE.stempel.alle()).sort().join(','), card: !document.getElementById('erfolg').hidden, tage: window.FIAE.stempel.tage().length }));
+  check('Stempel aus dem Lernstand kommen still dazu', k1.hat === 'b1,b5,t7' && !k1.card && k1.tage === 9, JSON.stringify(k1));
+  /* der zehnte Artikel per Klick: Karte mit dem Stempel Bienenstock */
+  await sp.evaluate(p => window.FIAE.stand.set(p, 1), P10[9]);
+  await sp.waitForFunction(() => !document.getElementById('erfolg').hidden, { timeout: 5000 }).catch(() => {});
+  await sleep(500);
+  const k2 = await sp.evaluate(() => ({ art: document.getElementById('erfolg').dataset.art, title: document.getElementById('erfolgTitle').textContent, stp: !!document.querySelector('#erfolgStempel svg'),
+    on: !!document.querySelector('#ausweis .stempel.on[data-id="b10"]'), live: document.getElementById('sheetLive').textContent }));
+  await sp.screenshot({ path: path.join(SHOTS, 'stempel-karte.png') });
+  check('Neuer Stempel: Karte mit Stempel und Ansage', k2.art === 'stempel' && k2.title === 'Bienenstock' && k2.stp && k2.on && k2.live.includes('Bienenstock'), JSON.stringify(k2));
+  await sp.click('#erfolgStand');
+  await sleep(1000);
+  const k3 = await sp.evaluate(() => ({ zu: document.getElementById('erfolg').hidden, top: Math.round(document.getElementById('ausweis').getBoundingClientRect().top) }));
+  await sp.screenshot({ path: path.join(SHOTS, 'leseausweis.png') });
+  check('Zum Leseausweis springt dorthin', k3.zu && k3.top >= 0 && k3.top < 400, JSON.stringify(k3));
+  /* Sichern gibt Backup-Profi */
+  await sp.evaluate(() => document.getElementById('exp').click());
+  await sp.waitForFunction(() => !document.getElementById('erfolg').hidden, { timeout: 5000 }).catch(() => {});
+  const k4 = await sp.evaluate(() => ({ title: document.getElementById('erfolgTitle').textContent, hat: !!window.FIAE.stempel.alle().backup }));
+  check('Sichern gibt den Stempel Backup-Profi', k4.hat && k4.title === 'Backup-Profi', JSON.stringify(k4));
+  await sp.evaluate(() => document.getElementById('erfolgOk').click());
+  /* nach 22 Uhr: Nachteule, mit dem Hinweis auf Schlaf */
+  await sp.emulateTimezone(NACHT);
+  await sp.evaluate(p => window.FIAE.stand.set(p, 2), P10[0]);
+  await sp.waitForFunction(() => !document.getElementById('erfolg').hidden && document.getElementById('erfolgTitle').textContent.includes('Nachteule'), { timeout: 5000 }).catch(() => {});
+  const k5 = await sp.evaluate(() => ({ title: document.getElementById('erfolgTitle').textContent, sub: document.getElementById('erfolgSub').textContent }));
+  check('Nach 22 Uhr: Nachteule mit Hinweis auf Schlaf', k5.title.includes('Nachteule') && k5.sub.includes('Schlaf'), k5.title);
+  await sp.evaluate(() => document.getElementById('erfolgOk').click());
+  await sp.emulateTimezone(TAG);
+  /* Zurücksetzen löscht Stempel und Lerntage */
+  await sp.evaluate(() => { window.confirm = () => true; document.getElementById('reset').click(); });
+  await sleep(400);
+  const k6 = await sp.evaluate(() => ({ n: Object.keys(window.FIAE.stempel.alle()).length, tage: window.FIAE.stempel.tage().length }));
+  check('Zurücksetzen löscht Stempel und Lerntage', k6.n === 0 && k6.tage === 0, JSON.stringify(k6));
+  /* Wiederherstellen einer Sicherung bringt Stempel und Lerntage mit, ohne Feier; Unbekanntes bleibt draußen */
+  const tMittag = await sp.evaluate(() => new Date(2026, 8, 1, 12).getTime());
+  const SICH = path.join(SHOTS, 'sicherung-test.json');
+  await writeFile(SICH, JSON.stringify({ app: 'lernwiki', version: 1, stand: { [P10[0]]: { s: 1, t: tMittag } }, stempel: { backup: tMittag, quatsch: 5 }, tage: ['2026-09-01', '2026-09-02'] }));
+  await (await sp.$('#imp')).uploadFile(SICH);
+  await sleep(1000);
+  const k7 = await sp.evaluate(() => ({ hat: Object.keys(window.FIAE.stempel.alle()).sort().join(','), tage: window.FIAE.stempel.tage().length, card: !document.getElementById('erfolg').hidden }));
+  check('Wiederherstellen bringt Stempel mit, ohne Feier', k7.hat === 'b1,backup' && k7.tage === 2 && !k7.card, JSON.stringify(k7));
+  check('Keine Fehler beim Leseausweis', serrs.length === 0, serrs.slice(0, 5).join(' | '));
+  await ctx3.close();
 } catch (e) {
   check('Test lief durch', false, e.message);
 } finally {

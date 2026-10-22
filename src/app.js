@@ -694,30 +694,210 @@ addEventListener('fiae-stand', e => {
   feiern(D.lf.find(l => l.n === n), k, gesamt);
 });
 function feiern(l, k, gesamt){
+  festZeigen({
+    art: gesamt ? 'gesamt' : 'lf', kicker: gesamt ? `${l.k} war das letzte` : 'Lernfeld geschafft',
+    titel: gesamt ? 'Alle Lernfelder geschafft!' : `${l.k} geschafft!`,
+    sub: gesamt ? `In allen ${lfZiel.length} Lernfeldern mit Artikeln sitzt jeder Artikel. Viel Erfolg bei der Prüfung!`
+      : `${l.titel}: ${k === 1 ? 'der Artikel sitzt' : `alle ${k} Artikel sitzen`}. Stark!`
+  });
+}
+/* Eine Karte für alles. Lernfeld-Feiern kommen sofort (eine neue ersetzt die alte, ein offener Stempel wartet dann wieder).
+   Stempel warten, bis die Karte frei ist und keine Biene mehr fliegt; was dann wartet, kommt zusammen auf eine Karte. */
+const festQ = [];
+let festNow = null, festT = 0;
+function festZeigen(item){
+  if (item.art !== 'stempel') { festOeffnen(item); return; }
+  festQ.push(item.s);
+  festWeiter();
+}
+function festWeiter(){
+  clearTimeout(festT);
+  if (festNow || !festQ.length) return;
+  festT = setTimeout(() => {
+    if (festNow || !festQ.length) return;
+    if (document.querySelector('.bee-fly')) { festWeiter(); return; }
+    festOeffnen({ art: 'stempel', liste: festQ.splice(0) });
+  }, document.querySelector('.bee-fly') ? 1500 : 400);
+}
+const undList = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' und ' + a[a.length - 1];
+function festOeffnen(item){
+  if (festNow && festNow.art === 'stempel' && item.art !== 'stempel') festQ.unshift(...festNow.liste);
+  festNow = item;
   hideToast();
-  const titel = gesamt ? 'Alle Lernfelder geschafft!' : `${l.k} geschafft!`;
-  const sub = gesamt ? `In allen ${lfZiel.length} Lernfeldern mit Artikeln sitzt jeder Artikel. Viel Erfolg bei der Prüfung!`
-    : `${l.titel}: ${k === 1 ? 'der Artikel sitzt' : `alle ${k} Artikel sitzen`}. Stark!`;
-  $('#erfolgKicker').textContent = gesamt ? `${l.k} war das letzte` : 'Lernfeld geschafft';
+  const st = item.art === 'stempel', gesamt = item.art === 'gesamt', L = item.liste || [];
+  const kicker = st ? (L.length === 1 ? 'Neuer Stempel im Leseausweis' : `${L.length} neue Stempel im Leseausweis`) : item.kicker;
+  const titel = st ? undList(L.map(s => s.name)) + (L.length === 1 ? '' : '!') : item.titel;
+  const sub = st ? L.slice(0, 2).map(s => s.text).join(' ') : item.sub;
+  fest.dataset.art = item.art;
+  $('#erfolgKicker').textContent = kicker;
   $('#erfolgTitle').textContent = titel;
   $('#erfolgSub').textContent = sub;
+  $('#erfolgStand').textContent = st ? 'Zum Leseausweis' : 'Mein Stand';
+  const stp = $('#erfolgStempel');
+  stp.innerHTML = st ? stempelSvg(L[0], Date.now()) : '';
+  if (st) stp.style.cssText = `--c:${stempelFarbe(L[0])};--r:${stempelDreh(L[0])}deg`;
   fest.classList.toggle('gesamt', gesamt);
+  fest.classList.toggle('stempelkarte', st);
   fest.hidden = false;
   fest.classList.remove('in'); void fest.offsetWidth; fest.classList.add('in');
   /* Blätter in den Farben der Ranke und gelbe Blütenblätter fliegen aus dem Häkchen, bei reduzierter Bewegung nicht */
   let leaves = '';
-  if (!reduce.matches) for (let i = 0, n = gesamt ? 26 : 14; i < n; i++) {
+  if (!st && !reduce.matches) for (let i = 0, n = gesamt ? 26 : 14; i < n; i++) {
     const w = -Math.PI / 2 + (i / (n - 1) - 0.5) * Math.PI * 0.95 + (Math.random() - 0.5) * 0.25, d = 70 + Math.random() * (gesamt ? 150 : 90);
     leaves += `<i style="--x:${(Math.cos(w) * d).toFixed(0)}px;--y:${(Math.sin(w) * d).toFixed(0)}px;--r:${(Math.random() * 540 - 270).toFixed(0)}deg;--d:${(120 + Math.random() * 160).toFixed(0)}ms;--c:${FEST_COL[i % FEST_COL.length]}"></i>`;
   }
   festBurst.innerHTML = leaves;
-  say(`${titel} ${sub}`);
+  say(`${st ? kicker + ': ' : ''}${titel} ${sub}`);
 }
-function festZu(){ fest.hidden = true; festBurst.innerHTML = ''; }
+function festZu(){ fest.hidden = true; festBurst.innerHTML = ''; festNow = null; festWeiter(); }
 $('#erfolgOk').addEventListener('click', festZu);
-$('#erfolgStand').addEventListener('click', festZu);
+/* Bei einem Stempel führt der Knopf zum Leseausweis in Mein Stand (reader.js liest standZiel) */
+$('#erfolgStand').addEventListener('click', () => {
+  if (festNow && festNow.art === 'stempel') {
+    window.FIAE.standZiel = 'ausweis';
+    if (location.hash === '#/stand') {
+      window.FIAE.standZiel = null;
+      const el = document.getElementById('ausweis');
+      if (el) el.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'start' });
+    }
+  }
+  festZu();
+});
 /* Escape schließt zuerst die Feier, die offene Seite bleibt */
 addEventListener('keydown', e => { if (e.key === 'Escape' && !fest.hidden) { e.stopImmediatePropagation(); festZu(); } }, true);
+
+/* Leseausweis: Stempel für Meilensteine. Einmal verdient, bleiben sie, mit Datum wie im Leihstempel (lernwiki-stempel-v1);
+   nur Zurücksetzen löscht sie. Die meisten werden aus dem Lernstand berechnet, die Lerntage merkt sich lernwiki-tage-v1.
+   Neue Stempel durch einen Klick bekommen eine Karte, beim Laden und Wiederherstellen kommen sie still dazu. */
+const STEMPEL_KEY = 'lernwiki-stempel-v1', TAGE_KEY = 'lernwiki-tage-v1';
+let stempel = {}, tage = [];
+try { stempel = JSON.parse(store.get(STEMPEL_KEY) || '{}') || {}; } catch (e) { stempel = {}; }
+try { tage = JSON.parse(store.get(TAGE_KEY) || '[]') || []; } catch (e) { tage = []; }
+if (!Array.isArray(tage)) tage = [];
+const tagOf = t => { const d = new Date(t); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const nachts = t => { const h = new Date(t).getHours(); return h >= 22 || h < 5; };
+const liest = arts => arts.filter(a => Stand.get(pathOf(a)) >= 1).length;
+/* KI: die Sammlung "Anfänger bis Nerd" hat drei Teile (Gruppen), dazu kommen weitere Artikel in der Abteilung */
+const kiAlle = D.artikel.filter(a => a.r === 'ki');
+const kiTeile = ((REG.find(r => r.id === 'ki') || {}).gruppen || []).map(([g]) => kiAlle.filter(a => a.g === g))
+  .filter(arts => arts.length && pathOf(arts[0]).startsWith('KI-Anfänger_bis_Nerd_Die_Sammlung/'));
+const nRot = rotAll, nAlle = D.artikel.length;
+
+/* Bilder in der Mitte des Stempels, gezeichnet um den Mittelpunkt, Farbe über currentColor */
+const BEE_LINE = '<ellipse cx="13" cy="14.5" rx="6.5" ry="4.6"/><path d="M11.6 10.2v8.6M15.1 10.5v8"/><circle cx="5.6" cy="13.8" r="2.3"/><ellipse cx="11" cy="7.6" rx="2.8" ry="3.6"/><ellipse cx="14.8" cy="8" rx="2.4" ry="3.1"/>';
+const bildZahl = n => `<g class="ico" transform="translate(-8 -30) scale(.66)">${BEE_LINE}</g><text class="num${String(n).length > 2 ? ' n3' : ''}" y="13">${n}</text>`;
+const bildKi = lv => `<g class="ico"><rect x="-13" y="-19" width="26" height="26" rx="4"/><path d="M-6 -23v4M0 -23v4M6 -23v4M-6 7v4M0 7v4M6 7v4M-17 -12h4M-17 -6h4M-17 0h4M13 -12h4M13 -6h4M13 0h4"/></g>` +
+  `<text class="ki" y="-2">KI</text>` + [...Array(lv)].map((_, i) => `<circle class="dot" cx="${(i - (lv - 1) / 2) * 7}" cy="20" r="2.3"/>`).join('');
+const bildBluete = `<g class="ico">${[0, 72, 144, 216, 288].map(a => `<ellipse cy="-11" rx="6" ry="9.5" transform="rotate(${a})"/>`).join('')}<circle r="4.5" class="f"/></g>`;
+const bildAmpel = '<g class="ico"><rect x="-9" y="-22" width="18" height="44" rx="6"/><circle cy="-11" r="4.4" class="f"/><circle r="4.4"/><circle cy="11" r="4.4"/></g>';
+const bildTage = n => `<g class="ico"><rect x="-17" y="-16" width="34" height="32" rx="4"/><path d="M-17 -6h34M-9 -21v8M9 -21v8"/></g><text class="num2" y="11">${n}</text>`;
+const bildDiskette = '<g class="ico"><path d="M-16 -16h24l8 8v24h-32z"/><path d="M-9 -16v10h14v-10"/><rect x="-10" y="4" width="20" height="12"/></g>';
+const bildOffline = '<g class="ico"><path d="M-18 -4a26 26 0 0 1 36 0M-12 3a17 17 0 0 1 24 0M-6 10a8 8 0 0 1 12 0"/><circle cy="16" r="1.8" class="f"/><path d="M-17 -16L17 20"/></g>';
+const bildEule = '<g class="ico"><path d="M-14 -9l-3-11 9 5h16l9-5-3 11v11a14 14 0 0 1-28 0z"/><circle cx="-6" cy="-3" r="5"/><circle cx="6" cy="-3" r="5"/><circle cx="-6" cy="-3" r="1.7" class="f"/><circle cx="6" cy="-3" r="1.7" class="f"/><path d="M-2 4l2 3 2-3"/></g>';
+
+/* Die Stempel. wert liefert [geschafft, nötig] für den Fortschritt; ohne wert vergibt die App sie bei einer Handlung */
+const ST = (id, name, farbe, bild, text, offen, wert) => ({ id, name, farbe, bild, text, offen, wert });
+const STEMPEL = [
+  ...[[1, 'Erste Biene', 'Der erste Artikel ist durch, die erste Biene summt. Jede Bibliothek fängt mit einer einzigen Seite an.'],
+    [5, 'Kleiner Schwarm', 'Fünf Artikel gelesen. Da summt schon was.'],
+    [10, 'Bienenstock', 'Zehn Artikel. Du baust dir gerade einen ganzen Stock voller Wissen.'],
+    [25, 'Fleißige Biene', '25 Artikel gelesen. Fleißig ist hier keine Floskel, das ist Statistik.'],
+    [75, 'Ganzes Volk', '75 Artikel. Ein ganzes Bienenvolk arbeitet jetzt für dich.'],
+    [100, 'Honigernte', 'Dreistellig! 100 Artikel gelesen. Zeit, den Honig zu ernten.'],
+    [nAlle, 'Bücherwurm mit Flügeln', `Alle ${nAlle} Artikel gelesen. Aus dem Bücherwurm ist eine Biene geworden, und die ganze Bibliothek verneigt sich.`]
+  ].map(([n, name, text], i, all) => ST(i === all.length - 1 ? 'balle' : 'b' + n, name, 'honig', bildZahl(n), text,
+    n === 1 ? 'Lies deinen ersten Artikel bis zum Ende.' : `Lies ${n} Artikel.`, () => [Stand.count().gelesen, n])),
+  ST('ki1', 'KI-Anfänger', 'gruen', bildKi(1), 'Teil 1 der KI-Sammlung ist durch. Du weißt jetzt, was KI ist, was sie kann und wo sie flunkert.',
+    'Lies Teil 1 der KI-Sammlung „Anfänger bis Nerd“.', () => [liest(kiTeile[0] || []), (kiTeile[0] || [0]).length]),
+  ST('ki3', 'KI-Profi', 'gruen', bildKi(2), `Alle ${kiTeile.length} Teile der KI-Sammlung sind durch. Du redest nicht mehr nur über KI, du weißt, was unter der Haube passiert.`,
+    `Lies alle ${kiTeile.length} Teile der KI-Sammlung.`, () => [kiTeile.filter(arts => liest(arts) === arts.length).length, kiTeile.length]),
+  ST('kinerd', 'KI-Nerd', 'gruen', bildKi(3), `Die ganze Abteilung KI, alle ${kiAlle.length} Artikel, bis zum eigenen Recherche-Agent. Von Anfänger bis Nerd, genau wie versprochen.`,
+    `Lies alle ${kiAlle.length} Artikel der Abteilung KI.`, () => [liest(kiAlle), kiAlle.length]),
+  ST('lf', 'Erstes Lernfeld', 'gruen', bildBluete, 'Ein ganzes Lernfeld sitzt. An deiner Ranke ist die erste Blüte aufgegangen, und die Bienen haben es schon gemerkt.',
+    'Bring alle Artikel eines Lernfelds auf Sitzt.', () => [Erfolg.list().length, 1]),
+  ST('pruef', 'Prüfungsreif', 'rot', bildAmpel, `Alle ${nRot} Artikel mit Ampel sitzen. Rot ist jetzt offiziell deine Lieblingsfarbe. Die IHK kann kommen.`,
+    `Bring alle ${nRot} Artikel mit Ampel auf Sitzt.`, () => [Stand.count(a => a.rot).sitzt, nRot]),
+  ST('t7', 'Dranbleiber', 'gruen', bildTage(7), 'An 7 verschiedenen Tagen gelernt. Steter Tropfen höhlt den Stein und füllt den Kopf.',
+    'Lerne an 7 verschiedenen Tagen.', () => [tage.length, 7]),
+  ST('t15', 'Dauerbrenner', 'gruen', bildTage(15), '15 Lerntage. Das ist keine Phase mehr, das ist eine Gewohnheit.',
+    'Lerne an 15 verschiedenen Tagen.', () => [tage.length, 15]),
+  ST('backup', 'Backup-Profi', 'blau', bildDiskette, 'Lernstand gesichert. Unter Admins gilt: Kein Backup, kein Mitleid. Du brauchst zum Glück keins.',
+    'Sichere deinen Lernstand in Mein Stand.'),
+  ST('offline', 'Funkloch-sicher', 'blau', bildOffline, 'Alle Artikel liegen offline auf deinem Gerät. Funkloch im Zug? Dann lernst du eben weiter.',
+    'Speichere alle Artikel offline.'),
+  ST('eule', 'Nachteule', 'blau', bildEule, 'Nach 22 Uhr noch gelernt, Respekt! Aber Schlaf ist kein Luxus: Nachts sortiert dein Gehirn, was du tagsüber gelernt hast. Also ab ins Bett, die Ranke wartet auch morgen noch.',
+    'Lerne nach 22 Uhr. Aber bitte nicht zu oft.')
+];
+const FARBE = { honig: 'var(--ink-honig)', gruen: 'var(--accent)', rot: 'var(--rot)', blau: 'var(--ink-blau)' };
+const stempelFarbe = s => FARBE[s.farbe];
+/* jeder Stempel sitzt etwas schief, aber immer gleich schief */
+const stempelDreh = s => ([...s.id].reduce((h, c) => h * 31 + c.charCodeAt(0), 7) % 19) - 9;
+/* Stempel: zwei Ringe, oben LERN-WIKI, unten das Datum, in der Mitte das Bild. Verdiente bekommen die Tinte (Filter #tinte). */
+function stempelSvg(s, t){
+  const k = 'sp' + s.id + (t ? 'x' : 'o');
+  const datum = t ? new Date(t).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+  return `<svg class="stempel-svg" viewBox="-50 -50 100 100" aria-hidden="true"><defs><path id="${k}a" d="M-37 0A37 37 0 0 1 37 0"/><path id="${k}b" d="M-43 0A43 43 0 0 0 43 0"/></defs>` +
+    `<g${t ? ' filter="url(#tinte)"' : ''}><circle r="46" class="r1"/><circle r="31" class="r2"/>` +
+    `<text class="arc"><textPath href="#${k}a" startOffset="50%">LERN-WIKI</textPath></text>` +
+    (t ? `<text class="arc"><textPath href="#${k}b" startOffset="50%">${datum}</textPath></text>` : '') + s.bild + '</g></svg>';
+}
+function stempelGeben(liste, still){
+  store.set(STEMPEL_KEY, JSON.stringify(stempel));
+  window.dispatchEvent(new Event('fiae-stempel'));
+  if (!still) liste.forEach(s => festZeigen({ art: 'stempel', s }));
+}
+function stempelPruefen(still){
+  const neu = STEMPEL.filter(s => !stempel[s.id] && s.wert && (w => w[0] >= w[1])(s.wert()));
+  if (!neu.length) return;
+  neu.forEach(s => { stempel[s.id] = Date.now(); });
+  stempelGeben(neu, still);
+}
+function gib(id, still){
+  if (stempel[id]) return;
+  stempel[id] = Date.now();
+  stempelGeben(STEMPEL.filter(s => s.id === id), still);
+}
+function tagMerk(t){
+  const d = tagOf(t);
+  if (tage.includes(d)) return;
+  tage.push(d); tage.sort();
+  store.set(TAGE_KEY, JSON.stringify(tage));
+}
+/* Lerntage und Nachteule aus dem vorhandenen Lernstand nachtragen (beim Start und nach dem Wiederherstellen), still */
+function nachtragen(){
+  Object.values(Stand.all()).forEach(v => { if (v && v.t > 0) { tagMerk(v.t); if (nachts(v.t)) gib('eule', true); } });
+  stempelPruefen(true);
+}
+nachtragen();
+addEventListener('fiae-stand', e => {
+  const p = e.detail && e.detail.p;
+  if (!p) {
+    if (!Object.keys(Stand.all()).length) {
+      stempel = {}; tage = [];
+      store.set(STEMPEL_KEY, '{}'); store.set(TAGE_KEY, '[]');
+      window.dispatchEvent(new Event('fiae-stempel'));
+      return;
+    }
+    nachtragen();
+    return;
+  }
+  if (e.detail.s >= 1) { const now = Date.now(); tagMerk(now); if (nachts(now)) gib('eule'); }
+  stempelPruefen(false);
+});
+window.FIAE.stempel = {
+  liste: STEMPEL, farbe: stempelFarbe, dreh: stempelDreh, svg: stempelSvg, gib,
+  alle: () => ({ ...stempel }), tage: () => tage.slice(),
+  /* aus einer Sicherung: Stempel (frühestes Datum gewinnt) und Lerntage übernehmen */
+  merge(st, tg){
+    if (st && typeof st === 'object') for (const [k, v] of Object.entries(st)) {
+      if (STEMPEL.some(s => s.id === k) && Number(v) > 0 && (!stempel[k] || stempel[k] > Number(v))) stempel[k] = Number(v);
+    }
+    if (Array.isArray(tg)) tg.forEach(d => { if (/^\d{4}-\d\d-\d\d$/.test(d) && !tage.includes(d)) tage.push(d); });
+    tage.sort();
+    store.set(TAGE_KEY, JSON.stringify(tage));
+    stempelGeben([], true);
+  }
+};
 
 /* App: Service Worker (offline und Updates), Installieren, Hinweis bei fehlendem Netz */
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
