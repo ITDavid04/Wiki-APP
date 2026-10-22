@@ -61,11 +61,13 @@ try {
   const errs = watch(page, 'Desktop');
   await page.goto(BASE, { waitUntil: 'networkidle0' });
   check('Seite lädt, Katalog vollständig', await catalogOk(page));
+  /* Die Suche wartet kurz nach dem Tippen; auf dem langsamen GitHub-Rechner reichen feste 300 ms nicht immer */
+  const listOpen = open => page.waitForFunction(o => document.getElementById('catList').hidden !== o, { timeout: 10000 }, open).catch(() => {});
   await page.type('#q', 'subnetting');
-  await sleep(300);
+  await listOpen(true);
   const hit = await page.evaluate(() => ({ open: !document.getElementById('catList').hidden, shown: document.querySelectorAll('#catList li[data-i]:not([hidden])').length, count: document.getElementById('catCount').textContent }));
   await page.$eval('#q', e => { e.value = ''; e.dispatchEvent(new Event('input')); });
-  await sleep(300);
+  await listOpen(false);
   const shut = await page.evaluate(() => document.getElementById('catList').hidden);
   await page.$eval('#chips [data-r="all"]', b => b.click());
   const all = await page.evaluate(() => ({ open: !document.getElementById('catList').hidden, count: document.getElementById('catCount').textContent }));
@@ -114,11 +116,12 @@ try {
   await r.reload({ waitUntil: 'networkidle0' });
   await ready(r);
   await r.type('#q', 'Fundament des Netzwerks');
-  await sleep(300);
-  await r.evaluate(p => { const a = document.querySelector(`#catList .st[data-p="${p}"]`).closest('a'); if (a.offsetParent) a.click(); }, LF31);
+  /* warten, bis der Treffer sichtbar ist; auf dem langsamen GitHub-Rechner reichen feste 300 ms nicht immer */
+  const link = await r.waitForFunction(p => { const s = document.querySelector(`#catList .st[data-p="${p}"]`), a = s && s.closest('a'); return a && a.offsetParent ? a : null; }, { timeout: 10000 }, LF31).catch(() => null);
+  if (link) await link.evaluate(a => a.click());
   await r.waitForFunction(() => document.querySelectorAll('#prose table').length > 2, { timeout: 15000 }).catch(() => {});
   const art = await r.evaluate(() => ({
-    open: !document.getElementById('sheet').hidden, hash: location.hash, title: document.getElementById('sheetTitle').textContent,
+    open: !document.getElementById('sheet').hidden, hash: location.hash, title: (document.getElementById('sheetTitle') || {}).textContent,
     tables: document.querySelectorAll('#prose table').length, rot: document.querySelectorAll('#prose [data-ampel="rot"]').length,
     gelb: document.querySelectorAll('#prose [data-ampel="gelb"]').length, anchors: document.querySelectorAll('#prose h2[id], #prose h3[id]').length
   }));
