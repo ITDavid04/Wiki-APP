@@ -279,7 +279,22 @@ function bootVine(THREE, RoomEnvironment){
   scene.add(core);
   let coreG = 0, coreS = 0;
 
-  let dataLeaves = null, decoLeaves = null, buds = null, secCores = null, lfPetals = null, lfCores = null;
+  let dataLeaves = null, decoLeaves = null, buds = null, secCores = null, lfPetals = null, lfCores = null, beeBodies = null, beeHeads = null, beeWings = null;
+  let BE = [];                             /* Bienen um die Blüten der geschafften Lernfelder, zwei je Blüte */
+  /* Biene: Körper mit Streifen (Kugel, Pole auf der Längsachse x, vorne +x), Kopf, zwei Flügel mit Gelenk am Rücken */
+  const beeTex = (() => {
+    const c = document.createElement('canvas'); c.width = 8; c.height = 64;
+    const g = c.getContext('2d');
+    g.fillStyle = '#E2F06A'; g.fillRect(0, 0, 8, 64);
+    g.fillStyle = '#1A1F14'; [[20, 28], [34, 42], [48, 55], [60, 64]].forEach(([a, b]) => g.fillRect(0, a, 8, b - a));
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  })();
+  const beeBodyGeo = new THREE.SphereGeometry(1, 18, 12).rotateZ(-Math.PI / 2);
+  const beeBodyMat = new THREE.MeshPhysicalMaterial({ map: beeTex, roughness: 0.45, clearcoat: 0.6, clearcoatRoughness: 0.3 });
+  const beeHeadMat = new THREE.MeshPhysicalMaterial({ color: 0x1A1F14, roughness: 0.35, clearcoat: 0.8 });
+  const wingGeo = new THREE.CircleGeometry(1, 18).translate(0, 1, 0);
+  const wingMat = new THREE.MeshBasicMaterial({ color: 0xC9E2F0, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false });
   let SC = [];                             /* Blütenmitten der Abschnitte */
   let LB = [];                             /* Blüten an den Trieben geschaffter Lernfelder */
   let lfDone = new Set(F.erfolg.list().map(l => l.n));
@@ -486,7 +501,7 @@ function bootVine(THREE, RoomEnvironment){
     geo.setIndex(out.I);
     stem.geometry.dispose(); stem.geometry = geo;
 
-    [dataLeaves, decoLeaves, buds, secCores, lfPetals, lfCores].forEach(m => { if (m) { scene.remove(m); m.dispose(); } });
+    [dataLeaves, decoLeaves, buds, secCores, lfPetals, lfCores, beeBodies, beeHeads, beeWings].forEach(m => { if (m) { scene.remove(m); m.dispose(); } });
     dataLeaves = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LD.length));
     decoLeaves = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LX.length));
     BD = LD.filter(l => l.rot);
@@ -496,7 +511,13 @@ function bootVine(THREE, RoomEnvironment){
     lfPetals = new THREE.InstancedMesh(leafGeo, leafMat, Math.max(1, LB.length * 5));
     lfCores = new THREE.InstancedMesh(budGeo, core.material, Math.max(1, LB.length));
     lfPetals.count = LB.length * 5; lfCores.count = LB.length;
-    [dataLeaves, decoLeaves, buds, secCores, lfPetals, lfCores].forEach(m => { m.frustumCulled = false; scene.add(m); });
+    BE = [];
+    LB.forEach((b, i) => [1, -1].forEach((dir, k) => BE.push({ i, dir, ph: i * 1.7 + k * Math.PI, sp: 0.9 + ((i * 37 + k * 11) % 7) / 14 })));
+    beeBodies = new THREE.InstancedMesh(beeBodyGeo, beeBodyMat, Math.max(1, BE.length));
+    beeHeads = new THREE.InstancedMesh(budGeo, beeHeadMat, Math.max(1, BE.length));
+    beeWings = new THREE.InstancedMesh(wingGeo, wingMat, Math.max(1, BE.length * 2));
+    beeBodies.count = beeHeads.count = BE.length; beeWings.count = BE.length * 2;
+    [dataLeaves, decoLeaves, buds, secCores, lfPetals, lfCores, beeBodies, beeHeads, beeWings].forEach(m => { m.frustumCulled = false; scene.add(m); });
     LD.forEach((l, i) => { l.col = leafColor(l.ai, l.jit); dataLeaves.setColorAt(i, l.col); });
     LX.forEach((l, i) => decoLeaves.setColorAt(i, l.col));
     const petalCol = new THREE.Color(0xE2F06A);
@@ -562,6 +583,40 @@ function bootVine(THREE, RoomEnvironment){
     });
     lfPetals.instanceMatrix.needsUpdate = true;
     lfCores.instanceMatrix.needsUpdate = true;
+  }
+  /* Bienen fliegen in Achten um die offene Blüte, mal davor, mal dahinter. Fliegen sie nach links, drehen sie sich um die
+     Längsachse, damit die Flügel oben bleiben. Bei reduzierter Bewegung sitzen sie still neben der Blüte. */
+  const mF = new THREE.Matrix4(), mL = new THREE.Matrix4(), mT = new THREE.Matrix4(), mR = new THREE.Matrix4(), mS = new THREE.Matrix4();
+  const qRoll = new THREE.Quaternion().setFromAxisAngle(AX, Math.PI), one = new THREE.Vector3(1, 1, 1);
+  function setBees(g, t){
+    BE.forEach((e, j) => {
+      const b = LB[e.i];
+      const k = smooth(clamp01((g - b.g) / 80)) * smooth(clamp01(b.k));
+      /* am Handy sind die Blüten klein, die Bienen sollen trotzdem erkennbar bleiben */
+      const L = Math.max(1e-5, Math.max(b.size * 0.3, 7.5 * unit) * k), R = Math.max(b.size * 1.6, 30 * unit);
+      let x, y, z, head;
+      if (reduce.matches) {
+        x = b.p.x + e.dir * R * 0.8; y = b.p.y + R * 0.45; z = b.p.z + 2 * unit; head = e.dir > 0 ? Math.PI : 0;
+      } else {
+        const at = a => [b.p.x + Math.cos(a) * R, b.p.y + Math.sin(a * 2) * R * 0.32 + Math.sin(t * 2.1 + e.ph) * R * 0.07, b.p.z + Math.sin(a) * R * 0.7];
+        const a = t * e.sp * e.dir + e.ph, n = at(a + 0.05 * e.dir);
+        [x, y, z] = at(a);
+        head = Math.atan2(n[1] - y, n[0] - x);
+      }
+      qz.setFromAxisAngle(AZ, head);
+      if (Math.cos(head) < 0) qz.multiply(qRoll);
+      mF.compose(pv.set(x, y, z), qz, one);
+      beeBodies.setMatrixAt(j, mL.multiplyMatrices(mF, mS.makeScale(L, L * 0.64, L * 0.64)));
+      mT.makeTranslation(L * 1.02, L * 0.1, 0);
+      beeHeads.setMatrixAt(j, mL.multiplyMatrices(mF, mT).multiply(mS.makeScale(L * 0.46, L * 0.46, L * 0.46)));
+      const flap = reduce.matches ? 0.3 : 0.25 + 0.75 * Math.abs(Math.sin(t * 34 + e.ph));
+      [[L * 0.12, 0.2], [-L * 0.32, -0.25]].forEach(([hx, tilt], w) => {
+        mT.makeTranslation(hx, L * 0.5, (w ? -1 : 1) * L * 0.15);
+        mR.makeRotationZ(tilt).multiply(mL.makeRotationX(flap * (w ? -1 : 1)));
+        beeWings.setMatrixAt(j * 2 + w, mL.multiplyMatrices(mF, mT).multiply(mR).multiply(mS.makeScale(L * 0.5, L * 0.6, 1)));
+      });
+    });
+    beeBodies.instanceMatrix.needsUpdate = true; beeHeads.instanceMatrix.needsUpdate = true; beeWings.instanceMatrix.needsUpdate = true;
   }
 
   /* Hover und Klick auf Blätter, nur im Bereich des Baums */
@@ -671,6 +726,7 @@ function bootVine(THREE, RoomEnvironment){
     setBuds(G);
     setCores(G);
     setBlooms(G, dt);
+    setBees(G, t);
     core.scale.setScalar(Math.max(1e-5, coreS * smooth(clamp01((G - coreG) / 80))));
     twigTips.forEach(tt => tt.el && tt.el.classList.toggle('on', G > tt.g - 60));
     if (pType !== 'touch') {

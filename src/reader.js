@@ -132,9 +132,12 @@ function wireStatus(scope, p){
     Stand.set(p, Number(b.dataset.st));
   }));
 }
+/* Platz für die Biene eines Artikels; zu ihm fliegt sie beim ersten Gelesen (app.js) */
+const beeSpot = (p, v) => `<span class="bee-spot" data-bee="${esc(p)}">${v ? F.BEE : ''}</span>`;
 function paintStatus(p){
   const v = Stand.get(p);
   $$('.seg [data-st]', sheet).forEach(b => b.setAttribute('aria-checked', String(Number(b.dataset.st) === v)));
+  $$('.bee-spot', sheet).forEach(s => { if (!!s.firstElementChild !== !!v) s.innerHTML = v ? F.BEE : ''; });
   const chip = $('#stChip');
   if (chip) { chip.textContent = ['offen', 'gelesen', 'sitzt'][v]; chip.className = 'st-chip micro s' + v; }
 }
@@ -189,14 +192,20 @@ async function openArticle(p){
   const next = same[pos + 1] || same[0];
   const end = document.createElement('section');
   end.className = 'art-end';
-  end.innerHTML = `<h2 class="micro">Wie sitzt das Thema?</h2>${statusBar(p)}` +
+  end.innerHTML = `<h2 class="micro">Wie sitzt das Thema?${beeSpot(p, Stand.get(p))}</h2>${statusBar(p)}` +
     (next && next.k !== i ? `<a class="next" href="${F.artUrl(next.x)}"><span class="micro">Weiter in der Abteilung ${esc(r.kurz)}</span><b>${esc(next.x.t)}</b>${ICON.arr}</a>` : '') +
     `<p class="src">Quelle: <a href="${esc(blobUrl(p))}" target="_blank" rel="noopener">${esc(p)}</a> im Wiki auf GitHub</p>`;
   body.appendChild(end);
   wireStatus(end, p);
   paintStatus(p);
-  /* bis zum Ende gescrollt: als gelesen markieren, wenn noch nichts gesetzt ist */
-  readHook = () => { if (Stand.get(p) === 0) { Stand.set(p, 1); F.toast && F.toast('Als gelesen markiert.', 'Rückgängig', () => Stand.set(p, 0), 4000); } };
+  /* bis zum Ende gescrollt: als gelesen markieren, wenn noch nichts gesetzt ist. Beim ersten Mal fliegt dafür die Biene ein,
+     sonst kommt der Hinweis */
+  readHook = () => {
+    if (Stand.get(p) !== 0) return;
+    const biene = F.biene.neu(p);
+    Stand.set(p, 1);
+    if (!biene && F.toast) F.toast('Als gelesen markiert.', 'Rückgängig', () => Stand.set(p, 0), 4000);
+  };
   requestAnimationFrame(() => scrollEl.dispatchEvent(new Event('scroll')));
 }
 
@@ -296,7 +305,7 @@ function renderExam(){
       shown.filter(o => o.a.r === r.id).map(o => {
         const v = Stand.get(o.p);
         return `<li class="s${v}"><label class="tick"><input type="checkbox" data-p="${esc(o.p)}"${v === 2 ? ' checked' : ''}><span class="sr">sitzt</span></label>` +
-          `<a href="${F.artUrl(o.a)}"><span class="t">${esc(o.a.t)}</span><span class="g micro">${esc(groupLabel(o.a))}${v === 1 ? ' · gelesen' : ''}</span></a></li>`;
+          `<a href="${F.artUrl(o.a)}"><span class="t">${esc(o.a.t)}</span><span class="g micro">${esc(groupLabel(o.a))}${v ? ' · ' : ''}${beeSpot(o.p, v)}${v === 1 ? '<span class="sr">gelesen</span>' : ''}</span></a></li>`;
       }).join('') + `</ul></section>`).join('')
       : `<p class="callout">${examState.filter === 'sitzt' ? 'Hier ist noch nichts abgehakt.' : 'In dieser Auswahl ist alles abgehakt.'}</p>`);
   $$('[data-f]', body).forEach(b => b.addEventListener('click', () => { examState.filter = b.dataset.f; renderExam(); }));
@@ -345,7 +354,7 @@ async function renderStand(){
   body.innerHTML =
     `<header class="art-head"><p class="eyebrow micro">Mein Stand</p><h1 id="sheetTitle" tabindex="-1">${geschafft === ziel.length ? 'Alle Lernfelder geschafft.' : c.gelesen ? 'Deine Ranke wächst.' : 'Deine Ranke wartet.'}</h1>` +
     `<p class="lead">Dein Lernstand bleibt auf diesem Gerät. Niemand sonst sieht ihn, und es braucht kein Konto.</p></header>` +
-    `<div class="stand-nums"><div><b>${c.gelesen}</b><span>von ${n} gelesen</span></div><div><b>${c.sitzt}</b><span>sitzen</span></div>` +
+    `<div class="stand-nums"><div><b>${c.gelesen}${F.BEE}</b><span>von ${n} gelesen</span></div><div><b>${c.sitzt}</b><span>sitzen</span></div>` +
     `<div><b>${Stand.count(a => a.rot).sitzt}</b><span>von ${D.artikel.filter(a => a.rot).length} mit Ampel sitzen</span></div>` +
     `<div id="lfDone"><b>${geschafft}</b><span>von ${ziel.length} Lernfeldern geschafft</span></div></div>` +
     `<ul class="regal-bars">${rows}</ul>` +
@@ -353,7 +362,7 @@ async function renderStand(){
     `<section class="block"><h2>Lernfelder</h2><p>Ein Lernfeld ist geschafft, wenn alle seine Artikel sitzen.</p><ul class="lf-chips">${lfChips}</ul></section>` +
     (recent.length ? `<section class="block"><h2>Weiterlesen</h2><ul class="exam-list plain">${recent.map(a => {
       const v = Stand.get(F.pathOf(a));
-      return `<li class="s${v}"><a href="${F.artUrl(a)}"><span class="t">${esc(a.t)}</span><span class="g micro">${esc(regOf(a).kurz)} · ${esc(groupLabel(a))}${v ? ' · ' + ['', 'gelesen', 'sitzt'][v] : ''}</span></a></li>`;
+      return `<li class="s${v}"><a href="${F.artUrl(a)}"><span class="t">${esc(a.t)}</span><span class="g micro">${esc(regOf(a).kurz)} · ${esc(groupLabel(a))}${v ? ' · ' + F.stMark(v) : ''}</span></a></li>`;
     }).join('')}</ul></section>` : '') +
     `<section class="block"><h2>Offline lesen</h2><p id="offInfo">Wird gezählt …</p>` +
       `<button type="button" class="btn" id="saveAll">Alle Artikel offline speichern</button><p class="small" id="saveProg"></p></section>` +

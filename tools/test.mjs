@@ -280,6 +280,49 @@ try {
   await ep.screenshot({ path: path.join(SHOTS, 'erfolg-kacheln.png') });
   check('Keine Fehler beim Erfolg', eerrs.length === 0, eerrs.slice(0, 5).join(' | '));
   await ctx.close();
+
+  /* 8. Bienen: zu Ende gelesen, einmal je Artikel fliegt eine Biene ein. Eigener Browser-Kontext. */
+  const ctx2 = await browser.createBrowserContext();
+  const bp = await ctx2.newPage();
+  const berrs = watch(bp, 'Bienen');
+  await bp.setViewport({ width: 1280, height: 860 });
+  /* zählt, wie oft eine Biene losfliegt */
+  await bp.evaluateOnNewDocument(() => addEventListener('DOMContentLoaded', () => {
+    window.__bienen = 0;
+    new MutationObserver(ms => ms.forEach(mu => mu.addedNodes.forEach(n => { if (n.classList && n.classList.contains('bee-fly')) window.__bienen++; }))).observe(document.body, { childList: true });
+  }));
+  await bp.goto(BASE, { waitUntil: 'networkidle0' });
+  await ready(bp);
+  const readToEnd = async () => {
+    await bp.evaluate(p => window.FIAE.go('#/artikel/' + encodeURIComponent(p)), LF31);
+    await bp.waitForSelector('.art-end', { timeout: 15000 });
+    await bp.evaluate(() => document.getElementById('sheetScroll').scrollTo(0, 1e6));
+    await bp.waitForFunction(p => (JSON.parse(localStorage.getItem('lernwiki-stand-v1') || '{}')[p] || {}).s === 1, { timeout: 8000 }, LF31).catch(() => {});
+  };
+  await readToEnd();
+  await bp.waitForFunction(() => window.__bienen > 0, { timeout: 5000 }).catch(() => {});
+  await sleep(500);
+  await bp.screenshot({ path: path.join(SHOTS, 'biene-flug.png') });
+  await bp.waitForFunction(() => !document.querySelector('.bee-fly'), { timeout: 5000 }).catch(() => {});
+  const b1 = await bp.evaluate(p => {
+    const b = document.querySelector('.art-end [data-bee] .bee');
+    return { fly: window.__bienen, landed: !!b && getComputedStyle(b).visibility === 'visible', merk: !!JSON.parse(localStorage.getItem('lernwiki-bienen-v1') || '{}')[p],
+      toast: !document.getElementById('toast').hidden, live: document.getElementById('sheetLive').textContent };
+  }, LF31);
+  await bp.screenshot({ path: path.join(SHOTS, 'biene-gelandet.png') });
+  check('Zu Ende gelesen: Biene fliegt ein und landet', b1.fly === 1 && b1.landed && b1.merk && !b1.toast && b1.live.includes('Biene'), JSON.stringify(b1));
+  /* auf "Noch nicht" und noch einmal zu Ende lesen: keine zweite Biene, dafür der gewohnte Hinweis */
+  await bp.evaluate(() => document.querySelector('.art-end .seg [data-st="0"]').click());
+  await bp.evaluate(() => window.FIAE.closeSheet());
+  await readToEnd();
+  await sleep(600);
+  const b2 = await bp.evaluate(() => ({ fly: window.__bienen, toast: document.getElementById('toastText').textContent }));
+  check('Biene nur einmal je Artikel', b2.fly === 1 && b2.toast === 'Als gelesen markiert.', JSON.stringify(b2));
+  await bp.evaluate(() => window.FIAE.closeSheet());
+  const b3 = await bp.evaluate(p => ({ cat: !!document.querySelector(`#catList .st[data-p="${p}"] svg.bee`), line: !!document.querySelector('#standLine svg.bee') }), LF31);
+  check('Katalog und Stand zeigen die Biene', b3.cat && b3.line, JSON.stringify(b3));
+  check('Keine Fehler bei den Bienen', berrs.length === 0, berrs.slice(0, 5).join(' | '));
+  await ctx2.close();
 } catch (e) {
   check('Test lief durch', false, e.message);
 } finally {

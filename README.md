@@ -23,6 +23,9 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
   (Karte mit Blätterflug, Ansage für Screenreader, ohne Animation bei reduzierter Bewegung). Danach trägt die Kachel einen Stempel,
   der Würfel ein Häkchen, am Trieb in der Ranke blüht es, und Mein Stand zählt mit. Sind alle Lernfelder mit Artikeln geschafft,
   gibt es eine eigene Feier. Kommt ein neuer Artikel dazu, ist das Lernfeld wieder offen.
+- **Bienen**: Jeder gelesene Artikel bekommt eine Biene, sie steht im Katalog, im Prüfungsmodus und in Mein Stand für „gelesen“.
+  Beim ersten Gelesen oder Sitzt eines Artikels fliegt sie einmal ein (am Artikelende oder in der Zeile im Prüfungsmodus).
+  In der Ranke summen Bienen um die Blüten der geschafften Lernfelder, ohne WebGL sitzt eine daneben.
 - **Handy**: untere Leiste mit Start, Suchen, Prüfung, Mein Stand.
 
 ## Aufbau
@@ -68,8 +71,8 @@ Chrome-Menü „Zum Startbildschirm hinzufügen“ installierbar. Nach jedem Upd
 Wichtig: Über GitHub Pages ist die App öffentlich. Impressum und Datenschutz sind noch Platzhalter und gehören vor dem
 breiten Teilen ausgefüllt.
 
-Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. Der Lernstand und
-welche Erfolge schon gefeiert wurden liegen nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
+Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. Der Lernstand samt
+Erfolgen und Bienen liegt nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
 `raw.githubusercontent.com`; dabei sieht GitHub wie bei jedem Webserver die IP-Adresse.
 
 ## Neue Artikel im Wiki

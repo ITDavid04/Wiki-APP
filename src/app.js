@@ -47,7 +47,18 @@ const Stand = {
 const artUrl = a => '#/artikel/' + encodeURIComponent(pathOf(a));
 /* Blattfarben der Ranke nach Lernstand: blass = noch nicht, grün = gelesen, dunkelgrün = sitzt */
 const LEAF = ['#A8D9B9', '#3FA16A', '#1F6E4E'];
-Object.assign(window.FIAE, { stand: Stand, pathOf, artUrl, LEAF, byPath: p => D.artikel[idxByPath.get(p)], indexOfPath: p => idxByPath.get(p) });
+/* Biene: Zeichen für "gelesen", schaut nach links. In einem Feld von 24 mal 24, Flügel mit Klasse w (flattern beim Einflug) */
+const BEE_G = '<g class="w"><ellipse cx="11" cy="7.2" rx="3.2" ry="4.3" transform="rotate(-18 11 7.2)" fill="#F4FBFF" fill-opacity=".9" stroke="#0F1A15" stroke-width="1.1"/></g>' +
+  '<g class="w"><ellipse cx="14.8" cy="7.6" rx="2.8" ry="3.8" transform="rotate(16 14.8 7.6)" fill="#F4FBFF" fill-opacity=".9" stroke="#0F1A15" stroke-width="1.1"/></g>' +
+  '<path d="M19.6 14l2.6-.9-.9 2.2z" fill="#0F1A15"/>' +
+  '<ellipse cx="13" cy="14.5" rx="7" ry="5" fill="#E2F06A"/>' +
+  '<path d="M12.4 9.7v9.6M15.9 10.1v8.8" stroke="#0F1A15" stroke-width="2"/>' +
+  '<ellipse cx="13" cy="14.5" rx="7" ry="5" fill="none" stroke="#0F1A15" stroke-width="1.3"/>' +
+  '<circle cx="5.4" cy="13.6" r="2.9" fill="#0F1A15"/>';
+const BEE = `<svg class="bee" viewBox="0 0 24 24" aria-hidden="true">${BEE_G}</svg>`;
+/* Lernstand im Text: Biene ab gelesen, bei sitzt mit Wort */
+const stMark = v => v ? BEE + (v === 2 ? 'sitzt' : '<span class="sr">gelesen</span>') : '';
+Object.assign(window.FIAE, { stand: Stand, pathOf, artUrl, LEAF, BEE, BEE_G, stMark, byPath: p => D.artikel[idxByPath.get(p)], indexOfPath: p => idxByPath.get(p) });
 
 /* Erfolge: ein Lernfeld ist geschafft, wenn es Artikel hat und alle sitzen. Das wird immer aus dem Lernstand berechnet.
    Gemerkt wird nur, was schon gefeiert wurde (Lernfeld: Zahl seiner Artikel beim Feiern). So kommt die Feier nicht bei jedem
@@ -241,7 +252,9 @@ function drawTreeSvg(T){
   const bloom = ([x, y], s, n) => {
     let o = '';
     for (let k = 0; k < 5; k++) o += `<path d="${leafD(s)}" fill="#E2F06A" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(k * 72 + n * 57) % 360})"/>`;
-    return o + `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(s * 0.3).toFixed(1)}" fill="#F2C14E"/>`;
+    /* daneben sitzt eine Biene */
+    return o + `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(s * 0.3).toFixed(1)}" fill="#F2C14E"/>` +
+      `<g transform="translate(${(x + s * 0.75).toFixed(1)} ${(y - s * 1.35).toFixed(1)}) scale(${(s * 0.8 / 24).toFixed(3)})">${BEE_G}</g>`;
   };
   let out = line(T.trunk, 7, '#2C7A50');
   T.twigs.forEach(t => {
@@ -547,11 +560,11 @@ document.addEventListener('click', e => {
 });
 
 /* Lernstand sichtbar machen: Katalog, Ranke-Text, Weiterlesen */
-const ST_TXT = ['', 'gelesen', 'sitzt'];
+$('.stand-box .tlink').insertAdjacentHTML('afterbegin', BEE);
 function paintStand(){
-  $$('#catList .st').forEach(el => { const v = Stand.get(el.dataset.p); el.textContent = ST_TXT[v]; el.className = 'st s' + v; });
+  $$('#catList .st').forEach(el => { const v = Stand.get(el.dataset.p); if (el.className !== 'st s' + v) { el.innerHTML = stMark(v); el.className = 'st s' + v; } });
   const c = Stand.count();
-  $('#standLine').innerHTML = `Dein Stand: <b>${c.gelesen}</b> von ${D.artikel.length} gelesen, <b>${c.sitzt}</b> sitzen.`;
+  $('#standLine').innerHTML = `Dein Stand: ${BEE}<b>${c.gelesen}</b> von ${D.artikel.length} gelesen, <b>${c.sitzt}</b> sitzen.`;
   const last = Stand.recent()[0], la = last && window.FIAE.byPath(last);
   const res = $('#resume');
   if (la) { res.hidden = false; res.href = artUrl(la); $('#resumeT').textContent = la.t; } else res.hidden = true;
@@ -590,8 +603,72 @@ function hideToast(){ toast.hidden = true; }
 $('#toastX').addEventListener('click', hideToast);
 window.FIAE.toast = showToast;
 
+/* Ansage für Screenreader: in der offenen Seite über deren Region, sonst über die auf der Startseite.
+   Was im selben Moment kommt (Biene und Lernfeld), wird zu einer Ansage zusammengefasst. */
+let sayBuf = [], sayT = 0;
+function say(text){
+  sayBuf.push(text);
+  clearTimeout(sayT);
+  sayT = setTimeout(() => {
+    const live = window.FIAE.sheetOpen ? $('#sheetLive') : $('#erfolgLive'), t = sayBuf.join(' ');
+    sayBuf = []; live.textContent = '';
+    setTimeout(() => { live.textContent = t; }, 40);
+  }, 80);
+}
+
+/* Bienen: Jeder Artikel, der gelesen ist oder sitzt, hat eine Biene (aus dem Lernstand). Herbeifliegen tut sie nur einmal
+   je Artikel, beim ersten Gelesen oder Sitzt; gemerkt in lernwiki-bienen-v1. Wiederherstellen fliegt nicht, Zurücksetzen vergisst. */
+const BIENEN_KEY = 'lernwiki-bienen-v1';
+let bienen = {};
+try { bienen = JSON.parse(store.get(BIENEN_KEY) || '{}') || {}; } catch (e) { bienen = {}; }
+window.FIAE.biene = { neu: p => !bienen[p] };
+addEventListener('fiae-stand', e => {
+  const p = e.detail && e.detail.p;
+  if (!p) {
+    const all = Object.keys(Stand.all());
+    if (!all.length) bienen = {}; else all.forEach(q => { bienen[q] = bienen[q] || 1; });
+    store.set(BIENEN_KEY, JSON.stringify(bienen));
+    return;
+  }
+  if (!(e.detail.s >= 1) || bienen[p]) return;
+  bienen[p] = Date.now();
+  store.set(BIENEN_KEY, JSON.stringify(bienen));
+  say('Eine Biene für diesen Artikel.');
+  /* erst nach dem Neuzeichnen der offenen Seite: dort steht die Biene, zu der sie fliegt */
+  requestAnimationFrame(() => beeFly(document.querySelector(`#sheet [data-bee="${CSS.escape(p)}"] .bee`)));
+});
+/* Biene fliegt vom rechten Rand in Schleifen zu ihrem Platz. Liegt der gerade außerhalb, wartet sie, bis er ins Bild kommt.
+   Bei reduzierter Bewegung sitzt sie einfach da. */
+function beeFly(target){
+  if (!target || reduce.matches) return;
+  const fly = () => {
+    const r = target.getBoundingClientRect();
+    if (!r.width) { target.style.visibility = ''; return; }
+    const el = document.createElement('div');
+    el.className = 'bee-fly';
+    el.innerHTML = BEE;
+    el.style.cssText = `left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px`;
+    document.body.appendChild(el);
+    const x0 = innerWidth + 40 - r.left, y0 = -90 - Math.random() * 90;
+    const anim = el.animate([
+      { transform: `translate(${x0}px,${y0}px) rotate(-8deg) scale(1.9)` },
+      { transform: `translate(${x0 * 0.62}px,${y0 * 0.15 + 34}px) rotate(10deg) scale(1.9)`, offset: 0.3 },
+      { transform: `translate(${x0 * 0.3}px,${y0 * 0.75}px) rotate(-14deg) scale(1.8)`, offset: 0.58 },
+      { transform: 'translate(-26px,-30px) rotate(8deg) scale(1.5)', offset: 0.8 },
+      { transform: 'translate(0,0) rotate(0) scale(1)' }
+    ], { duration: 1400, easing: 'cubic-bezier(.35,.1,.3,1)' });
+    anim.onfinish = anim.oncancel = () => { target.style.visibility = ''; el.remove(); };
+  };
+  target.style.visibility = 'hidden';
+  const r = target.getBoundingClientRect();
+  if (r.top >= 0 && r.bottom <= innerHeight) { fly(); return; }
+  const io = new IntersectionObserver(es => { if (es[0].intersectionRatio >= 0.99) { io.disconnect(); fly(); } }, { threshold: 1 });
+  io.observe(target);
+}
+
 /* Feier, wenn ein Lernfeld geschafft ist: nur beim Wechsel von offen auf geschafft durch einen Klick (Stand.set mit p).
-   Laden, Wiederherstellen und Zurücksetzen (Stand.replace, ohne p) feiern nicht; Zurücksetzen vergisst auch die Feiern. */
+   Laden, Wiederherstellen und Zurücksetzen (Stand.replace, ohne p) feiern nicht; Zurücksetzen vergisst auch die Feiern.
+   Hört nach den Bienen zu, damit die Ansage mit der Biene beginnt. */
 const fest = $('#erfolg'), festBurst = $('#erfolgBurst');
 const FEST_COL = [LEAF[1], LEAF[2], '#4BAF73', '#E2F06A', '#E2F06A'];
 let doneNow = new Set(Erfolg.list().map(l => l.n));
@@ -634,10 +711,7 @@ function feiern(l, k, gesamt){
     leaves += `<i style="--x:${(Math.cos(w) * d).toFixed(0)}px;--y:${(Math.sin(w) * d).toFixed(0)}px;--r:${(Math.random() * 540 - 270).toFixed(0)}deg;--d:${(120 + Math.random() * 160).toFixed(0)}ms;--c:${FEST_COL[i % FEST_COL.length]}"></i>`;
   }
   festBurst.innerHTML = leaves;
-  /* Ansage: im Artikel und im Prüfungsmodus über die Region in der offenen Seite, sonst über die auf der Startseite */
-  const live = window.FIAE.sheetOpen ? $('#sheetLive') : $('#erfolgLive');
-  live.textContent = '';
-  setTimeout(() => { live.textContent = `${titel} ${sub}`; }, 80);
+  say(`${titel} ${sub}`);
 }
 function festZu(){ fest.hidden = true; festBurst.innerHTML = ''; }
 $('#erfolgOk').addEventListener('click', festZu);
