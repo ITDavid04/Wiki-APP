@@ -6,6 +6,8 @@ Auf dem Handy lässt sie sich auf den Startbildschirm legen und läuft danach au
 
 ## Was drin ist
 
+Ausführlich, mit allen Gimmicks, Texten und dem Änderungsprotokoll: [ReadmeUpdate.md](ReadmeUpdate.md).
+
 - **Bühne** mit zwölf Lernfeld-Würfeln (three.js), grün = Lernfeld hat Artikel, weiß gestrichelt = noch leer
 - **Die Ranke**: eine 3D-Ranke wächst beim Scrollen durch die Seite und läuft beim Hochscrollen wieder zurück, an jedem Abschnitt geht an einem kleinen Zweig eine Blüte auf; im Abschnitt „Die Ranke“ ist jedes Blatt ein Artikel, ein Klick auf einen Zweig öffnet die Kachel seiner Abteilung
 - **Abteilungen, Lernfelder, Katalog mit Suche, Prüfungsblock mit Ampel und Prüfungs-Kit, Mitmachen**. Die Liste im Katalog
