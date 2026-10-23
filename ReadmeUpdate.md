@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
 > **Stand:** 23.10.2026
-> **App-Stand:** Commit `138cd4b` (Fehler melden, Versionsnummer), ab hier Version 1.0.0
+> **App-Stand:** Commit `5b005ca` (Fehler melden, Versionsnummer, Formeln), ab hier Version 1.0.0
 > **Katalog:** 172 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 20.10.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -157,6 +157,7 @@ Aufdecken geht am Desktop per Maus, sonst per Tippen. Escape deckt wieder zu.
 | Ampel | Stellen mit 🔴 🟡 🟢 sind farbig markiert, auch Tabellenzeilen |
 | Nur ROT | Blendet Gelb und Grün aus (nur bei Artikeln mit roten Stellen) |
 | Inhalt | Sprungmarken an Überschriften, Links zu anderen Wiki-Artikeln öffnen in der App, Bilder kommen aus dem Wiki, breite Tabellen scrollen |
+| Formeln | `$…$` und `\(…\)` im Text, `$$…$$` im Text oder als Block, `\[ … \]` auf eigenen Zeilen; KaTeX zeichnet sie, auch in Tabellen. KaTeX lädt nur bei Artikeln mit Formeln, liegt aber in der App-Hülle und geht offline. Breite Formeln scrollen für sich. Kein Fehlgriff bei „5 $“, `\$`, Shell wie `$HOME/bin:$PATH`, Code und `\[Bedingung\]` |
 | Diagramme | Mermaid wird noch nicht gezeichnet: Hinweis, Link zu GitHub und der Quelltext zum Aufklappen |
 | Fortschritt | Balken oben zeigt, wie weit gelesen ist |
 | Zu Ende gelesen | Ab etwa 92 Prozent gilt der Artikel als gelesen. Beim ersten Mal fliegt dafür eine Biene ein, sonst kommt „Als gelesen markiert.“ mit „Rückgängig“ |
@@ -360,12 +361,12 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | `tools/test.mjs` | automatischer Test mit Chrome |
 | `.github/workflows/pages.yml` | veröffentlicht bei Push auf `main`, jede Nacht um 2:30 Uhr UTC und auf Knopfdruck |
 
-**Bibliotheken:** three.js 0.186.1, Lenis 1.3.26, marked 15.0.12, DOMPurify 3.2.7, Schrift Hanken Grotesk.
+**Bibliotheken:** three.js 0.186.1, Lenis 1.3.26, marked 15.0.12, DOMPurify 3.2.7, KaTeX 0.19.0 (nur woff2-Schriften), Schrift Hanken Grotesk.
 
 **Ereignisse zwischen den Dateien:** `fiae-stand` (Lernstand geändert), `fiae-stempel` (Stempel geändert),
 `fiae-theme`, `fiae-tree`. Gemeinsame Werkzeuge liegen in `window.FIAE` (zum Beispiel `stand`, `erfolg`, `biene`, `stempel`).
 
-**Tests** (`npm test`, zurzeit 56 Prüfungen):
+**Tests** (`npm test`, zurzeit 59 Prüfungen):
 
 | **Teil** | **Prüft** |
 |---|---|
@@ -377,6 +378,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | 8 | Bienen: Einflug, nur einmal je Artikel, Katalog und Stand |
 | 9 | Leseausweis: Stempel still beim Laden, Karte, Sprung zum Ausweis, Backup-Profi, Nachteule, Zurücksetzen, Wiederherstellen |
 | 10 | Versionsnummer im Fuß und in `version.json`; Fehler melden: Artikel und Abschnitt, ohne Text nichts, Kopieren, Escape, GitHub-Link, Startseite |
+| 11 | Formeln im USV-Artikel: alle gezeichnet, auch in Tabellen und als Block, kein Dollarzeichen übrig, auch im Flugmodus |
 
 Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht zufällig die Nachteule auslöst.
 
@@ -401,6 +403,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 22.10.2026 | `7370346` | Bienen: je gelesenem Artikel, Einflug, Bienen um die Blüten |
 | 22.10.2026 | `06d2457` | Leseausweis mit 17 Stempeln |
 | 23.10.2026 | `138cd4b` | Fehler melden (GitHub-Issue oder Text für Teams) und Versionsnummer ab 1.0.0, die bei Updates selbst hochzählt |
+| 23.10.2026 | `5b005ca` | Formeln mit KaTeX (gemeldet über Teams: Formeln in der USV-Tabelle standen als Text mit Dollarzeichen da) |
 
 ### Entfernt oder ersetzt
 
@@ -448,10 +451,10 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 seite: ReadmeUpdate.md
 inhalt: Funktionen und Gimmicks der Wiki-APP
 stand: 2026-10-23
-app_commit: 138cd4b
+app_commit: 5b005ca
 app_version: ab 1.0.0, zählt selbst hoch
 katalog: 172 Artikel, 75 mit Ampel, 10 von 12 Lernfeldern mit Artikeln, Wiki-Stand 2026-10-20
 stempel: 17
-tests: 56 Prüfungen
+tests: 59 Prüfungen
 gepflegt_von: Lernteam FIAE/FISI
 ```

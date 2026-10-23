@@ -16,7 +16,8 @@ Ausführlich, mit allen Gimmicks, Texten und dem Änderungsprotokoll: [ReadmeUpd
   Gibt es eine neue Version, erscheint unten „Neu laden“.
 - **Lesen in der App**: Artikel öffnen als eigene Seite (`#/artikel/<pfad>`, Zurück-Taste funktioniert). Markdown kommt von
   `raw.githubusercontent.com`, wird mit marked umgewandelt und mit DOMPurify bereinigt. Ampel-Stellen (🔴 🟡 🟢) sind farbig
-  markiert, „Nur ROT“ blendet Gelb und Grün aus. Einmal geöffnete Artikel bleiben offline verfügbar.
+  markiert, „Nur ROT“ blendet Gelb und Grün aus. Formeln (`$…$`, `$$…$$`, `\(…\)`, `\[…\]`) zeichnet KaTeX, auch in Tabellen
+  und offline. Einmal geöffnete Artikel bleiben offline verfügbar.
 - **Lernstand**: pro Artikel „Noch nicht“, „Gelesen“, „Sitzt“; bis zum Ende gelesen setzt automatisch „Gelesen“.
   Die Blätter der Ranke zeigen den Stand (blass, grün, dunkelgrün).
 - **Prüfungsmodus** (`#/pruefung`): alle Artikel mit Ampel zum Abhaken, mit Fortschritt und „Nächsten offenen öffnen“.
@@ -158,5 +159,5 @@ Hintergrund die aktuelle und zeigt sie beim nächsten Öffnen. Geänderte Titel 
 
 ## Lizenzen
 
-Code: MIT (siehe `LICENSE`). Mitgelieferte Bibliotheken (three.js, Lenis, marked, DOMPurify) und die Schrift
+Code: MIT (siehe `LICENSE`). Mitgelieferte Bibliotheken (three.js, Lenis, marked, DOMPurify, KaTeX mit seinen Schriften) und die Schrift
 Hanken Grotesk (SIL Open Font License) liegen mit ihren Lizenzen in der gebauten App unter `docs/vendor/LICENSES/`.
