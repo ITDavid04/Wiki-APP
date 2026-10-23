@@ -35,12 +35,17 @@ Ausführlich, mit allen Gimmicks, Texten und dem Änderungsprotokoll: [ReadmeUpd
   die wartet, bis keine Biene mehr fliegt und keine Lernfeld-Feier mehr offen ist. Stempel bleiben, nur Zurücksetzen löscht sie;
   die Sicherung nimmt sie mit.
 - **Handy**: untere Leiste mit Start, Suchen, Prüfung, Mein Stand.
+- **Fehler melden**: Fahne oben im Artikel, Link am Artikelende, im Menü, im Fuß und in Mein Stand. Ein kleines Formular fragt
+  „Was stimmt nicht?“, Artikel, Abschnitt (die Überschrift, die gerade oben steht), markierte Stelle, Version und Gerät kommen
+  automatisch dazu. Weiter geht es als vorausgefülltes Issue auf GitHub (braucht ein Konto) oder mit „Text kopieren“ für Teams.
+- **Versionsnummer** (zum Beispiel `1.0.7`): steht im Fuß und in Mein Stand, im Hinweis „Neu laden“ und nach dem Update
+  („Aktualisiert auf Version …“). Sie zählt sich beim Veröffentlichen selbst hoch, siehe unten.
 
 ## Aufbau
 
 | Ordner | Inhalt |
 |---|---|
-| `src/` | Quelltext: `index.html`, `app.css`, `app.js` (Seite, Lernstand), `scene.js` (3D), `reader.js` (Lesen, Prüfungsmodus, Mein Stand), `sw.js` (Service Worker), Manifest, Icons |
+| `src/` | Quelltext: `index.html`, `app.css`, `app.js` (Seite, Lernstand), `scene.js` (3D), `reader.js` (Lesen, Prüfungsmodus, Mein Stand), `melden.js` (Fehler melden), `sw.js` (Service Worker), Manifest, Icons |
 | `data/catalog.json` | Alle Artikel des Wikis mit Abteilung, Gruppe, Titel, Ampel und Link, erzeugt mit `tools/catalog.mjs` |
 | `tools/` | `catalog.mjs` (Katalog aus dem Wiki), `build.mjs` (baut nach `docs/`), `serve.mjs` (Testserver), `test.mjs` (automatischer Test), `icons.py` (Icons) |
 | `.github/workflows/pages.yml` | Veröffentlichen über GitHub Actions: Katalog, Bauen, Testen, Hochladen |
@@ -65,7 +70,7 @@ Danach erledigt der Workflow `.github/workflows/pages.yml` alles, bei jedem Push
 und auf Knopfdruck (**Actions → App veröffentlichen → Run workflow**):
 
 1. Wiki frisch klonen und den Katalog erzeugen (`tools/catalog.mjs --streng`)
-2. App bauen (`npm run build`)
+2. App bauen (`npm run build`), dabei die Versionsnummer bestimmen
 3. Testen (`npm test`, 3D läuft dort in Software)
 4. `docs/` zu GitHub Pages hochladen
 
@@ -73,13 +78,32 @@ Schlägt ein Schritt fehl, bleibt die bisherige Fassung online und GitHub schick
 hat (neu, entfallen, Titel, Ampel), steht in der Zusammenfassung des Laufs. Bei einem fehlgeschlagenen Test hängen dort
 auch die Bildschirmfotos.
 
+### Versionsnummer
+
+Die Nummer hat drei Stellen, zum Beispiel `1.0.7`. Die ersten zwei stehen in `package.json` (`"version": "1.0.0"`),
+die letzte zählt der Build selbst: Er holt `version.json` der veröffentlichten App und vergleicht die Prüfsumme. Ist alles
+gleich, bleibt die Nummer, sonst geht sie eins hoch. Das passiert also genau dann, wenn die App „Neu laden“ anbietet, auch wenn
+nur neue Artikel dazugekommen sind. Der nächtliche Lauf ohne Änderungen erhöht nichts.
+
+- Größerer Schritt: in `package.json` zum Beispiel `"version": "1.1.0"` eintragen und pushen, dann geht es mit `1.1.0` weiter.
+- Lokal (ohne `APP_URL`) heißt die Version `1.0.x-lokal`.
+- Ist `version.json` online gerade nicht lesbar, bricht der Lauf ab, damit die Nummer nicht zurückspringt. Dann einfach
+  später noch einmal **Run workflow**.
+
+### Fehlermeldungen
+
+„Auf GitHub melden“ öffnet ein neues Issue in diesem Repository mit Titel, Text und allen Angaben, Label `bug` (das Label
+setzt GitHub nur bei Leuten mit Schreibrecht). Abgeschickt wird erst, wenn die Person auf GitHub selbst auf „Submit“ drückt.
+„Text kopieren“ legt dieselben Angaben als einfachen Text in die Zwischenablage, zum Einfügen in Teams.
+
 Die App ist unter `https://itdavid04.github.io/Wiki-APP/` erreichbar und auf dem Handy über „App installieren“ oder das
 Chrome-Menü „Zum Startbildschirm hinzufügen“ installierbar. Nach jedem Update bietet sie „Neu laden“ an.
 
 Wichtig: Über GitHub Pages ist die App öffentlich. Impressum und Datenschutz sind noch Platzhalter und gehören vor dem
 breiten Teilen ausgefüllt.
 
-Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. Der Lernstand samt
+Für die Datenschutzerklärung relevant: Die App selbst hat keine Konten, kein Tracking und keine Cookies. „Fehler melden“
+schickt nichts von selbst; erst wer auf GitHub abschickt oder den Text in Teams einfügt, gibt die Meldung weiter. Der Lernstand samt
 Erfolgen, Bienen, Stempeln und Lerntagen liegt nur im Browser des Geräts (localStorage). Die App wird aber von GitHub Pages ausgeliefert und lädt Artikel von
 `raw.githubusercontent.com`; dabei sieht GitHub wie bei jedem Webserver die IP-Adresse.
 
