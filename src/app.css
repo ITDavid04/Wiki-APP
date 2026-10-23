@@ -667,6 +667,12 @@ html.sheet-open body{overflow:hidden}
 }
 @media (hover:none),(pointer:coarse){.cursor{display:none}}
 
+/* Formeln (KaTeX): Blöcke breiter als der Text scrollen für sich, bis KaTeX geladen ist steht der Quelltext da */
+.prose .math.display{display:block;margin:1.1em 0;padding:4px 0;overflow-x:auto;overflow-y:hidden;text-align:center}
+.prose .math:not(:has(.katex)){font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;color:var(--muted)}
+.prose .katex{font-size:1.12em}
+.prose .katex-display{margin:0}
+
 /* Fehler melden: Formular als Dialog über allem (melden.js) */
 .melden{width:min(520px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:0;border:1px solid var(--line);border-radius:24px;background:var(--card);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.3);overflow:auto;overscroll-behavior:contain}
 .melden::backdrop{background:rgba(8,16,12,.55)}

@@ -87,6 +87,13 @@ for (const a of ['geometries/RoundedBoxGeometry.js', 'environments/RoomEnvironme
 await copy(path.join(NM, 'lenis', 'dist', 'lenis.min.js'), 'vendor/lenis.min.js');
 await copy(path.join(NM, 'marked', 'lib', 'marked.esm.js'), 'vendor/marked.esm.js');
 await copy(path.join(NM, 'dompurify', 'dist', 'purify.es.mjs'), 'vendor/purify.es.mjs');
+/* KaTeX für Formeln: nur die woff2-Schriften (können alle aktuellen Browser), die CSS-Zeilen für woff und ttf fallen weg */
+const KATEX = path.join(NM, 'katex', 'dist');
+await put('vendor/katex/katex.mjs', await mini(await read(path.join(KATEX, 'katex.mjs')), true));
+const katexCss = (await read(path.join(KATEX, 'katex-swap.min.css'))).replace(/,url\(fonts\/[^)]+\.(woff|ttf)\) format\("(woff|truetype)"\)/g, '');
+if (/\.(woff|ttf)\)/.test(katexCss)) throw new Error('KaTeX-CSS: woff- oder ttf-Schrift übrig, Muster in build.mjs anpassen');
+await put('vendor/katex/katex.min.css', katexCss);
+for (const f of await readdir(path.join(KATEX, 'fonts'))) if (f.endsWith('.woff2')) await copy(path.join(KATEX, 'fonts', f), 'vendor/katex/fonts/' + f);
 
 /* Lizenzen der mitgelieferten Bibliotheken und der Schrift */
 const pkgs = PKG.dependencies;
@@ -94,6 +101,7 @@ await copy(path.join(THREE, 'LICENSE'), 'vendor/LICENSES/three.txt');
 await copy(path.join(NM, 'lenis', 'LICENSE'), 'vendor/LICENSES/lenis.txt');
 await copy(path.join(NM, 'marked', 'LICENSE.md'), 'vendor/LICENSES/marked.md');
 await copy(path.join(NM, 'dompurify', 'LICENSE'), 'vendor/LICENSES/dompurify.txt');
+await copy(path.join(NM, 'katex', 'LICENSE'), 'vendor/LICENSES/katex.txt');
 await copy(path.join(FONT, 'LICENSE'), 'vendor/LICENSES/hanken-grotesk-OFL.txt');
 await put('vendor/LICENSES/README.txt', 'Mitgelieferte Bibliotheken und Schrift:\n' +
   Object.entries(pkgs).map(([k, v]) => `- ${k} ${v}`).join('\n') + '\n');

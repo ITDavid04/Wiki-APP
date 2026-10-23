@@ -442,6 +442,27 @@ try {
   check('Fehler melden auch von der Startseite', start.open && start.wo.includes('Startseite'), start.wo);
   await fp.screenshot({ path: path.join(SHOTS, 'fehler-melden.png') });
   check('Keine Fehler beim Melden', ferrs.length === 0, ferrs.slice(0, 5).join(' | '));
+
+  /* 11. Formeln (KaTeX): der USV-Artikel hat Formeln im Text, in Tabellen und als Block; offline aus dem Speicher */
+  const USV = 'Network/0.1USV_und_USV_Klassen.md';
+  const formeln = async () => {
+    await fp.waitForFunction(() => document.querySelectorAll('#prose .katex').length > 10, { timeout: 15000 }).catch(() => {});
+    return fp.evaluate(() => ({ katex: document.querySelectorAll('#prose .katex').length, platz: document.querySelectorAll('#prose .math').length,
+      block: document.querySelectorAll('#prose .math.display .katex-display').length, fehler: document.querySelectorAll('#prose .katex-error').length,
+      tabelle: document.querySelectorAll('#prose td .katex').length, dollar: [...document.querySelectorAll('#prose td, #prose p')].filter(e => /\$\S/.test(e.textContent)).length }));
+  };
+  await fp.evaluate(() => { if (document.getElementById('melden').open) document.getElementById('melden').close(); });
+  await fp.evaluate(p => window.FIAE.go('#/artikel/' + encodeURIComponent(p)), USV);
+  const fm = await formeln();
+  check('Formeln werden gezeichnet, auch in Tabellen', fm.katex === fm.platz && fm.katex > 10 && fm.block >= 3 && fm.tabelle >= 2 && fm.fehler === 0 && fm.dollar === 0, JSON.stringify(fm));
+  await fp.evaluate(() => window.FIAE.closeSheet());
+  await setOffline(fp, true);
+  await fp.reload({ waitUntil: 'load' });
+  await fp.evaluate(p => window.FIAE.go('#/artikel/' + encodeURIComponent(p)), USV);
+  const fo = await formeln();
+  check('Formeln auch im Flugmodus', fo.katex === fo.platz && fo.katex > 10 && fo.fehler === 0, JSON.stringify(fo));
+  await setOffline(fp, false);
+  check('Keine Fehler bei den Formeln', ferrs.length === 0, ferrs.slice(0, 5).join(' | '));
 } catch (e) {
   check('Test lief durch', false, e.message);
 } finally {

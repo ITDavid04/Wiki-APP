@@ -110,8 +110,51 @@ function resetScroll(){ scrollEl.scrollTop = 0; prog.style.transform = 'scaleX(0
 let libs = null;
 async function loadLibs(){
   if (!libs) libs = Promise.all([import('./vendor/marked.esm.js'), import('./vendor/purify.es.mjs')])
-    .then(([m, p]) => ({ marked: m.marked, purify: p.default }));
+    .then(([m, p]) => { m.marked.use({ extensions: MATH }); return { marked: m.marked, purify: p.default }; });
   return libs;
+}
+
+/* Formeln wie auf GitHub: $...$ und \(...\) im Text, $$...$$ im Text oder als eigener Block, \[ ... \] nur auf eigenen Zeilen
+   (sonst sind es oft einfach eckige Klammern). Ein $ direkt vor oder nach einem Leerzeichen zählt nicht, damit "5 $ und 10 $"
+   Text bleibt, ebenso eins direkt vor Buchstabe, Ziffer, ( oder {, damit Shell wie "$HOME/bin:$PATH" Text bleibt. marked lässt die Formel als Quelltext in einem Platzhalter stehen, KaTeX zeichnet sie
+   erst nach dem Bereinigen (renderMath). Code bleibt unberührt, den erkennt marked vorher. */
+const mathTok = (type, display, tex, raw) => ({ type, raw, tex: tex.trim(), display });
+const MATH = [{
+  name: 'mathBlock', level: 'block',
+  start: src => { const m = src.match(/^ {0,3}(\$\$|\\\[)/m); return m ? m.index : undefined; },
+  tokenizer(src){
+    const m = /^ {0,3}(?:\$\$([\s\S]+?)\$\$|\\\[[ \t]*\n([\s\S]+?)\n[ \t]*\\\])[ \t]*(?:\n+|$)/.exec(src);
+    if (m) return mathTok('mathBlock', true, m[1] || m[2], m[0]);
+  },
+  renderer: t => `<div class="math display">${esc(t.tex)}</div>\n`
+}, {
+  name: 'mathInline', level: 'inline',
+  start: src => { const m = src.match(/(?<!\\)\$|\\\(/); return m ? m.index : undefined; },
+  tokenizer(src){
+    const m = /^(?:\$\$([^$]+?)\$\$|\$(?![\s$])((?:\\.|[^\\$\n])+?)(?<!\s)\$(?![\w({])|\\\(([\s\S]+?)\\\))/.exec(src);
+    if (m) return mathTok('mathInline', !!m[1], m[1] || m[2] || m[3], m[0]);
+  },
+  renderer: t => `<span class="math${t.display ? ' display' : ''}">${esc(t.tex)}</span>`
+}];
+let katexLib = null;
+function loadKatex(){
+  if (!katexLib) {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet'; css.href = 'vendor/katex/katex.min.css';
+    document.head.appendChild(css);
+    katexLib = import('./vendor/katex/katex.mjs').then(m => m.default);
+  }
+  return katexLib;
+}
+async function renderMath(prose){
+  const els = $$('.math', prose);
+  if (!els.length) return;
+  let katex;
+  try { katex = await loadKatex(); } catch (e) { katexLib = null; return; } /* dann bleibt der Quelltext stehen */
+  for (const el of els) {
+    try { katex.render(el.textContent, el, { displayMode: el.classList.contains('display'), throwOnError: false, strict: false }); }
+    catch (e) { /* kaputte Formel: Quelltext bleibt stehen */ }
+  }
 }
 function slug(text, used){
   let s = text.toLowerCase().trim().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s/g, '-');
@@ -187,6 +230,7 @@ async function openArticle(p){
   const html = purify.sanitize(marked.parse(text, { gfm: true, breaks: false }));
   prose.innerHTML = html;
   enhance(prose, p);
+  renderMath(prose);
 
   /* Ende des Artikels: Lernstand und weiter im Regal */
   const same = D.artikel.map((x, k) => ({ x, k })).filter(o => o.x.r === a.r);
