@@ -3,6 +3,7 @@
    - setzt den Katalog (data/catalog.json) in index.html ein
    - kopiert Bibliotheken aus node_modules nach docs/vendor, verkleinert die großen mit terser, legt Lizenzen bei
    - erzeugt den Service Worker mit Prüfsumme und Liste aller Dateien
+   - zählt die Versionsnummer hoch, wenn sich die App gegenüber der veröffentlichten geändert hat (siehe unten)
    - bricht ab, wenn in den Texten Gedankenstriche stehen */
 import { readFile, writeFile, mkdir, rm, copyFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -16,6 +17,7 @@ const OUT = path.join(ROOT, 'docs');
 const NM = path.join(ROOT, 'node_modules');
 
 const read = p => readFile(p, 'utf8');
+const PKG = JSON.parse(await readFile(path.join(ROOT, 'package.json'), 'utf8'));
 async function put(rel, data){
   const p = path.join(OUT, rel);
   await mkdir(path.dirname(p), { recursive: true });
@@ -58,9 +60,10 @@ noDashes('data/catalog.json', catJs);
 let html = await read(path.join(SRC, 'index.html'));
 noDashes('src/index.html', html);
 if (!html.includes('/*CATALOG*/')) throw new Error('Platzhalter /*CATALOG*/ fehlt');
+if (!html.includes('/*APPVERSION*/')) throw new Error('Platzhalter /*APPVERSION*/ fehlt');
 html = html.replace('/*CATALOG*/', () => catJs);
 await put('index.html', html);
-for (const f of ['app.css', 'app.js', 'scene.js', 'reader.js']) {
+for (const f of ['app.css', 'app.js', 'scene.js', 'reader.js', 'melden.js']) {
   const code = await read(path.join(SRC, f));
   noDashes('src/' + f, code);
   if (f === 'app.css') await put(f, code);
@@ -84,27 +87,67 @@ for (const a of ['geometries/RoundedBoxGeometry.js', 'environments/RoomEnvironme
 await copy(path.join(NM, 'lenis', 'dist', 'lenis.min.js'), 'vendor/lenis.min.js');
 await copy(path.join(NM, 'marked', 'lib', 'marked.esm.js'), 'vendor/marked.esm.js');
 await copy(path.join(NM, 'dompurify', 'dist', 'purify.es.mjs'), 'vendor/purify.es.mjs');
+/* KaTeX für Formeln: nur die woff2-Schriften (können alle aktuellen Browser), die CSS-Zeilen für woff und ttf fallen weg */
+const KATEX = path.join(NM, 'katex', 'dist');
+await put('vendor/katex/katex.mjs', await mini(await read(path.join(KATEX, 'katex.mjs')), true));
+const katexCss = (await read(path.join(KATEX, 'katex-swap.min.css'))).replace(/,url\(fonts\/[^)]+\.(woff|ttf)\) format\("(woff|truetype)"\)/g, '');
+if (/\.(woff|ttf)\)/.test(katexCss)) throw new Error('KaTeX-CSS: woff- oder ttf-Schrift übrig, Muster in build.mjs anpassen');
+await put('vendor/katex/katex.min.css', katexCss);
+for (const f of await readdir(path.join(KATEX, 'fonts'))) if (f.endsWith('.woff2')) await copy(path.join(KATEX, 'fonts', f), 'vendor/katex/fonts/' + f);
 
 /* Lizenzen der mitgelieferten Bibliotheken und der Schrift */
-const pkgs = JSON.parse(await read(path.join(ROOT, 'package.json'))).dependencies;
+const pkgs = PKG.dependencies;
 await copy(path.join(THREE, 'LICENSE'), 'vendor/LICENSES/three.txt');
 await copy(path.join(NM, 'lenis', 'LICENSE'), 'vendor/LICENSES/lenis.txt');
 await copy(path.join(NM, 'marked', 'LICENSE.md'), 'vendor/LICENSES/marked.md');
 await copy(path.join(NM, 'dompurify', 'LICENSE'), 'vendor/LICENSES/dompurify.txt');
+await copy(path.join(NM, 'katex', 'LICENSE'), 'vendor/LICENSES/katex.txt');
 await copy(path.join(FONT, 'LICENSE'), 'vendor/LICENSES/hanken-grotesk-OFL.txt');
 await put('vendor/LICENSES/README.txt', 'Mitgelieferte Bibliotheken und Schrift:\n' +
   Object.entries(pkgs).map(([k, v]) => `- ${k} ${v}`).join('\n') + '\n');
 
 /* Service Worker: Prüfsumme über alle Dateien, Liste zum Vorladen */
 const files = (await walk(OUT)).filter(f => f !== '.nojekyll' && !f.startsWith('vendor/LICENSES/'));
+const basis = PKG.version.split('.').slice(0, 2).join('.');
 const hash = createHash('sha256');
+hash.update(basis);
 for (const f of files) { hash.update(f); hash.update(await readFile(path.join(OUT, f))); }
 const version = hash.digest('hex').slice(0, 12);
+
+/* Versionsnummer für Menschen, zum Beispiel 1.0.7. Die ersten zwei Stellen stehen in package.json ("version": "1.0.0"),
+   die letzte zählt der Build selbst: Er liest version.json der veröffentlichten App (APP_URL, im Workflow gesetzt).
+   Gleiche Prüfsumme heißt gleiche Nummer, sonst eins höher. Damit steigt sie genau dann, wenn die App "Neu laden" anbietet,
+   auch wenn nur neue Artikel dazugekommen sind. Wer in package.json 1.1.0 einträgt, fängt bei 1.1.0 wieder an.
+   Ohne APP_URL (lokal) heißt sie 1.0.x-lokal. */
+async function liveVersion(url){
+  for (let i = 1; ; i++) {
+    try {
+      const r = await fetch(new URL('version.json', url), { cache: 'no-store' });
+      if (r.status === 404) return null;
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return await r.json();
+    } catch (e) {
+      if (i === 3) throw new Error(`version.json der veröffentlichten App nicht lesbar (${e.message}), ohne sie könnte die Versionsnummer zurückspringen`);
+      await new Promise(ok => setTimeout(ok, 3000 * i));
+    }
+  }
+}
+let appVersion = basis + '.x-lokal', vorher = null;
+if (process.env.APP_URL) {
+  vorher = await liveVersion(process.env.APP_URL);
+  const m = vorher && /^(\d+\.\d+)\.(\d+)$/.exec(vorher.version);
+  appVersion = !m || m[1] !== basis ? basis + '.0' : vorher.hash === version ? vorher.version : `${basis}.${Number(m[2]) + 1}`;
+}
+await put('index.html', (await read(path.join(OUT, 'index.html'))).replace('/*APPVERSION*/', appVersion));
+
 let sw = await read(path.join(SRC, 'sw.js'));
 noDashes('src/sw.js', sw);
 sw = sw.replace("'/*VERSION*/'", `'${version}'`).replace('/*PRECACHE*/[]', JSON.stringify(['./', ...files]));
 await put('sw.js', await mini(sw, false));
+/* nicht vorgeladen: der nächste Build und die App selbst (Hinweis "Neu laden") fragen sie frisch ab */
+await put('version.json', JSON.stringify({ version: appVersion, hash: version, stand: catalog.stand, artikel: catalog.artikel.length }) + '\n');
 
 let total = 0;
 for (const f of await walk(OUT)) total += (await readFile(path.join(OUT, f))).length;
-console.log(`docs/ gebaut: ${files.length + 1} Dateien vorgeladen, ${(total / 1024).toFixed(0)} KB gesamt, Version ${version}, ${catalog.artikel.length} Artikel (Stand ${catalog.stand})`);
+console.log(`docs/ gebaut: ${files.length + 1} Dateien vorgeladen, ${(total / 1024).toFixed(0)} KB gesamt, Version ${appVersion} (Prüfsumme ${version}` +
+  `${vorher ? `, veröffentlicht ist ${vorher.version}` : process.env.APP_URL ? ', erste Version mit Nummer' : ''}), ${catalog.artikel.length} Artikel (Stand ${catalog.stand})`);

@@ -14,7 +14,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '
 const D = JSON.parse($('#catalog').textContent);
 const REG = D.regale;
 const share = r => r.n ? r.rot / r.n : 0;
-window.FIAE = { D, REG, scrollTo: null, openTile: null, loadStep: null, tree: null, relayoutTree: null, hoverBlock: false, tip: null, sheetOpen: false, closeSheet: null, lenis: null };
+window.FIAE = { D, REG, version: root.dataset.version, scrollTo: null, openTile: null, loadStep: null, tree: null, relayoutTree: null, hoverBlock: false, tip: null, sheetOpen: false, closeSheet: null, lenis: null };
 
 /* Lernstand: bleibt nur auf diesem Gerät (localStorage). Schlüssel ist der Pfad der Datei im Wiki,
    damit der Stand auch nach einem neuen Katalog stimmt. 0 = noch nicht, 1 = gelesen, 2 = sitzt */
@@ -87,6 +87,7 @@ setStat('rot', rotAll);
 setStat('pruef', (REG.find(r => r.id === 'ap') || { n: 0 }).n);
 const [sy, sm, sd] = (D.stand || '').split('-');
 if (sd) $('#footStand').textContent = `Bibliothek Lern-Wiki für Umschüler, letzter Eintrag im Repository am ${sd}.${sm}.${sy}`;
+$('#footVersion').textContent = 'Version ' + root.dataset.version;
 $('#mdLink').href = D.links.markdown;
 $('#ghLink').href = D.repo;
 const EXT = '<svg class="ext" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -130,9 +131,9 @@ function setMenu(open){
   if (open) $('a', menu).focus();
 }
 menuBtn.addEventListener('click', e => { e.stopPropagation(); setMenu(menu.hidden); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden && !$('dialog[open]')) { setMenu(false); menuBtn.focus(); } });
 document.addEventListener('click', e => { if (!menu.hidden && !e.target.closest('#menu')) setMenu(false); });
-menu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+menu.addEventListener('click', e => { if (e.target.closest('a,[data-melden]')) setMenu(false); });
 
 /* Ladebildschirm: 6 Felder für die Ladeschritte */
 const loader = $('#loader'), cells = [...$('#loaderRow').children];
@@ -764,7 +765,7 @@ $('#erfolgStand').addEventListener('click', () => {
   festZu();
 });
 /* Escape schließt zuerst die Feier, die offene Seite bleibt */
-addEventListener('keydown', e => { if (e.key === 'Escape' && !fest.hidden) { e.stopImmediatePropagation(); festZu(); } }, true);
+addEventListener('keydown', e => { if (e.key === 'Escape' && !fest.hidden && !$('dialog[open]')) { e.stopImmediatePropagation(); festZu(); } }, true);
 
 /* Leseausweis: Stempel für Meilensteine. Einmal verdient, bleiben sie, mit Datum wie im Leihstempel (lernwiki-stempel-v1);
    nur Zurücksetzen löscht sie. Die meisten werden aus dem Lernstand berechnet, die Lerntage merkt sich lernwiki-tage-v1.
@@ -899,13 +900,27 @@ window.FIAE.stempel = {
   }
 };
 
+/* Nach einem Update einmal sagen, welche Version jetzt läuft (nicht beim ersten Besuch) */
+const VERSION_KEY = 'lernwiki-version';
+const vorher = store.get(VERSION_KEY);
+if (vorher && vorher !== root.dataset.version) {
+  const zeig = () => root.classList.contains('is-loading') ? setTimeout(zeig, 300) : showToast(`Aktualisiert auf Version ${root.dataset.version}.`, null, null, 4000);
+  zeig();
+}
+store.set(VERSION_KEY, root.dataset.version);
+
 /* App: Service Worker (offline und Updates), Installieren, Hinweis bei fehlendem Netz */
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   const hadController = !!navigator.serviceWorker.controller;
   addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').then(reg => {
-      const offer = w => showToast('Es gibt eine neue Version der App.', 'Neu laden', () => w.postMessage('skipWaiting'));
+      /* mit Nummer, wenn version.json der neuen Fassung zu holen ist */
+      const offer = w => {
+        const zeig = v => showToast(`Es gibt eine neue Version der App${v ? ` (${v})` : ''}.`, 'Neu laden', () => w.postMessage('skipWaiting'));
+        fetch('version.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null)
+          .then(j => zeig(j && j.version !== root.dataset.version ? j.version : ''), () => zeig(''));
+      };
       if (reg.waiting && hadController) offer(reg.waiting);
       reg.addEventListener('updatefound', () => {
         const w = reg.installing;

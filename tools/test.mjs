@@ -2,7 +2,8 @@
    npm test                     -> alle Prüfungen, Bildschirmfotos nach tools/shots/
    CHROME=/pfad/zu/chrome npm test, falls Chrome woanders liegt
    CI=1 npm test               -> wie auf GitHub: 3D in Software statt auf der Grafikkarte
-   Prüft: Installierbarkeit laut Chrome, Service Worker übernimmt, Start im Flugmodus, keine Fehler in der Konsole. */
+   Prüft: Installierbarkeit laut Chrome, Service Worker übernimmt, Start im Flugmodus, keine Fehler in der Konsole,
+   Lesen, Lernstand, Belohnungen, Fehler melden und Versionsnummer. */
 import puppeteer from 'puppeteer-core';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -395,6 +396,73 @@ try {
   check('Wiederherstellen bringt Stempel mit, ohne Feier', k7.hat === 'b1,backup' && k7.tage === 2 && !k7.card, JSON.stringify(k7));
   check('Keine Fehler beim Leseausweis', serrs.length === 0, serrs.slice(0, 5).join(' | '));
   await ctx3.close();
+
+  /* 10. Fehler melden und Versionsnummer */
+  const fp = await browser.newPage();
+  const ferrs = watch(fp, 'Melden');
+  await fp.setViewport({ width: 1280, height: 860 });
+  await fp.goto(BASE, { waitUntil: 'networkidle0' });
+  await ready(fp);
+  const ver = await fp.evaluate(async () => ({ html: document.documentElement.dataset.version, foot: document.getElementById('footVersion').textContent, json: (await (await fetch('version.json', { cache: 'no-store' })).json()).version }));
+  check('Versionsnummer im Fuß und in version.json', /^\d+\.\d+\.(\d+|x-lokal)$/.test(ver.html) && ver.foot === 'Version ' + ver.html && ver.json === ver.html, JSON.stringify(ver));
+  await fp.evaluate(p => window.FIAE.go('#/artikel/' + encodeURIComponent(p)), LF31);
+  await fp.waitForFunction(() => document.querySelectorAll('#prose h2').length > 2, { timeout: 15000 }).catch(() => {});
+  /* zur dritten Überschrift scrollen: sie ist dann der Abschnitt der Meldung */
+  const h3 = await fp.evaluate(() => { const h = document.querySelectorAll('#prose h2')[2], s = document.getElementById('sheetScroll'); s.scrollTop += h.getBoundingClientRect().top - s.getBoundingClientRect().top - 40; return h.textContent.trim(); });
+  await sleep(300);
+  await fp.click('#sheetTools [data-melden]');
+  await sleep(300);
+  const dl1 = await fp.evaluate(() => ({ open: document.getElementById('melden').open, wo: document.getElementById('meldenWo').textContent, info: document.getElementById('meldenInfo').textContent, fokus: document.activeElement.id }));
+  check('Fehler melden: Formular kennt Artikel und Abschnitt', dl1.open && dl1.wo.includes('Fundament') && dl1.wo.includes(h3) && dl1.info.includes('App-Version') && dl1.fokus === 'meldenText', `${dl1.wo}`);
+  await fp.click('#meldenGh');
+  const leer = await fp.evaluate(() => ({ open: document.getElementById('melden').open, st: document.getElementById('meldenStatus').textContent }));
+  await fp.type('#meldenText', 'Formeln in der Tabelle stehen als Text da.');
+  await fp.evaluate(() => { window.__kopie = null; navigator.clipboard.writeText = t => { window.__kopie = t; return Promise.resolve(); }; });
+  await fp.click('#meldenCopy');
+  await sleep(200);
+  const kopie = await fp.evaluate(() => ({ t: window.__kopie, st: document.getElementById('meldenStatus').textContent }));
+  check('Ohne Text geht nichts raus, Kopieren für Teams', leer.open && leer.st.includes('Schreib') && kopie.t && kopie.t.includes('Formeln in der Tabelle') && kopie.t.includes(h3) && kopie.t.includes('App-Version: ' + ver.html) && kopie.st.startsWith('Kopiert'), kopie.st);
+  await fp.keyboard.press('Escape');
+  await sleep(200);
+  const esc1 = await fp.evaluate(() => ({ dlg: document.getElementById('melden').open, sheet: !document.getElementById('sheet').hidden }));
+  check('Escape schließt nur das Formular, der Artikel bleibt offen', !esc1.dlg && esc1.sheet, JSON.stringify(esc1));
+  await fp.click('#sheetTools [data-melden]');
+  await fp.evaluate(() => { window.__auf = null; window.open = u => { window.__auf = u; return null; }; });
+  await fp.click('#meldenGh');
+  await sleep(200);
+  const gh = await fp.evaluate(() => ({ u: window.__auf, open: document.getElementById('melden').open }));
+  const ghu = gh.u ? new URL(gh.u) : null;
+  check('Auf GitHub melden: Issue mit Titel, Text und Version', ghu && ghu.pathname === '/ITDavid04/Wiki-APP/issues/new' && !gh.open &&
+    ghu.searchParams.get('title').startsWith('Fehler: ') && ghu.searchParams.get('body').includes('Formeln in der Tabelle') &&
+    ghu.searchParams.get('body').includes(h3) && ghu.searchParams.get('body').includes(ver.html), gh.u && ghu.searchParams.get('title'));
+  await fp.evaluate(() => window.FIAE.closeSheet());
+  await fp.evaluate(() => document.querySelector('.foot [data-melden]').click());
+  await sleep(200);
+  const start = await fp.evaluate(() => ({ open: document.getElementById('melden').open, wo: document.getElementById('meldenWo').textContent }));
+  check('Fehler melden auch von der Startseite', start.open && start.wo.includes('Startseite'), start.wo);
+  await fp.screenshot({ path: path.join(SHOTS, 'fehler-melden.png') });
+  check('Keine Fehler beim Melden', ferrs.length === 0, ferrs.slice(0, 5).join(' | '));
+
+  /* 11. Formeln (KaTeX): der USV-Artikel hat Formeln im Text, in Tabellen und als Block; offline aus dem Speicher */
+  const USV = 'Network/0.1USV_und_USV_Klassen.md';
+  const formeln = async () => {
+    await fp.waitForFunction(() => document.querySelectorAll('#prose .katex').length > 10, { timeout: 15000 }).catch(() => {});
+    return fp.evaluate(() => ({ katex: document.querySelectorAll('#prose .katex').length, platz: document.querySelectorAll('#prose .math').length,
+      block: document.querySelectorAll('#prose .math.display .katex-display').length, fehler: document.querySelectorAll('#prose .katex-error').length,
+      tabelle: document.querySelectorAll('#prose td .katex').length, dollar: [...document.querySelectorAll('#prose td, #prose p')].filter(e => /\$\S/.test(e.textContent)).length }));
+  };
+  await fp.evaluate(() => { if (document.getElementById('melden').open) document.getElementById('melden').close(); });
+  await fp.evaluate(p => window.FIAE.go('#/artikel/' + encodeURIComponent(p)), USV);
+  const fm = await formeln();
+  check('Formeln werden gezeichnet, auch in Tabellen', fm.katex === fm.platz && fm.katex > 10 && fm.block >= 3 && fm.tabelle >= 2 && fm.fehler === 0 && fm.dollar === 0, JSON.stringify(fm));
+  await fp.evaluate(() => window.FIAE.closeSheet());
+  await setOffline(fp, true);
+  await fp.reload({ waitUntil: 'load' });
+  await fp.evaluate(p => window.FIAE.go('#/artikel/' + encodeURIComponent(p)), USV);
+  const fo = await formeln();
+  check('Formeln auch im Flugmodus', fo.katex === fo.platz && fo.katex > 10 && fo.fehler === 0, JSON.stringify(fo));
+  await setOffline(fp, false);
+  check('Keine Fehler bei den Formeln', ferrs.length === 0, ferrs.slice(0, 5).join(' | '));
 } catch (e) {
   check('Test lief durch', false, e.message);
 } finally {

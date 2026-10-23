@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
-> **Stand:** 22.10.2026
-> **App-Stand:** `main` bei Commit `06d2457` (Leseausweis)
+> **Stand:** 23.10.2026
+> **App-Stand:** Commit `5b005ca` (Fehler melden, Versionsnummer, Formeln), ab hier Version 1.0.0
 > **Katalog:** 172 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 20.10.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -24,7 +24,7 @@ eine weg, wird diese Seite mitgepflegt.
 | 2 | [Startseite](#2-startseite) | Ladebildschirm, Würfel, Ranke, Kacheln, Katalog, Prüfung, Mitmachen |
 | 3 | [Lesen und Lernen](#3-lesen-und-lernen) | Artikelseite, Lernstand, Prüfungsmodus, Mein Stand |
 | 4 | [Belohnungen](#4-belohnungen) | Bienen, Lernfeld geschafft, Leseausweis mit Stempeln |
-| 5 | [App auf dem Gerät](#5-app-auf-dem-gerät) | Installieren, offline, Updates, Handy-Leiste, hell und dunkel |
+| 5 | [App auf dem Gerät](#5-app-auf-dem-gerät) | Installieren, offline, Updates, Versionsnummer, Fehler melden, Handy-Leiste, hell und dunkel |
 | 6 | [Barrierefreiheit](#6-barrierefreiheit) | Tastatur, Screenreader, reduzierte Bewegung, ohne 3D |
 | 7 | [Daten und Speicher](#7-daten-und-speicher) | Was die App auf dem Gerät speichert |
 | 8 | [Technik in Kürze](#8-technik-in-kürze) | Dateien, Bibliotheken, Veröffentlichen, Tests |
@@ -54,6 +54,8 @@ eine weg, wird diese Seite mitgepflegt.
 | Belohnung | Gesamtfeier, wenn alle Lernfelder mit Artikeln geschafft sind | Feier-Karte, Mein Stand |
 | Belohnung | Leseausweis mit 17 Stempeln | Mein Stand |
 | Gerät | Installierbar, offline, „Neu laden“ bei Updates | ganze App |
+| Gerät | Versionsnummer, zählt bei jedem Update selbst hoch | Fuß, Mein Stand, Hinweis „Neu laden“ |
+| Hilfe | Fehler melden: Formular mit Artikel, Abschnitt, Version und Gerät, weiter zu GitHub oder als Text für Teams | Fahne im Artikel, Artikelende, Menü, Fuß, Mein Stand |
 | Gerät | Untere Leiste am Handy | Handy |
 | Gerät | Hell und dunkel | Knopf oben rechts |
 
@@ -139,7 +141,8 @@ Aufdecken geht am Desktop per Maus, sonst per Tippen. Escape deckt wieder zu.
 
 - Drei Schritte, wie man Artikel ergänzt, und der Link zum Wiki auf GitHub.
 - Fuß: „Viel Erfolg bei der Prüfung.“ (hier endet die Ranke mit ihrer großen Blüte), Datum des letzten Wiki-Eintrags,
-  Platzhalter für Impressum und Datenschutz.
+  „Fehler melden“, „Version 1.0.…“, Platzhalter für Impressum und Datenschutz.
+- Im Menü steht „Fehler melden“ unter GitHub.
 
 ---
 
@@ -150,14 +153,15 @@ Aufdecken geht am Desktop per Maus, sonst per Tippen. Escape deckt wieder zu.
 | **Funktion** | **Details** |
 |---|---|
 | Laden | Markdown von `raw.githubusercontent.com`, umgewandelt mit marked, bereinigt mit DOMPurify |
-| Kopf | Abteilung und Gruppe, Titel, Hinweis „Mit Prüfungs-Ampel“, Lernstand-Chip, „Auf GitHub öffnen“ |
+| Kopf | Abteilung und Gruppe, Titel, Hinweis „Mit Prüfungs-Ampel“, Lernstand-Chip, Fahne „Fehler melden“, „Auf GitHub öffnen“ |
 | Ampel | Stellen mit 🔴 🟡 🟢 sind farbig markiert, auch Tabellenzeilen |
 | Nur ROT | Blendet Gelb und Grün aus (nur bei Artikeln mit roten Stellen) |
 | Inhalt | Sprungmarken an Überschriften, Links zu anderen Wiki-Artikeln öffnen in der App, Bilder kommen aus dem Wiki, breite Tabellen scrollen |
+| Formeln | `$…$` und `\(…\)` im Text, `$$…$$` im Text oder als Block, `\[ … \]` auf eigenen Zeilen; KaTeX zeichnet sie, auch in Tabellen. KaTeX lädt nur bei Artikeln mit Formeln, liegt aber in der App-Hülle und geht offline. Breite Formeln scrollen für sich. Kein Fehlgriff bei „5 $“, `\$`, Shell wie `$HOME/bin:$PATH`, Code und `\[Bedingung\]` |
 | Diagramme | Mermaid wird noch nicht gezeichnet: Hinweis, Link zu GitHub und der Quelltext zum Aufklappen |
 | Fortschritt | Balken oben zeigt, wie weit gelesen ist |
 | Zu Ende gelesen | Ab etwa 92 Prozent gilt der Artikel als gelesen. Beim ersten Mal fliegt dafür eine Biene ein, sonst kommt „Als gelesen markiert.“ mit „Rückgängig“ |
-| Ende | „Wie sitzt das Thema?“ mit Noch nicht, Gelesen, Sitzt; daneben landet die Biene. „Weiter in der Abteilung“ und die Quelle |
+| Ende | „Wie sitzt das Thema?“ mit Noch nicht, Gelesen, Sitzt; daneben landet die Biene. „Weiter in der Abteilung“, die Quelle und „Etwas falsch oder kaputt? Fehler melden“ |
 | Offline | Einmal geöffnete Artikel gehen ohne Netz. Ein ungelesener zeigt offline einen verständlichen Hinweis |
 | Aktualität | Erst die gespeicherte Fassung, im Hintergrund die neue; die kommt beim nächsten Öffnen |
 
@@ -192,7 +196,7 @@ Der Lernstand hängt am **Pfad der Datei** im Wiki. Wird eine Datei umbenannt od
 | Weiterlesen | die fünf zuletzt geöffneten Artikel |
 | Offline lesen | wie viele Artikel auf dem Gerät liegen, Knopf „Alle Artikel offline speichern“ |
 | Lernstand sichern | Sichern (Datei), Wiederherstellen, Zurücksetzen |
-| Über die App | Katalogstand und Link zu den Lizenzen |
+| Über die App | Versionsnummer, Katalogstand, Link zu den Lizenzen, Knopf „Fehler melden“ |
 
 ---
 
@@ -292,7 +296,9 @@ Bedingung und Fortschritt („10 von 25“).
 |---|---|
 | Installieren | Manifest und Icons; Chrome bietet „App installieren“ an, die App zeigt dann die Knöpfe im Intro und im Menü |
 | Offline | Die App-Hülle liegt nach dem ersten Besuch auf dem Gerät, danach startet die App auch im Flugmodus |
-| Updates | Gibt es eine neue Version, erscheint unten „Es gibt eine neue Version der App.“ mit „Neu laden“ |
+| Updates | Gibt es eine neue Version, erscheint unten „Es gibt eine neue Version der App (1.0.8).“ mit „Neu laden“. Danach einmal „Aktualisiert auf Version 1.0.8.“ (nicht beim ersten Besuch) |
+| Versionsnummer | drei Stellen, zum Beispiel 1.0.7. Die letzte zählt der Build beim Veröffentlichen hoch, sobald sich die App ändert (auch bei neuen Artikeln). Größere Schritte über `package.json`, Einzelheiten in der [README](README.md#versionsnummer) |
+| Fehler melden | Formular „Fehler melden“ mit „Was stimmt nicht?“. Automatisch dabei: Artikel, Abschnitt (die Überschrift im oberen Drittel; vom Artikelende aus keiner), markierte Stelle (bis 300 Zeichen), App-Version, Gerät (System, Browser, App oder Browser, Fenstergröße, hell oder dunkel, 3D an oder aus), Zeit und Link in die App. Unter „Das kommt automatisch mit“ aufklappbar. „Auf GitHub melden“ öffnet ein vorausgefülltes Issue in Wiki-APP, „Text kopieren“ legt alles für Teams in die Zwischenablage. Ohne Text: „Schreib kurz, was nicht stimmt.“, ohne Netz ein Hinweis statt GitHub |
 | Netz-Hinweise | „Du bist offline. Die App läuft weiter…“ und „Wieder online.“ |
 | Adressen | `#/artikel/<pfad>`, `#/pruefung`, `#/stand` als eigene Seiten; die Zurück-Taste funktioniert, direkte Links auch |
 | Handy-Leiste | Start, Suchen, Prüfung, Mein Stand (unter 860 Pixel Breite) |
@@ -305,7 +311,7 @@ Bedingung und Fortschritt („10 von 25“).
 
 | **Bereich** | **Was die App tut** |
 |---|---|
-| Tastatur | Sprunglink „Zum Inhalt“, Kacheln per Tastatur aufdecken, Escape schließt Menü, Kachel, Feier-Karte und Seite |
+| Tastatur | Sprunglink „Zum Inhalt“, Kacheln per Tastatur aufdecken, Escape schließt Menü, Kachel, Feier-Karte und Seite; ist „Fehler melden“ offen, schließt Escape nur das Formular |
 | Screenreader | Beschriftungen an Kacheln, Knöpfen und Bienen („gelesen“); Feier, Biene und Stempel werden über `aria-live` angesagt |
 | Fokus | Beim Öffnen einer Seite springt der Fokus auf ihren Titel, beim Schließen zurück |
 | Reduzierte Bewegung | keine Animationen: Ranke sofort voll, Würfel ohne Schweben, kein Blätterflug, keine fliegenden Bienen, Bienen in der Ranke sitzen still, Stempel ohne Aufdrücken |
@@ -326,6 +332,7 @@ Alles liegt nur im **Browser des Geräts**. Nichts geht an einen Server.
 | `lernwiki-stempel-v1` | verdiente Stempel mit Datum | ja |
 | `lernwiki-tage-v1` | Lerntage als Datum | ja |
 | `fiae-theme` | hell oder dunkel, wenn selbst gewählt | nein |
+| `lernwiki-version` | zuletzt gesehene Versionsnummer, für „Aktualisiert auf Version …“ | nein |
 
 | **Speicher** | **Inhalt** |
 |---|---|
@@ -346,19 +353,20 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | `src/app.css` | Gestaltung, hell und dunkel, Handy |
 | `src/app.js` | Startseite, Lernstand, Erfolge, Bienen, Stempel, Feier-Karte, Ansagen |
 | `src/reader.js` | Artikelseite, Prüfungsmodus, Mein Stand mit Leseausweis, Sichern |
+| `src/melden.js` | Fehler melden: Formular, GitHub-Issue, Text für Teams |
 | `src/scene.js` | 3D: Würfel, Ranke, Blüten, Bienen |
 | `src/sw.js` | Service Worker: App-Hülle und Artikel offline |
 | `data/catalog.json` | Katalog aller Artikel, erzeugt mit `tools/catalog.mjs` |
-| `tools/build.mjs` | baut `docs/`, bricht bei Gedankenstrichen ab |
+| `tools/build.mjs` | baut `docs/`, bestimmt die Versionsnummer und schreibt `version.json`, bricht bei Gedankenstrichen ab |
 | `tools/test.mjs` | automatischer Test mit Chrome |
 | `.github/workflows/pages.yml` | veröffentlicht bei Push auf `main`, jede Nacht um 2:30 Uhr UTC und auf Knopfdruck |
 
-**Bibliotheken:** three.js 0.186.1, Lenis 1.3.26, marked 15.0.12, DOMPurify 3.2.7, Schrift Hanken Grotesk.
+**Bibliotheken:** three.js 0.186.1, Lenis 1.3.26, marked 15.0.12, DOMPurify 3.2.7, KaTeX 0.19.0 (nur woff2-Schriften), Schrift Hanken Grotesk.
 
 **Ereignisse zwischen den Dateien:** `fiae-stand` (Lernstand geändert), `fiae-stempel` (Stempel geändert),
 `fiae-theme`, `fiae-tree`. Gemeinsame Werkzeuge liegen in `window.FIAE` (zum Beispiel `stand`, `erfolg`, `biene`, `stempel`).
 
-**Tests** (`npm test`, zurzeit 49 Prüfungen):
+**Tests** (`npm test`, zurzeit 59 Prüfungen):
 
 | **Teil** | **Prüft** |
 |---|---|
@@ -369,6 +377,8 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | 7 | Lernfeld geschafft: Kachel, Mein Stand, Feier genau einmal, Wiederherstellen, Gesamtfeier |
 | 8 | Bienen: Einflug, nur einmal je Artikel, Katalog und Stand |
 | 9 | Leseausweis: Stempel still beim Laden, Karte, Sprung zum Ausweis, Backup-Profi, Nachteule, Zurücksetzen, Wiederherstellen |
+| 10 | Versionsnummer im Fuß und in `version.json`; Fehler melden: Artikel und Abschnitt, ohne Text nichts, Kopieren, Escape, GitHub-Link, Startseite |
+| 11 | Formeln im USV-Artikel: alle gezeichnet, auch in Tabellen und als Block, kein Dollarzeichen übrig, auch im Flugmodus |
 
 Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht zufällig die Nachteule auslöst.
 
@@ -392,6 +402,8 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 22.10.2026 | `d2347c4` | Test wartet auf Suchtreffer (lief auf GitHub sonst manchmal zu früh) |
 | 22.10.2026 | `7370346` | Bienen: je gelesenem Artikel, Einflug, Bienen um die Blüten |
 | 22.10.2026 | `06d2457` | Leseausweis mit 17 Stempeln |
+| 23.10.2026 | `138cd4b` | Fehler melden (GitHub-Issue oder Text für Teams) und Versionsnummer ab 1.0.0, die bei Updates selbst hochzählt |
+| 23.10.2026 | `5b005ca` | Formeln mit KaTeX (gemeldet über Teams: Formeln in der USV-Tabelle standen als Text mit Dollarzeichen da) |
 
 ### Entfernt oder ersetzt
 
@@ -438,10 +450,11 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 ```yaml
 seite: ReadmeUpdate.md
 inhalt: Funktionen und Gimmicks der Wiki-APP
-stand: 2026-10-22
-app_commit: 06d2457
+stand: 2026-10-23
+app_commit: 5b005ca
+app_version: ab 1.0.0, zählt selbst hoch
 katalog: 172 Artikel, 75 mit Ampel, 10 von 12 Lernfeldern mit Artikeln, Wiki-Stand 2026-10-20
 stempel: 17
-tests: 49 Prüfungen
+tests: 59 Prüfungen
 gepflegt_von: Lernteam FIAE/FISI
 ```
