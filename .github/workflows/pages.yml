@@ -44,7 +44,13 @@ jobs:
           printf '```\n' >> "$GITHUB_STEP_SUMMARY"
           exit $status
 
-      - run: npm run build
+      # Versionsnummer: vergleicht mit version.json der veröffentlichten App und zählt hoch, wenn sich etwas geändert hat
+      - name: App bauen
+        env:
+          APP_URL: https://itdavid04.github.io/Wiki-APP/
+        run: |
+          npm run build
+          echo "### Version $(node -p "require('./docs/version.json').version")" >> "$GITHUB_STEP_SUMMARY"
 
       - run: npm test
 

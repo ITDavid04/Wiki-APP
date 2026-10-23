@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" data-version="/*APPVERSION*/">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -63,6 +63,7 @@
     <a href="#/stand">Mein Stand <small>App</small></a>
     <a href="#mitmachen">Mitmachen <small>06</small></a>
     <a id="ghLink" href="https://github.com/ITDavid04/Bibliothek-Lern-Wiki" target="_blank" rel="noopener">GitHub <small>Repo</small></a>
+    <button type="button" class="menu-btn" data-melden>Fehler melden <small>Hilfe</small></button>
     <button type="button" class="menu-install" data-install hidden>App installieren <small>Startbildschirm</small></button>
   </nav>
 </div>
@@ -206,7 +207,7 @@
   <p class="foot-big">Viel Erfolg bei der Prüfung.<span class="end-anchor" id="a-end" aria-hidden="true"></span></p>
   <div class="foot-row">
     <span id="footStand">Bibliothek Lern-Wiki für Umschüler</span>
-    <span><span class="ph">Impressum folgt</span> <span class="ph">Datenschutz folgt</span></span>
+    <span class="foot-links"><button type="button" class="linkbtn" data-melden>Fehler melden</button> <span id="footVersion"></span> <span class="ph">Impressum folgt</span> <span class="ph">Datenschutz folgt</span></span>
   </div>
 </footer>
 
@@ -253,6 +254,28 @@
   </div>
 </section>
 <p class="sr" id="erfolgLive" aria-live="polite"></p>
+<!-- Fehler melden (melden.js): Text schreiben, Ort und Gerät kommen automatisch dazu -->
+<dialog class="melden" id="melden" aria-labelledby="meldenTitle" data-lenis-prevent>
+  <form method="dialog" class="melden-in" id="meldenForm">
+    <div class="melden-head">
+      <h2 id="meldenTitle">Fehler melden</h2>
+      <button type="submit" class="toast-x" aria-label="Schließen"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+    </div>
+    <p class="melden-wo" id="meldenWo"></p>
+    <label class="micro" for="meldenText">Was stimmt nicht?</label>
+    <textarea id="meldenText" rows="5" placeholder="Zum Beispiel: In der Tabelle stehen die Formeln als Text mit Dollarzeichen da, statt als Formel."></textarea>
+    <details class="melden-mit">
+      <summary>Das kommt automatisch mit</summary>
+      <dl id="meldenInfo"></dl>
+    </details>
+    <div class="row-btns">
+      <button type="button" class="pillbtn dark micro" id="meldenGh">Auf GitHub melden</button>
+      <button type="button" class="pillbtn micro" id="meldenCopy">Text kopieren</button>
+    </div>
+    <p class="melden-status" id="meldenStatus" role="status" aria-live="polite"></p>
+    <p class="small">GitHub braucht ein Konto, die Meldung ist dort öffentlich. Ohne Konto: Text kopieren und in Teams schicken. Ein Bildschirmfoto hilft in beiden Fällen.</p>
+  </form>
+</dialog>
 <!-- Tinte für die Stempel im Leseausweis: etwas ungleichmäßig, wie echt gestempelt -->
 <svg class="sr" width="0" height="0" aria-hidden="true" focusable="false"><filter id="tinte" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.75"/><feComposite in="SourceGraphic" operator="in"/></filter></svg>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
@@ -261,5 +284,6 @@
 <script src="app.js"></script>
 <script type="module" src="scene.js"></script>
 <script type="module" src="reader.js"></script>
+<script type="module" src="melden.js"></script>
 </body>
 </html>

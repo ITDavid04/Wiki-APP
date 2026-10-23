@@ -24,7 +24,8 @@ const AMPEL = { '🔴': 'rot', '🟡': 'gelb', '🟢': 'gruen' };
 const ICON = {
   ext: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   arr: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  check: '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  check: '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  flag: '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4h11l-2.5 4.5L17 13H6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 };
 
 /* ---------- Seite öffnen und schließen ---------- */
@@ -64,7 +65,7 @@ function closeSheet(){
 }
 F.closeSheet = () => { history.replaceState(null, '', location.pathname + location.search); deepEntry = false; hideSheet(); };
 $('#sheetBack').addEventListener('click', closeSheet);
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && F.sheetOpen) closeSheet(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && F.sheetOpen && !$('dialog[open]')) closeSheet(); });
 function setTab(kind){
   $$('#tabbar a').forEach(a => a.classList.toggle('on', a.dataset.tab === (kind === 'artikel' ? '' : kind)));
 }
@@ -158,6 +159,7 @@ async function openArticle(p){
   tools.innerHTML =
     `<span class="st-chip micro" id="stChip"></span>` +
     (a.rot ? `<button type="button" class="pillbtn micro" id="onlyRot" aria-pressed="false"><span class="dot" aria-hidden="true"></span>Nur ROT</button>` : '') +
+    `<button type="button" class="ibtn" data-melden aria-label="Fehler in diesem Artikel melden" title="Fehler melden">${ICON.flag}</button>` +
     `<a class="ibtn" href="${esc(blobUrl(p))}" target="_blank" rel="noopener" aria-label="Auf GitHub öffnen" title="Auf GitHub öffnen">${ICON.ext}</a>`;
   body.innerHTML =
     `<header class="art-head"><p class="eyebrow micro">${esc(r.name)} · ${esc(groupLabel(a))}</p>` +
@@ -194,7 +196,8 @@ async function openArticle(p){
   end.className = 'art-end';
   end.innerHTML = `<h2 class="micro">Wie sitzt das Thema?${beeSpot(p, Stand.get(p))}</h2>${statusBar(p)}` +
     (next && next.k !== i ? `<a class="next" href="${F.artUrl(next.x)}"><span class="micro">Weiter in der Abteilung ${esc(r.kurz)}</span><b>${esc(next.x.t)}</b>${ICON.arr}</a>` : '') +
-    `<p class="src">Quelle: <a href="${esc(blobUrl(p))}" target="_blank" rel="noopener">${esc(p)}</a> im Wiki auf GitHub</p>`;
+    `<p class="src">Quelle: <a href="${esc(blobUrl(p))}" target="_blank" rel="noopener">${esc(p)}</a> im Wiki auf GitHub</p>` +
+    `<p class="src">Etwas falsch oder kaputt? <button type="button" class="linkbtn" data-melden="ende">Fehler melden</button></p>`;
   body.appendChild(end);
   wireStatus(end, p);
   paintStatus(p);
@@ -208,6 +211,23 @@ async function openArticle(p){
   };
   requestAnimationFrame(() => scrollEl.dispatchEvent(new Event('scroll')));
 }
+
+/* Für "Fehler melden" (melden.js): welche Seite ist offen, bei Artikeln auch der Abschnitt, der gerade oben steht.
+   Als oben gilt eine Überschrift im oberen Drittel; vom Knopf am Artikelende aus gibt es keinen Abschnitt. */
+F.meldeOrt = ende => {
+  if (!F.sheetOpen) return null;
+  if (sheet.dataset.kind !== 'artikel') return { seite: crumb.textContent };
+  const p = decodeURIComponent(location.hash.slice(10)), a = F.byPath(p);
+  let abschnitt = '';
+  if (!ende) {
+    const box = scrollEl.getBoundingClientRect(), linie = box.top + box.height / 3;
+    for (const h of $$('#prose h2, #prose h3, #prose h4', body)) {
+      if (h.getBoundingClientRect().top > linie) break;
+      abschnitt = h.textContent.trim();
+    }
+  }
+  return { artikel: a ? a.t : p, pfad: p, wiki: blobUrl(p), abschnitt, ende: !!ende };
+};
 
 /* Nach dem Umwandeln: erste Überschrift weg (steht schon oben), Sprungmarken, Links, Bilder, Tabellen, Ampel */
 function enhance(prose, p){
@@ -383,8 +403,9 @@ async function renderStand(){
       `<div class="row-btns"><button type="button" class="pillbtn micro" id="exp">Sichern</button>` +
       `<label class="pillbtn micro">Wiederherstellen<input type="file" accept="application/json,.json" id="imp" hidden></label>` +
       `<button type="button" class="pillbtn micro danger" id="reset">Zurücksetzen</button></div></section>` +
-    `<section class="block about"><h2>Über die App</h2><p>Katalog vom ${esc((D.stand || '').split('-').reverse().join('.'))}, ${n} Artikel aus dem ` +
-      `<a href="${esc(D.repo)}" target="_blank" rel="noopener">Wiki auf GitHub</a>. Bibliotheken und Schrift mit ihren Lizenzen liegen in <a href="vendor/LICENSES/README.txt" target="_blank" rel="noopener">vendor/LICENSES</a>.</p></section>`;
+    `<section class="block about"><h2>Über die App</h2><p>Version <span id="standVersion">${esc(F.version)}</span>. Katalog vom ${esc((D.stand || '').split('-').reverse().join('.'))}, ${n} Artikel aus dem ` +
+      `<a href="${esc(D.repo)}" target="_blank" rel="noopener">Wiki auf GitHub</a>. Bibliotheken und Schrift mit ihren Lizenzen liegen in <a href="vendor/LICENSES/README.txt" target="_blank" rel="noopener">vendor/LICENSES</a>.</p>` +
+      `<div class="row-btns"><button type="button" class="pillbtn micro" data-melden>Fehler melden</button></div></section>`;
 
   const cnt = await articleCacheCount();
   if (cnt === n) F.stempel.gib('offline', true);
