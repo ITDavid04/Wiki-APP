@@ -1,0 +1,76 @@
+# Baut die App und veröffentlicht sie auf GitHub Pages.
+# Läuft bei jedem Push auf main, jede Nacht und auf Knopfdruck (Actions, "App veröffentlichen", "Run workflow").
+# Der Katalog kommt dabei frisch aus dem Wiki. Liegt ein Artikel in einem Ordner ohne Zeile in GRUPPEN
+# (tools/catalog.mjs), oder schlägt ein Test fehl, bricht der Lauf ab und die bisherige Fassung bleibt online.
+name: App veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '30 2 * * *'   # jede Nacht 2:30 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Katalog aus dem Wiki
+        shell: bash
+        run: |
+          git clone --depth 1 https://github.com/ITDavid04/Lern-Wiki "$RUNNER_TEMP/wiki"
+          printf '### Katalog\n```\n' >> "$GITHUB_STEP_SUMMARY"
+          set +e
+          node tools/catalog.mjs "$RUNNER_TEMP/wiki" --streng 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"
+          status=${PIPESTATUS[0]}
+          printf '```\n' >> "$GITHUB_STEP_SUMMARY"
+          exit $status
+
+      # Versionsnummer: vergleicht mit version.json der veröffentlichten App und zählt hoch, wenn sich etwas geändert hat
+      - name: App bauen
+        env:
+          APP_URL: https://itdavid04.github.io/Wiki-APP/
+        run: |
+          npm run build
+          echo "### Version $(node -p "require('./docs/version.json').version")" >> "$GITHUB_STEP_SUMMARY"
+
+      - run: npm test
+
+      - name: Bildschirmfotos der Tests
+        if: failure()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: test-bildschirmfotos
+          path: tools/shots/
+
+      - uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5.0.1

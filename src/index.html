@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="de" data-version="/*APPVERSION*/">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bibliothek Lern-Wiki</title>
+<meta name="description" content="Die Bibliothek unseres Lernteams aus der Umschulung FIAE und FISI als App: jedes Blatt der Ranke ist ein Artikel, mit Prüfungs-Ampel.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#EFF1EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1512" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lern-Wiki">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/hanken-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="app.css">
+<script>
+/* Früh: Ladebildschirm nur mit JS und ohne reduzierte Bewegung, nie länger als 3,5 s */
+(function(){
+  var d = document.documentElement;
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    d.classList.add('is-loading');
+    setTimeout(function(){ d.classList.remove('is-loading'); }, 3500);
+  }
+})();
+</script>
+<script type="application/json" id="catalog">/*CATALOG*/</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-row" id="loaderRow"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <p>Moin. Die Ranke wird gegossen.</p>
+</div>
+
+<a class="skip" href="#main">Zum Inhalt</a>
+
+<header class="top" id="top">
+  <div class="top-in">
+    <a class="brand" href="#main" aria-label="Bibliothek Lern-Wiki, zum Anfang"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Bibliothek Lern-Wiki</a>
+    <p class="top-intro">Die Bibliothek unseres Lernteams aus der Umschulung FIAE und FISI.</p>
+    <div class="actions">
+      <button class="ibtn" id="themeBtn" type="button" aria-label="Hell oder dunkel wechseln" title="Hell oder dunkel">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+      </button>
+      <a class="pillbtn micro hide-s" href="#/stand">Mein Stand</a>
+      <a class="pillbtn dark micro hide-s" href="#katalog" data-focus="q">Suchen <span class="dot1" aria-hidden="true"></span></a>
+      <button class="pillbtn micro" id="menuBtn" type="button" aria-expanded="false" aria-controls="menu">Menü <span class="dots" aria-hidden="true"><i></i><i></i></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <nav aria-label="Hauptmenü">
+    <a href="#ranke">Die Ranke <small>01</small></a>
+    <a href="#regale">Abteilungen <small>02</small></a>
+    <a href="#lernfelder">Lernfelder <small>03</small></a>
+    <a href="#katalog" data-focus="q">Suchen <small>04</small></a>
+    <a href="#pruefung">Prüfung <small>05</small></a>
+    <a href="#/pruefung">Prüfungsmodus <small>App</small></a>
+    <a href="#/stand">Mein Stand <small>App</small></a>
+    <a href="#mitmachen">Mitmachen <small>06</small></a>
+    <a id="ghLink" href="https://github.com/ITDavid04/Lern-Wiki" target="_blank" rel="noopener">GitHub <small>Repo</small></a>
+    <button type="button" class="menu-btn" data-melden>Fehler melden <small>Hilfe</small></button>
+    <button type="button" class="menu-install" data-install hidden>App installieren <small>Startbildschirm</small></button>
+  </nav>
+</div>
+
+<main id="main" class="wrap">
+  <section class="hero" aria-labelledby="hello">
+    <div class="stage" id="stage">
+      <div class="poster" id="posterStage" aria-hidden="true"></div>
+      <div class="stage-copy">
+        <p class="micro">Umschulung FIAE und FISI</p>
+        <h1 class="hello" id="hello"><span class="w" style="--i:0">Moin,</span> <span class="w" style="--i:1">schön,</span> <span class="w" style="--i:2">dass</span> <span class="w" style="--i:3">du</span> <span class="w" style="--i:4">da</span> <span class="w" style="--i:5">bist.</span></h1>
+      </div>
+      <p class="stage-hint micro" aria-hidden="true">Jeder Würfel ist ein Lernfeld</p>
+    </div>
+    <div class="rule micro" aria-hidden="true"><i>+</i><b></b><span>Scroll weiter, die Ranke wächst mit</span><b></b><i>+</i></div>
+  </section>
+
+  <section class="intro" id="idee" aria-labelledby="h-idee">
+    <h2 class="huge reveal" id="h-idee"><span class="ind">Ein Wiki,</span> das mit uns wächst.</h2>
+    <div class="intro-side reveal">
+      <p class="lead">Das ist die Bibliothek unseres Lernteams aus der <strong>Umschulung FIAE und FISI</strong>. Lernfelder, Prüfungsvorbereitung, Grundlagen, Systeme und KI an einem Ort, <mark>und beim Prüfungsstoff steht dran, wie wichtig er ist.</mark></p>
+      <div class="cta-row">
+        <a class="btn" href="#lf1" data-open="lf1">Neu hier: Start mit LF1 <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="link" href="#pruefung">Prüfung naht</a>
+        <a class="link" href="#katalog" data-focus="q">Thema suchen</a>
+        <a class="link" href="#regale">Stöbern</a>
+        <a class="pillbtn micro resume" id="resume" href="#" hidden>Weiterlesen: <span id="resumeT"></span></a>
+        <button type="button" class="pillbtn micro" data-install hidden>App installieren <span class="dot1" aria-hidden="true"></span></button>
+      </div>
+      <div class="stats" aria-label="Stand der Bibliothek">
+        <div><b data-stat="artikel"></b><span>Artikel im Repository</span></div>
+        <div><b data-stat="regale"></b><span>Abteilungen</span></div>
+        <div><b data-stat="lf"></b><span>Lernfeldern mit Artikeln</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ranke" id="ranke" aria-labelledby="h-ranke">
+    <div class="ranke-copy">
+      <p class="eyebrow micro">01 · Die Ranke</p>
+      <h2 id="h-ranke">Jedes Blatt ist ein Artikel.</h2>
+      <p class="lead"><span data-stat="regale"></span> Zweige, einer pro Abteilung, daran <span data-stat="artikel"></span> Blätter. Wo eine rote Knospe sitzt, hat der Artikel eine Prüfungs-Ampel.</p>
+      <a class="tlink" href="#pruefung"><span class="dot" aria-hidden="true"></span>Was der rote Punkt heißt <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <div class="stand-box">
+        <p class="stand-line" id="standLine"></p>
+        <ul class="leaf-key micro" aria-label="Blattfarben">
+          <li><i style="--c:#A8D9B9"></i>noch nicht gelesen</li>
+          <li><i style="--c:#3FA16A"></i>gelesen</li>
+          <li><i style="--c:#1F6E4E"></i>sitzt</li>
+        </ul>
+        <a class="tlink" href="#/stand">Mein Stand ansehen</a>
+      </div>
+      <p class="touch-note" id="touchNote" hidden>Auf dem Handy: einmal tippen zeigt den Titel, ein zweites Mal öffnet den Artikel.</p>
+      <ul class="legend" id="legend" aria-label="Die sechs Abteilungen"></ul>
+    </div>
+    <div id="a-ranke" aria-hidden="true">
+      <svg id="treeSvg"></svg>
+      <div id="twigLabels"></div>
+    </div>
+  </section>
+
+  <section class="section" id="regale" aria-labelledby="h-reg">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">02 · Abteilungen</p>
+      <h2 id="h-reg">Sechs Abteilungen. Deck sie auf.</h2>
+      <p>Grün heißt: viel Prüfungsstoff.</p>
+    </div>
+    <ol class="tiles reg" id="tilesReg"></ol>
+  </section>
+
+  <section class="section" id="lernfelder" aria-labelledby="h-lf">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">03 · Lernfelder</p>
+      <h2 id="h-lf">Zwölf Lernfelder. Eins nach dem anderen.</h2>
+      <p>Grün heißt: Hier liegen schon Artikel. Ab LF10 folgt das Wiki der Fachrichtung Anwendungsentwicklung, darum das kleine a.</p>
+    </div>
+    <ol class="tiles lfg" id="tilesLf"></ol>
+  </section>
+
+  <section class="section" id="katalog" aria-labelledby="h-cat">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">04 · Suchen</p>
+      <h2 id="h-cat">Alles finden.</h2>
+      <p id="catIntro">Jeder Artikel aus dem Repository, direkt verlinkt. Ein roter Punkt heißt: Der Artikel hat eine <a class="link" href="#pruefung">Prüfungs-Ampel</a>.</p>
+    </div>
+    <div class="cat-tools">
+      <label class="search">
+        <span class="sr">Artikel durchsuchen</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Stichwort, zum Beispiel Subnetting, SQL, Prompt" autocomplete="off" enterkeyhint="search">
+      </label>
+      <div class="chips" id="chips" role="group" aria-label="Nach Abteilung filtern"></div>
+      <p class="cat-count" id="catCount" aria-live="polite"></p>
+    </div>
+    <div class="cat-list" id="catList"></div>
+    <p class="cat-empty" id="catEmpty" hidden>Nichts gefunden. Versuch ein anderes Wort oder einen anderen Filter, oder schau <a href="https://github.com/ITDavid04/Lern-Wiki" target="_blank" rel="noopener">direkt im Repository</a> nach.</p>
+  </section>
+
+  <section class="band" id="pruefung" aria-labelledby="h-pr">
+    <div class="reveal" style="display:grid;gap:20px">
+      <p class="eyebrow micro">05 · Prüfung</p>
+      <h2 id="h-pr">Wenn es ernst wird: ROT zuerst.</h2>
+      <p class="lead">Viele Artikel haben bei jeder wichtigen Aussage eine Ampelfarbe. So weißt du sofort, <mark>was du für die Prüfung sicher können musst</mark> und was erstmal warten darf.</p>
+    </div>
+    <div class="bignums reveal">
+      <div><b data-stat="rot"></b><span>Artikel mit Prüfungs-Ampel</span></div>
+      <div><b data-stat="pruef"></b><span>Artikel in der Abteilung Prüfung</span></div>
+      <div><b data-stat="lf"></b><span>Lernfelder mit Artikeln</span></div>
+    </div>
+    <ul class="ampel">
+      <li class="rot reveal"><span class="lamp" aria-hidden="true"></span><b>ROT</b><p>Prüfungsstoff. Kommt in AP1 oder im Fachgespräch dran. Das lernst du sicher.</p></li>
+      <li class="gelb reveal"><span class="lamp" aria-hidden="true"></span><b>GELB</b><p>Kontextwissen. Hilft dir, ROT zu verstehen und im Gespräch ruhig zu antworten.</p></li>
+      <li class="gruen reveal"><span class="lamp" aria-hidden="true"></span><b>GRÜN</b><p>Nice to know. Für Neugierige, darf beim ersten Lesen warten.</p></li>
+    </ul>
+    <div class="exam-cta reveal">
+      <a class="btn light" href="#/pruefung">Prüfungsmodus starten <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      <p>Alle Artikel mit Ampel als Liste zum Abhaken. Was sitzt, hakst du ab, der Rest steht oben.</p>
+    </div>
+    <div class="kit reveal">
+      <h3>Dein Prüfungs-Kit</h3>
+      <ul id="kit"></ul>
+    </div>
+  </section>
+
+  <section class="section" id="mitmachen" aria-labelledby="h-mit">
+    <div class="sec-head reveal">
+      <p class="eyebrow micro">06 · Mitmachen</p>
+      <h2 id="h-mit">Die Bibliothek lebt von allen.</h2>
+      <p>Alle im Lernteam dürfen Artikel ergänzen und verbessern. Hast du etwas gut erklärt bekommen oder selbst herausgefunden? Dann gehört es hier rein.</p>
+    </div>
+    <ol class="steps">
+      <li class="reveal"><b>Passenden Ordner wählen</b><p>Die Ordner folgen den Lernfeldern und Themen. Fehlt einer, darfst du ihn anlegen.</p></li>
+      <li class="reveal"><b>In Markdown schreiben</b><p>Neu bei Markdown? Der <a id="mdLink" href="https://github.com/ITDavid04/Lern-Wiki" target="_blank" rel="noopener">Schreib-Guide</a> zeigt dir alles, was du brauchst.</p></li>
+      <li class="reveal"><b>Kurz sagen, was du geändert hast</b><p>Eine knappe Commit-Nachricht reicht. Vor großen Umbauten sprichst du kurz mit dem Team.</p></li>
+    </ol>
+    <div class="reveal"><a class="btn" href="https://github.com/ITDavid04/Lern-Wiki" target="_blank" rel="noopener">Zum Repository auf GitHub <span class="ar"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a></div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p class="foot-big">Viel Erfolg bei der Prüfung.<span class="end-anchor" id="a-end" aria-hidden="true"></span></p>
+  <div class="foot-row">
+    <span id="footStand">Bibliothek Lern-Wiki für Umschüler</span>
+    <span class="foot-links"><button type="button" class="linkbtn" data-melden>Fehler melden</button> <span id="footVersion"></span> <a class="linkbtn" href="https://github.com/ITDavid04/Lern-Wiki/blob/main/IMPRESSUM.md" target="_blank" rel="noopener">Impressum</a> <a class="linkbtn" href="https://github.com/ITDavid04/Lern-Wiki/blob/main/DATENSCHUTZ.md" target="_blank" rel="noopener">Datenschutz</a></span>
+  </div>
+</footer>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden data-lenis-prevent>
+  <div class="sheet-bar">
+    <button type="button" class="ibtn" id="sheetBack" aria-label="Zurück"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <p class="sheet-crumb micro" id="sheetCrumb"></p>
+    <div class="sheet-tools" id="sheetTools"></div>
+    <i class="sheet-progress" id="sheetProgress" aria-hidden="true"></i>
+  </div>
+  <div class="sheet-scroll" id="sheetScroll">
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+  <p class="sr" id="sheetLive" aria-live="polite"></p>
+</div>
+
+<nav class="tabbar" id="tabbar" aria-label="App-Navigation">
+  <a href="#main" data-tab="start"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg><span>Start</span></a>
+  <a href="#katalog" data-focus="q" data-tab="suchen"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg><span>Suchen</span></a>
+  <a href="#/pruefung" data-tab="pruefung"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg><span>Prüfung</span></a>
+  <a href="#/stand" data-tab="stand"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20c-4-3-7-6-7-10a7 7 0 0 1 14 0c0 4-3 7-7 10z M12 20V9" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Mein Stand</span></a>
+</nav>
+
+<div class="tip" id="tip" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden>
+  <span id="toastText"></span>
+  <button type="button" class="pillbtn dark micro" id="toastBtn" hidden></button>
+  <button type="button" class="toast-x" id="toastX" aria-label="Hinweis schließen"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+</div>
+<section class="erfolg" id="erfolg" aria-labelledby="erfolgTitle" hidden>
+  <div class="erfolg-mark" aria-hidden="true">
+    <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="28"/><path d="M17 29l7.5 7.5L40 21"/></svg>
+    <div class="erfolg-burst" id="erfolgBurst"></div>
+    <div class="erfolg-stempel" id="erfolgStempel"></div>
+  </div>
+  <div class="erfolg-txt">
+    <p class="micro erfolg-kicker" id="erfolgKicker"></p>
+    <h2 id="erfolgTitle"></h2>
+    <p class="erfolg-sub" id="erfolgSub"></p>
+    <div class="erfolg-btns">
+      <button type="button" class="pillbtn dark micro" id="erfolgOk">Weiter</button>
+      <a class="pillbtn micro" id="erfolgStand" href="#/stand">Mein Stand</a>
+    </div>
+  </div>
+</section>
+<p class="sr" id="erfolgLive" aria-live="polite"></p>
+<!-- Fehler melden (melden.js): Text schreiben, Ort und Gerät kommen automatisch dazu -->
+<dialog class="melden" id="melden" aria-labelledby="meldenTitle" data-lenis-prevent>
+  <form method="dialog" class="melden-in" id="meldenForm">
+    <div class="melden-head">
+      <h2 id="meldenTitle">Fehler melden</h2>
+      <button type="submit" class="toast-x" aria-label="Schließen"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+    </div>
+    <p class="melden-wo" id="meldenWo"></p>
+    <label class="micro" for="meldenText">Was stimmt nicht?</label>
+    <textarea id="meldenText" rows="5" placeholder="Zum Beispiel: In der Tabelle stehen die Formeln als Text mit Dollarzeichen da, statt als Formel."></textarea>
+    <details class="melden-mit">
+      <summary>Das kommt automatisch mit</summary>
+      <dl id="meldenInfo"></dl>
+    </details>
+    <div class="row-btns">
+      <button type="button" class="pillbtn dark micro" id="meldenGh">Auf GitHub melden</button>
+      <button type="button" class="pillbtn micro" id="meldenCopy">Text kopieren</button>
+    </div>
+    <p class="melden-status" id="meldenStatus" role="status" aria-live="polite"></p>
+    <p class="small">GitHub braucht ein Konto, die Meldung ist dort öffentlich. Ohne Konto: Text kopieren und in Teams schicken. Ein Bildschirmfoto hilft in beiden Fällen.</p>
+  </form>
+</dialog>
+<!-- Tinte für die Stempel im Leseausweis: etwas ungleichmäßig, wie echt gestempelt -->
+<svg class="sr" width="0" height="0" aria-hidden="true" focusable="false"><filter id="tinte" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.7 1.75"/><feComposite in="SourceGraphic" operator="in"/></filter></svg>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<script src="vendor/lenis.min.js"></script>
+<script src="app.js"></script>
+<script type="module" src="scene.js"></script>
+<script type="module" src="reader.js"></script>
+<script type="module" src="melden.js"></script>
+</body>
+</html>
