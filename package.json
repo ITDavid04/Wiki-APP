@@ -9,7 +9,8 @@
     "build": "node tools/build.mjs",
     "catalog": "node tools/catalog.mjs",
     "serve": "node tools/serve.mjs",
-    "test": "node tools/test.mjs"
+    "test": "node tools/test.mjs",
+    "test:ci": "taskset -c 0,1 env CI=1 node tools/test.mjs"
   },
   "dependencies": {
     "@fontsource-variable/hanken-grotesk": "5.2.6",
