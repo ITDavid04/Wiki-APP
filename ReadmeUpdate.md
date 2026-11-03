@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
-> **Stand:** 29.10.2026
-> **App-Stand:** Commit `5b005ca` (Fehler melden, Versionsnummer, Formeln), ab hier Version 1.0.0
+> **Stand:** 03.11.2026
+> **App-Stand:** Commit `00cdc92` (Kacheln als Blüten), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 172 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 20.10.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -41,7 +41,7 @@ eine weg, wird diese Seite mitgepflegt.
 | Start | 12 Lernfeld-Würfel in 3D | Bühne ganz oben |
 | Start | Wegweiser und Zahlen zur Bibliothek | Intro |
 | Start | Die Ranke: jedes Blatt ein Artikel, wächst beim Scrollen | Abschnitt 01 und die ganze Seite |
-| Start | Kacheln der 6 Abteilungen und 12 Lernfelder | Abschnitte 02 und 03 |
+| Start | Kacheln der 6 Abteilungen und 12 Lernfelder, als Blüten und Knospen | Abschnitte 02 und 03 |
 | Start | Katalog mit Suche und Filtern | Abschnitt 04 |
 | Start | Prüfungs-Ampel, Prüfungs-Kit, Einstieg in den Prüfungsmodus | Abschnitt 05 |
 | Start | Mitmachen | Abschnitt 06 |
@@ -120,6 +120,11 @@ eine weg, wird diese Seite mitgepflegt.
 | Lernfeld ohne Artikel (2) | gestrichelt, „noch leer“ | „Hier liegt noch nichts. Magst du den ersten Artikel schreiben?“ mit Link zu Mitmachen |
 
 Aufdecken geht am Desktop per Maus, sonst per Tippen. Escape deckt wieder zu.
+
+**Blüten:** Die Kacheln haben Blattformen, zwei oder drei Ecken sind weit gerundet, im Wechsel. Auf jedem Deckblatt
+sitzt eine Blüte mit fünf Blättern wie an der Ranke, jede etwas anders gedreht. Volle Kacheln (grün) blühen gelb,
+die anderen sind grüne Knospen. Beim Aufdecken geht die Knospe auf und die Blüte dreht sich weiter, das Deckblatt
+wartet dafür kurz und hebt sich mit runder Unterkante wie ein Blütenblatt. Bei reduzierter Bewegung steht alles still.
 
 ### 2.6 Katalog
 
@@ -405,6 +410,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 23.10.2026 | `138cd4b` | Fehler melden (GitHub-Issue oder Text für Teams) und Versionsnummer ab 1.0.0, die bei Updates selbst hochzählt |
 | 23.10.2026 | `5b005ca` | Formeln mit KaTeX (gemeldet über Teams: Formeln in der USV-Tabelle standen als Text mit Dollarzeichen da) |
 | 29.10.2026 | `dc6b39a` | Impressum und Datenschutz im Fuß verlinkt (statt Platzhalter), für das öffentliche Release |
+| 03.11.2026 | `00cdc92` | Kacheln als Blüten: Blattformen, Blüte oder Knospe auf dem Deckblatt, Knospe geht beim Aufdecken auf |
 
 ### Entfernt oder ersetzt
 
@@ -451,8 +457,8 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 ```yaml
 seite: ReadmeUpdate.md
 inhalt: Funktionen und Gimmicks der Wiki-APP
-stand: 2026-10-29
-app_commit: 5b005ca
+stand: 2026-11-03
+app_commit: 00cdc92
 app_version: ab 1.0.0, zählt selbst hoch
 katalog: 172 Artikel, 75 mit Ampel, 10 von 12 Lernfeldern mit Artikeln, Wiki-Stand 2026-10-20
 stempel: 17
