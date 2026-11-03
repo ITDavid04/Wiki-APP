@@ -323,13 +323,13 @@ section[id],li[id]{scroll-margin-top:96px}
 .tiles{display:grid;gap:14px;list-style:none;padding:0;margin:0}
 .tiles.reg{grid-template-columns:repeat(3,minmax(0,1fr))}
 .tiles.lfg{grid-template-columns:repeat(4,minmax(0,1fr))}
-.tile{--rb:64px;position:relative;min-height:23rem;border-radius:var(--r) var(--rb);background:var(--card);overflow:hidden;isolation:isolate;border:1px solid var(--line)}
-/* Blattformen: zwei Ecken weit gerundet, im Wechsel, damit das Raster nach Beet aussieht und nicht nach Tabelle */
-.tile:nth-child(3n+2){border-radius:var(--rb) var(--r)}
-.tile:nth-child(3n){border-radius:var(--rb) var(--rb) var(--r) var(--rb)}
-.tiles.lfg .tile{min-height:21rem}
-/* ohne sichtbaren Scrollbalken: Chrome schneidet ihn an den runden Blattecken nicht ab, er ragt sonst aus der Kachel */
-.detail{position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:22px 22px 18px;overflow:auto;overscroll-behavior:contain;scrollbar-width:none}
+/* Jede Kachel ist eine Blüte: quadratisch, Schrift wächst mit der Kachel (cqi) */
+.tile{position:relative;aspect-ratio:1;container-type:inline-size;isolation:isolate}
+/* Rückseite: liegt unter der Blüte und kommt erst, wenn sie aufgeht. Mindestens so groß wie die Blüte; braucht sie mehr
+   Platz, wächst sie als Karte nach unten über die nächste Reihe, statt zu scrollen. */
+.detail{position:absolute;top:0;left:0;right:0;min-height:100%;display:flex;flex-direction:column;gap:12px;padding:26px 26px 22px;
+  border-radius:48px;background:var(--card);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.22);
+  opacity:0;visibility:hidden;transform:scale(.7);transform-origin:50% 40%;transition:opacity .3s,transform .4s,visibility 0s .4s}
 .d-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .d-nr{font-weight:600;color:var(--accent)}
 .detail h3{font-size:1.3rem;letter-spacing:-.02em;line-height:1.2}
@@ -349,50 +349,73 @@ section[id],li[id]{scroll-margin-top:96px}
 .tlink{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--accent);border-radius:99px;background:transparent;color:var(--accent);font-weight:600;font-size:.92rem;text-decoration:none;cursor:pointer}
 .tlink:hover{background:var(--accent);color:var(--accent-ink)}
 .empty-note{color:var(--muted);font-size:.95rem}
-.cover{position:absolute;inset:0;z-index:1;display:grid;grid-template-rows:auto 1fr auto;gap:12px;width:100%;padding:22px;border:0;border-radius:inherit;text-align:left;cursor:pointer;
-  background-color:var(--bg-2);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:18px 18px;background-position:-1px -1px;
-  transition:transform .7s cubic-bezier(.7,0,.2,1),border-radius .7s cubic-bezier(.7,0,.2,1)}
-.full .cover{background-color:var(--accent);background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);color:var(--accent-ink)}
-.c-nr{font-size:clamp(4rem,6.5vw,6.2rem);font-weight:400;letter-spacing:-.06em;line-height:.9;font-variant-numeric:tabular-nums}
-.c-title{align-self:end;font-size:1.25rem;font-weight:500;letter-spacing:-.02em;line-height:1.2;text-wrap:balance}
-.tiles.reg .c-title{font-size:clamp(1.5rem,2.2vw,2rem);letter-spacing:-.035em;line-height:1.05}
-.c-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.88rem}
+/* Deckblatt: die Blüte. Nummer in der Mitte, Pille im oberen Blatt, Titel in den unteren Blättern */
+.cover{position:absolute;inset:0;z-index:1;display:block;width:100%;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cover:focus-visible{border-radius:50%;outline-offset:-2px}
+.full .cover{color:var(--accent-ink)}
+.c-nr{position:absolute;left:50%;top:50%;transform:translate(-50%,-53%);font-size:13cqi;font-weight:500;letter-spacing:-.06em;line-height:1;font-variant-numeric:tabular-nums;color:var(--mark-ink)}
+.tile:not(.full) .c-nr{color:var(--ink)}
+.c-title{position:absolute;left:18%;right:18%;top:67.5%;text-align:center;font-size:clamp(.72rem,4.6cqi,1.4rem);font-weight:500;letter-spacing:-.02em;line-height:1.12;text-wrap:balance;hyphens:auto;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tiles.reg .c-title{font-size:6cqi;letter-spacing:-.03em}
+/* Schein in Blattfarbe, damit Nähte und Adern hinter der Schrift verschwinden */
+.full .c-title{text-shadow:0 0 4px var(--accent),0 0 8px var(--accent),0 0 12px var(--accent)}
+.tile:not(.full) .c-title{text-shadow:0 0 4px var(--bg-2),0 0 8px var(--bg-2),0 0 12px var(--bg-2)}
+.c-foot{position:absolute;left:50%;top:19%;transform:translate(-50%,-50%)}
+.c-foot .pill{padding:3px 10px;font-size:clamp(.66rem,3.4cqi,.85rem)}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:99px;font-weight:600;font-size:.82rem;white-space:nowrap}
 .pill.ok{background:var(--accent);color:var(--accent-ink)}
 .full .cover .pill.ok{background:var(--accent-ink);color:var(--accent)}
 .pill.wip{border:1.5px dashed currentColor;opacity:.8}
 /* Geschafftes Lernfeld: Stempel auf dem Deckblatt, Zeile im Detail */
-.c-done{position:absolute;top:22px;right:22px;display:none;align-items:center;gap:6px;padding:5px 12px 5px 9px;border-radius:99px;background:var(--mark);color:var(--mark-ink);font-weight:600;font-size:.82rem;box-shadow:0 6px 16px rgba(0,0,0,.18);transform:rotate(-4deg)}
+.c-done{position:absolute;top:22%;right:3%;display:none;align-items:center;gap:6px;padding:5px 12px 5px 9px;border-radius:99px;background:var(--mark);color:var(--mark-ink);font-weight:600;font-size:.82rem;box-shadow:0 6px 16px rgba(0,0,0,.18);transform:rotate(-4deg)}
 .tile.done .c-done{display:inline-flex}
 .pill.part{background:var(--accent-soft);color:var(--accent)}
 .pill.done{background:var(--mark);color:var(--mark-ink)}
-.c-hint{display:inline-flex;align-items:center;gap:6px;opacity:.75}
-/* Blüte: liegt hinter der Schrift und ragt rechts über den Rand */
-.c-flower{position:absolute;z-index:-1;top:7%;right:-10%;width:clamp(110px,50%,230px);height:auto;aspect-ratio:1;overflow:visible;pointer-events:none}
-/* jede Blüte etwas anders gedreht und groß, sonst wirkt das Beet wie Tapete */
-.tile:nth-child(2n) .c-flower{rotate:24deg;width:clamp(100px,44%,200px);top:11%}
-.tile:nth-child(3n) .c-flower{rotate:-17deg;right:-14%}
-.tile:nth-child(5n+1) .c-flower{rotate:9deg;width:clamp(116px,56%,250px);top:3%}
-.c-flower .pt{--a:calc(var(--i) * 72deg - 90deg);transform:rotate(var(--a));transition:transform 1s cubic-bezier(.3,1.35,.4,1)}
-.c-flower path{fill:var(--mark);stroke:var(--accent-ink);stroke-opacity:.22;stroke-width:1.2}
-.c-flower circle{fill:#F2C14E;transition:transform .8s cubic-bezier(.3,1.35,.4,1)}
-/* Knospe: Blätter eng nach oben gefaltet, ohne Mitte */
-.tile:not(.full) .c-flower .pt{transform:rotate(calc(var(--i) * 12deg - 114deg)) scale(.6)}
-.tile:not(.full) .c-flower path{fill:var(--accent-soft);stroke:var(--accent);stroke-opacity:.7;stroke-width:1.6}
-.tile:not(.full) .c-flower circle{transform:scale(0)}
-/* Aufdecken: die Blüte dreht sich auf, die Knospe geht auf, das Deckblatt hebt sich mit runder Kante wie ein Blütenblatt */
-.tile.open .c-flower .pt{transform:rotate(calc(var(--a) + 36deg)) scale(1.1)}
-.tile.open .c-flower circle{transform:scale(1)}
-/* das Deckblatt wartet einen Wimpernschlag, damit man das Aufgehen noch sieht */
-.tile.open .cover{transform:translateY(calc(-100% - 2px));border-bottom-left-radius:50% 40%;border-bottom-right-radius:50% 40%;transition-delay:.15s}
+.cover span{transition:opacity .2s}
+/* Blüte: sechs Blätter, dunkler Rand und Adern wie gezeichnet, ein Glanzlicht je Blatt.
+   Volle Kacheln blühen grün mit gelber Mitte, die anderen sind blass mit grünem Rand. */
+.c-flower{position:absolute;inset:0;z-index:-1;width:100%;height:100%;overflow:visible;pointer-events:none}
+.c-flower .pt{--a:calc(var(--i) * 60deg - 90deg);transform:rotate(var(--a));transition:transform .5s cubic-bezier(.3,1.2,.4,1),opacity .4s}
+.c-flower .pb{fill:var(--accent);stroke:color-mix(in srgb,var(--accent) 55%,#000);stroke-width:1.2}
+.c-flower .pv{fill:none;stroke:color-mix(in srgb,var(--accent) 50%,#000);stroke-opacity:.3;stroke-width:.9;stroke-linecap:round}
+.c-flower .pg{fill:#fff;opacity:.38}
+.c-flower .ctr{transition:transform .45s cubic-bezier(.3,1.2,.4,1),opacity .35s}
+.c-flower .ctr circle{fill:#F2C14E;stroke:#C4902A;stroke-width:1.2}
+.tile:not(.full) .c-flower .pb{fill:var(--bg-2);stroke:var(--accent);stroke-opacity:.6}
+.tile:not(.full) .c-flower .pv{stroke:var(--accent);stroke-opacity:.25}
+.tile:not(.full) .c-flower .pg{opacity:.07}
+.tile:not(.full) .c-flower .ctr circle{fill:var(--accent-soft);stroke:var(--accent);stroke-opacity:.6}
+/* Aufdecken: die Blätter gehen nacheinander nach außen auf und fallen ab, die Mitte schrumpft, darunter kommt die Rückseite */
+.tile.open .c-flower .pt{transform:rotate(calc(var(--a) + 24deg)) translate(14px) scale(1.15);opacity:0;transition-delay:calc(var(--i) * 35ms)}
+.tile.open .c-flower .ctr{transform:scale(0);opacity:0}
+.tile.open .cover span{opacity:0}
+.tile.open .cover{pointer-events:none}
+.tile.open{z-index:5}
+.tile.open .detail{opacity:1;visibility:visible;transform:none;transition:opacity .35s .15s,transform .55s .15s cubic-bezier(.3,1.25,.4,1),visibility 0s}
 @media (hover:hover){
-  .tile:hover .c-flower .pt{transform:rotate(calc(var(--a) + 36deg)) scale(1.1)}
-  .tile:hover .c-flower circle{transform:scale(1)}
-  .tile:hover .cover{transform:translateY(calc(-100% - 2px));border-bottom-left-radius:50% 40%;border-bottom-right-radius:50% 40%;transition-delay:.15s}
+  .tile:hover .c-flower .pt{transform:rotate(calc(var(--a) + 24deg)) translate(14px) scale(1.15);opacity:0;transition-delay:calc(var(--i) * 35ms)}
+  .tile:hover .c-flower .ctr{transform:scale(0);opacity:0}
+  .tile:hover .cover span{opacity:0}
+  .tile:hover .cover{pointer-events:none}
+  .tile:hover{z-index:6}
+  .tile:hover .detail{opacity:1;visibility:visible;transform:none;transition:opacity .35s .15s,transform .55s .15s cubic-bezier(.3,1.25,.4,1),visibility 0s}
 }
-.tile.flash{animation:flash 1.6s ease}
+.tile.flash .detail{animation:flash 1.6s ease}
+/* Kleine Blüten: Rückseite und Titel enger, am Handy darf der Titel größer sein als 4,6 % der Breite */
+@container (max-width:300px){
+  .detail{gap:9px;padding:20px 20px 18px;border-radius:36px}
+  .detail h3{font-size:1.08rem}
+  .alist{font-size:.88rem;gap:5px}
+  .tlink{padding:6px 11px;font-size:.84rem}
+}
+@container (max-width:220px){
+  .c-title{left:13%;right:13%;top:66%;font-size:6.2cqi}
+  .detail{padding:16px 14px 14px;gap:8px;border-radius:26px}
+  .detail h3{font-size:1rem}
+  .alist li:nth-child(n+4){display:none}
+}
+
 @keyframes flash{0%,40%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
 
 /* Katalog */
@@ -660,20 +683,9 @@ html.sheet-open body{overflow:hidden}
 @media (max-width:560px){
   .st-chip{display:none}
   .tiles.reg{grid-template-columns:minmax(0,1fr)}
-  .tiles.reg .tile{min-height:21rem}
   .tiles.lfg{gap:10px}
-  .tiles.lfg .tile{--r:18px;--rb:40px;min-height:15.5rem}
-  .tiles.lfg .cover{padding:16px}
-  .tiles.lfg .c-nr{font-size:3.4rem}
-  .tiles.lfg .c-title{font-size:.98rem}
-  .tiles.lfg .c-hint{display:none}
-  .tiles.lfg .c-done{top:14px;right:14px;padding:6px}
+  .tiles.lfg .c-done{padding:6px}
   .tiles.lfg .c-done span{display:none}
-  .tiles.lfg .detail{padding:16px 14px 14px;gap:9px}
-  .tiles.lfg .detail h3{font-size:1.02rem}
-  .tiles.lfg .alist{font-size:.86rem;gap:5px}
-  .tiles.lfg .alist li:nth-child(n+4){display:none}
-  .tiles.lfg .tlink{padding:6px 10px;font-size:.82rem}
   .search input{font-size:1.05rem;padding-block:15px}
   .chips{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
   .chip{flex:none}
