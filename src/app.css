@@ -323,9 +323,13 @@ section[id],li[id]{scroll-margin-top:96px}
 .tiles{display:grid;gap:14px;list-style:none;padding:0;margin:0}
 .tiles.reg{grid-template-columns:repeat(3,minmax(0,1fr))}
 .tiles.lfg{grid-template-columns:repeat(4,minmax(0,1fr))}
-.tile{position:relative;min-height:23rem;border-radius:var(--r);background:var(--card);overflow:hidden;isolation:isolate;border:1px solid var(--line)}
+.tile{--rb:64px;position:relative;min-height:23rem;border-radius:var(--r) var(--rb);background:var(--card);overflow:hidden;isolation:isolate;border:1px solid var(--line)}
+/* Blattformen: zwei Ecken weit gerundet, im Wechsel, damit das Raster nach Beet aussieht und nicht nach Tabelle */
+.tile:nth-child(3n+2){border-radius:var(--rb) var(--r)}
+.tile:nth-child(3n){border-radius:var(--rb) var(--rb) var(--r) var(--rb)}
 .tiles.lfg .tile{min-height:21rem}
-.detail{position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:22px 22px 18px;overflow:auto;overscroll-behavior:contain}
+/* ohne sichtbaren Scrollbalken: Chrome schneidet ihn an den runden Blattecken nicht ab, er ragt sonst aus der Kachel */
+.detail{position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;padding:22px 22px 18px;overflow:auto;overscroll-behavior:contain;scrollbar-width:none}
 .d-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .d-nr{font-weight:600;color:var(--accent)}
 .detail h3{font-size:1.3rem;letter-spacing:-.02em;line-height:1.2}
@@ -345,11 +349,11 @@ section[id],li[id]{scroll-margin-top:96px}
 .tlink{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1.5px solid var(--accent);border-radius:99px;background:transparent;color:var(--accent);font-weight:600;font-size:.92rem;text-decoration:none;cursor:pointer}
 .tlink:hover{background:var(--accent);color:var(--accent-ink)}
 .empty-note{color:var(--muted);font-size:.95rem}
-.cover{position:absolute;inset:0;z-index:1;display:grid;grid-template-rows:auto 1fr auto;gap:12px;width:100%;padding:22px;border:0;border-radius:calc(var(--r) - 1px);text-align:left;cursor:pointer;
+.cover{position:absolute;inset:0;z-index:1;display:grid;grid-template-rows:auto 1fr auto;gap:12px;width:100%;padding:22px;border:0;border-radius:inherit;text-align:left;cursor:pointer;
   background-color:var(--bg-2);
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:18px 18px;background-position:-1px -1px;
-  transition:transform .7s cubic-bezier(.7,0,.2,1)}
+  transition:transform .7s cubic-bezier(.7,0,.2,1),border-radius .7s cubic-bezier(.7,0,.2,1)}
 .full .cover{background-color:var(--accent);background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);color:var(--accent-ink)}
 .c-nr{font-size:clamp(4rem,6.5vw,6.2rem);font-weight:400;letter-spacing:-.06em;line-height:.9;font-variant-numeric:tabular-nums}
 .c-title{align-self:end;font-size:1.25rem;font-weight:500;letter-spacing:-.02em;line-height:1.2;text-wrap:balance}
@@ -365,8 +369,29 @@ section[id],li[id]{scroll-margin-top:96px}
 .pill.part{background:var(--accent-soft);color:var(--accent)}
 .pill.done{background:var(--mark);color:var(--mark-ink)}
 .c-hint{display:inline-flex;align-items:center;gap:6px;opacity:.75}
-.tile.open .cover{transform:translateY(calc(-100% - 2px))}
-@media (hover:hover){.tile:hover .cover{transform:translateY(calc(-100% - 2px))}}
+/* Blüte: liegt hinter der Schrift und ragt rechts über den Rand */
+.c-flower{position:absolute;z-index:-1;top:7%;right:-10%;width:clamp(110px,50%,230px);height:auto;aspect-ratio:1;overflow:visible;pointer-events:none}
+/* jede Blüte etwas anders gedreht und groß, sonst wirkt das Beet wie Tapete */
+.tile:nth-child(2n) .c-flower{rotate:24deg;width:clamp(100px,44%,200px);top:11%}
+.tile:nth-child(3n) .c-flower{rotate:-17deg;right:-14%}
+.tile:nth-child(5n+1) .c-flower{rotate:9deg;width:clamp(116px,56%,250px);top:3%}
+.c-flower .pt{--a:calc(var(--i) * 72deg - 90deg);transform:rotate(var(--a));transition:transform 1s cubic-bezier(.3,1.35,.4,1)}
+.c-flower path{fill:var(--mark);stroke:var(--accent-ink);stroke-opacity:.22;stroke-width:1.2}
+.c-flower circle{fill:#F2C14E;transition:transform .8s cubic-bezier(.3,1.35,.4,1)}
+/* Knospe: Blätter eng nach oben gefaltet, ohne Mitte */
+.tile:not(.full) .c-flower .pt{transform:rotate(calc(var(--i) * 12deg - 114deg)) scale(.6)}
+.tile:not(.full) .c-flower path{fill:var(--accent-soft);stroke:var(--accent);stroke-opacity:.7;stroke-width:1.6}
+.tile:not(.full) .c-flower circle{transform:scale(0)}
+/* Aufdecken: die Blüte dreht sich auf, die Knospe geht auf, das Deckblatt hebt sich mit runder Kante wie ein Blütenblatt */
+.tile.open .c-flower .pt{transform:rotate(calc(var(--a) + 36deg)) scale(1.1)}
+.tile.open .c-flower circle{transform:scale(1)}
+/* das Deckblatt wartet einen Wimpernschlag, damit man das Aufgehen noch sieht */
+.tile.open .cover{transform:translateY(calc(-100% - 2px));border-bottom-left-radius:50% 40%;border-bottom-right-radius:50% 40%;transition-delay:.15s}
+@media (hover:hover){
+  .tile:hover .c-flower .pt{transform:rotate(calc(var(--a) + 36deg)) scale(1.1)}
+  .tile:hover .c-flower circle{transform:scale(1)}
+  .tile:hover .cover{transform:translateY(calc(-100% - 2px));border-bottom-left-radius:50% 40%;border-bottom-right-radius:50% 40%;transition-delay:.15s}
+}
 .tile.flash{animation:flash 1.6s ease}
 @keyframes flash{0%,40%{box-shadow:0 0 0 4px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
 
@@ -637,8 +662,8 @@ html.sheet-open body{overflow:hidden}
   .tiles.reg{grid-template-columns:minmax(0,1fr)}
   .tiles.reg .tile{min-height:21rem}
   .tiles.lfg{gap:10px}
-  .tiles.lfg .tile{min-height:15.5rem;border-radius:18px}
-  .tiles.lfg .cover{padding:16px;border-radius:17px}
+  .tiles.lfg .tile{--r:18px;--rb:40px;min-height:15.5rem}
+  .tiles.lfg .cover{padding:16px}
   .tiles.lfg .c-nr{font-size:3.4rem}
   .tiles.lfg .c-title{font-size:.98rem}
   .tiles.lfg .c-hint{display:none}

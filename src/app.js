@@ -346,10 +346,14 @@ const UP = '<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><
 const ARR = '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const nArt = n => n === 1 ? '1 Artikel' : `${n} Artikel`;
 const ampelText = (rot, n) => !n ? 'noch keine Artikel' : rot ? `${rot} von ${n} mit Prüfungs-Ampel` : 'ohne Ampel, zum Stöbern und Vertiefen';
+/* Blüte auf dem Deckblatt, fünf Blätter wie an der Ranke. Volle Kacheln blühen, die anderen sind Knospen und gehen beim Aufdecken auf. */
+const FLOWER = '<svg class="c-flower" viewBox="-50 -50 100 100" aria-hidden="true">' +
+  [0, 1, 2, 3, 4].map(k => `<g class="pt" style="--i:${k}"><path d="M0 0C10 12.8 28 12 40 0C28-12 10-12.8 0 0Z"/></g>`).join('') +
+  '<circle r="7"/></svg>';
 
 function cover(id, nr, title, label, pill, extra = ''){
   return `<button class="cover" type="button" aria-expanded="false" aria-controls="d-${id}" aria-label="${esc(label)}. Kachel aufdecken">` +
-    `<span class="c-nr" aria-hidden="true">${nr}</span>${extra}` +
+    FLOWER + `<span class="c-nr" aria-hidden="true">${nr}</span>${extra}` +
     `<span class="c-title" aria-hidden="true">${esc(title)}</span>` +
     `<span class="c-foot" aria-hidden="true">${pill}<span class="c-hint">${UP}aufdecken</span></span>` +
   `</button>`;
