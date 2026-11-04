@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
 > **Stand:** 04.11.2026
-> **App-Stand:** Commit `f2f5118` (Udo fliegt flüssig), Version 1.0.0 zählt selbst hoch
+> **App-Stand:** Commit `d66954e` (Udo in 3D), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -173,8 +173,9 @@ wie die Bibliothek aufgebaut ist.
 | Ende | Nach der letzten Station („Danke, Udo!“), mit „Beenden“, Escape oder wenn ein Artikel aufgeht: Udo verschwindet in Funken und steht wieder auf seinem Platz. Die Seite bleibt, wo sie ist. |
 | Menü | „Führung mit Udo“ scrollt nach oben zu Udo und startet die Führung direkt. |
 | Handy | Kleineres Einhorn, die Sprechblase sitzt unten über der Handy-Leiste. Udo und seine Funken liegen in einer eigenen Ebene, die seitlich nichts überstehen lässt. |
-| Ohne 3D | Fliegt im Bogen statt an der Ranke entlang. |
-| Weniger Bewegung | Kein Flug, kein Winken, keine Funken: Udo springt von Station zu Station. |
+| 3D | Mit WebGL ist Udo ein 3D-Modell aus Grundformen (wie die Bienen): Kapseln für Körper, Hals und Beine, Kugeln für Kopf und Schnauze, Wolkenmähne und Schweif aus Perlen in Pastell, goldenes Horn mit rosa Spirale und Schimmer, Blumenkranz, schillernde Feenflügel. Beim Wenden dreht er sich wirklich um und schaut dabei kurz in die Kamera, im Flug zieht er die Beine an, ab und zu blinzelt er. Eigene kleine WebGL-Fläche über dem Inhalt, gezeichnet nur, solange Udo im Bild ist. Auf Geräten im Datensparmodus oder mit wenig Speicher bleibt die Zeichnung. |
+| Ohne 3D | Die Zeichnung von Udo; ohne 3D-Ranke fliegt er im Bogen statt an der Ranke entlang. |
+| Weniger Bewegung | Kein Flug, kein Winken, keine Funken: Udo springt von Station zu Station. In 3D steht er still und wird nur neu gezeichnet, wenn sich etwas ändert. |
 
 ---
 
@@ -387,7 +388,8 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | `src/app.js` | Startseite, Lernstand, Erfolge, Bienen, Stempel, Feier-Karte, Ansagen |
 | `src/reader.js` | Artikelseite, Prüfungsmodus, Mein Stand mit Leseausweis, Sichern |
 | `src/melden.js` | Fehler melden: Formular, GitHub-Issue, Text für Teams |
-| `src/einhorn.js` | Udo, das Einhorn: Platz, Winken, Führung mit Sprechblase, Flug an der Ranke (Weg aus `scene.js` als `F.rankePfad`) |
+| `src/einhorn.js` | Udo, das Einhorn: Platz, Winken, Führung mit Sprechblase, Flug an der Ranke (Weg aus `scene.js` als `F.rankePfad`), Zeichnung als Rückfall |
+| `src/einhorn3d.js` | Udo in 3D: Modell aus Grundformen, eigene kleine WebGL-Fläche, wird von `einhorn.js` nachgeladen |
 | `src/scene.js` | 3D: Würfel, Ranke, Blüten, Bienen |
 | `src/sw.js` | Service Worker: App-Hülle und Artikel offline |
 | `data/catalog.json` | Katalog aller Artikel, erzeugt mit `tools/catalog.mjs`; je Artikel der Tag, an dem er auf `main` dazukam (`d`), dazu `neu` = der zuletzt dazugekommene. Dafür braucht das Skript den ganzen Verlauf des Wikis, der Workflow klont es deshalb ohne `--depth 1` |
@@ -446,6 +448,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `91bbc65` | Mauszeiger als rosa Stift mit kurzer, funkelnder Spur (nur mit Maus) |
 | 04.11.2026 | `65ef49a` | Einhorn aus dem Feenwald (damals „Funkel“, heute Udo): winkt unter der Bühne, führt auf Klick in 7 Stationen an der Ranke entlang durch die Seite |
 | 04.11.2026 | `f2f5118` | Udo fliegt flüssig: im Takt der Seite (gemeinsame Schleife mit Lenis und 3D), gleichmäßig knapp über dem Stängel, ruhiges Reisetempo, weich wenden und neigen; das Einhorn heißt jetzt Udo, Texte mit etwas mehr Humor |
+| 04.11.2026 | `d66954e` | Udo in 3D: Modell aus Grundformen mit Wolkenmähne, goldenem Horn und schillernden Flügeln, dreht sich beim Wenden echt um, blinzelt; Zeichnung bleibt als Rückfall |
 
 ### Entfernt oder ersetzt
 
