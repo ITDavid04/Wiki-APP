@@ -470,10 +470,15 @@ try {
   const up = await ctx4.newPage();
   const uerrs = watch(up, 'Udo');
   await up.setViewport({ width: 1280, height: 860 });
-  await up.goto(BASE, { waitUntil: 'networkidle0' });
+  /* Bis hier sind viele Seiten mit 3D offen; auf dem gedrosselten Testrechner reicht "geladen", Netzwerkruhe kann dauern */
+  await up.goto(BASE, { waitUntil: 'load', timeout: 60000 });
   await ready(up);
   const blaseAuf = (txt) => up.waitForFunction(t => { const b = document.getElementById('udoBlase'); return !b.hidden && b.classList.contains('auf') && document.getElementById('udoKopf').textContent.includes(t); }, { timeout: 15000 }, txt);
   const heimY = () => up.evaluate(() => { const f = document.getElementById('udo').getBoundingClientRect(), r = document.querySelector('.hero .rule').getBoundingClientRect(); return { fuss: Math.round(f.bottom - f.height * 0.11 - (r.top + r.height / 2)), x: Math.round(f.left) }; });
+  /* Mit Grafikkarte ist Udo in 3D; auf GitHub (3D in Software) greift die Notbremse und die Zeichnung bleibt */
+  const drei = await up.waitForFunction(() => document.getElementById('udo').classList.contains('drei'), { timeout: 8000 }).then(() => true, () => false);
+  if (process.env.CI) check('Udo: auf dem langsamen Testrechner bleibt die Zeichnung (Notbremse)', await up.waitForFunction(() => !document.getElementById('udo').classList.contains('drei') && !document.querySelector('#udo canvas'), { timeout: 15000 }).then(() => true, () => false));
+  else check('Udo in 3D', drei);
   const h0 = await heimY();
   check('Udo steht unter der Bühne auf der Linie', Math.abs(h0.fuss) <= 6 && h0.x < 300, JSON.stringify(h0));
   await up.evaluate(() => document.querySelector('.hero .rule').scrollIntoView({ block: 'center' }));
@@ -503,16 +508,18 @@ try {
   await sleep(600);
   check('Escape beendet die Führung', await up.evaluate(() => document.getElementById('udoBlase').hidden && document.activeElement.id === 'udo'));
   await up.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-  await up.reload({ waitUntil: 'networkidle0' });
+  await up.reload({ waitUntil: 'load', timeout: 60000 });
   await ready(up);
+  /* zählt, ob Udo irgendwann in den Flug geht (bei weniger Bewegung darf er nur springen) */
+  await up.evaluate(() => { window.__flog = 0; const u = document.getElementById('udo'); new MutationObserver(() => { if (u.classList.contains('fliegt')) window.__flog++; }).observe(u, { attributes: true, attributeFilter: ['class'] }); });
   await up.click('#menuBtn');
   await up.click('[data-einhorn]');
   const t0 = Date.now();
   await blaseAuf('1 von 7');
   await up.click('#udoJa');
   await blaseAuf('2 von 7');
-  const ruhig = { ms: Date.now() - t0, funken: await up.evaluate(() => document.querySelectorAll('.fe-funke').length) };
-  check('Weniger Bewegung: Udo springt ohne Funken, Start aus dem Menü', ruhig.ms < 3000 && ruhig.funken === 0, JSON.stringify(ruhig));
+  const ruhig = { ms: Date.now() - t0, flug: await up.evaluate(() => window.__flog), funken: await up.evaluate(() => document.querySelectorAll('.fe-funke').length) };
+  check('Weniger Bewegung: Udo springt ohne Flug und Funken, Start aus dem Menü', ruhig.flug === 0 && ruhig.funken === 0, JSON.stringify(ruhig));
   await up.screenshot({ path: path.join(SHOTS, 'udo-ranke.png') });
   check('Keine Fehler bei Udo', uerrs.length === 0, uerrs.slice(0, 5).join(' | '));
   await ctx4.close();

@@ -3,34 +3,42 @@
    die Zustände (winkt, fliegt); hier wird nur gezeichnet. Klappt WebGL nicht, bleibt die Zeichnung.
    - Wenden: Udo dreht sich wirklich um und schaut dabei kurz in die Kamera.
    - Flügel schlagen langsam, im Flug schnell; Schweif schwingt; ab und zu blinzelt er; beim Winken hebt er den Vorderhuf.
-   - Gezeichnet wird nur, solange Udo im Bild ist; bei "weniger Bewegung" steht er still und wird nur bei Änderungen neu gezeichnet. */
+   - Gezeichnet wird nur, solange Udo im Bild ist; in Ruhe mit 30 Bildern pro Sekunde, im Flug und beim Winken mit vollen.
+   - Bei "weniger Bewegung" steht er still und wird nur bei Änderungen neu gezeichnet.
+   - Notbremse: braucht das Gerät im Schnitt über 45 ms pro Bild, gibt Udo sein 3D auf und die Zeichnung übernimmt wieder
+     (schwache Geräte, und der Testlauf auf GitHub, der 3D ohne Grafikkarte rechnet). */
+/* Wie flüssig läuft die Seite gerade? Mittlerer Abstand zwischen n Bildern in ms */
+const bildtakt = n => new Promise(r => { const d = []; let l = 0; const f = t => { if (l && t - l < 500) d.push(t - l); l = t; if (d.length < n) requestAnimationFrame(f); else r(d.reduce((a, b) => a + b, 0) / d.length); }; requestAnimationFrame(f); });
+
 export async function baue(api){
-  const THREE = await import('three');
-  const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
   const { fe, stand } = api;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  /* Erst messen, dann bauen: läuft die Seite schon jetzt zäh, bleibt die Zeichnung, ohne dass 3D erst teuer aufgebaut wird */
+  if (await bildtakt(40) > 34) { console.info('Udo zeichnet ohne 3D, das Gerät ist dafür zu langsam.'); return false; }
+  const THREE = await import('three');
 
   let renderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' }); }
   catch (e) { return false; }
   if (!renderer.getContext()) return false;
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.setClearColor(0x000000, 0);
   const cv = renderer.domElement;
   cv.className = 'fe-3d'; cv.setAttribute('aria-hidden', 'true');
 
+  /* Licht: Himmel und Boden, eine Sonne von vorn oben, ein rosa Rand von hinten (billiger als eine Spiegelungsumgebung) */
   const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  const sun = new THREE.DirectionalLight(0xffffff, 1.5); sun.position.set(-2, 5, 6); scene.add(sun);
-  const rim = new THREE.DirectionalLight(0xFFC2E3, 0.8); rim.position.set(3, 2, -4); scene.add(rim);
+  scene.add(new THREE.HemisphereLight(0xFFFFFF, 0xF0E8FF, 2.6));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.9); sun.position.set(-2, 5, 6); scene.add(sun);
+  const rim = new THREE.DirectionalLight(0xFFC2E3, 1.0); rim.position.set(3, 2, -4); scene.add(rim);
   const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 50);
   camera.position.set(0.15, 0.85, 11);
   camera.lookAt(0.15, 0.5, 0);
 
   /* ---------- Materialien ---------- */
-  const M = (o) => new THREE.MeshPhysicalMaterial(Object.assign({ roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.35 }, o));
+  /* Standardmaterial reicht für die kleinen Teile und ist deutlich billiger als das physikalische; Glanz und Schimmer bleiben den Flügeln */
+  const M = (o) => { const { clearcoat, clearcoatRoughness, sheen, sheenColor, sheenRoughness, ...rest } = o; return new THREE.MeshStandardMaterial(Object.assign({ roughness: 0.42 }, rest)); };
   const fell = M({ color: 0xFBF8FF, sheen: 0.6, sheenColor: new THREE.Color(0xD9C2FF), sheenRoughness: 0.5 });
   const schnauze = M({ color: 0xFFE9F3, sheen: 0.4, sheenColor: new THREE.Color(0xFFC2E3) });
   const huf = M({ color: 0xC9B4F5, roughness: 0.3, clearcoat: 0.9 });
@@ -38,7 +46,7 @@ export async function baue(api){
   const weiss = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const backe = new THREE.MeshBasicMaterial({ color: 0xFF9ECF, transparent: true, opacity: 0.55, depthWrite: false });
   const ohrInnen = M({ color: 0xFFC2E3 });
-  const gold = M({ color: 0xFFD98A, metalness: 0.55, roughness: 0.25, clearcoat: 1, emissive: new THREE.Color(0xFFB347), emissiveIntensity: 0.18 });
+  const gold = M({ color: 0xFFD98A, metalness: 0.1, roughness: 0.3, emissive: new THREE.Color(0xFFB347), emissiveIntensity: 0.32 });
   const spirale = M({ color: 0xF6A5CC, roughness: 0.3, clearcoat: 1 });
   const PASTELL = [0xFF9ECF, 0xC9A8FF, 0x8FE6CB, 0xFFB3D9, 0xB9A0FF];
   const haar = PASTELL.map(c => M({ color: c, roughness: 0.5, sheen: 0.7, sheenColor: new THREE.Color(0xffffff) }));
@@ -188,9 +196,27 @@ export async function baue(api){
     glanz.material.opacity = still ? 0.9 : 0.65 + Math.sin(sek * 2.6) * 0.3;
     renderer.render(scene, camera);
   }
+  /* Notbremse: Abstände zwischen den Bildern messen, in denen Udo gezeichnet hat */
+  let aus = false, letzt = 0, summe = 0, n = 0, start = 0, letztesBild = 0;
+  function aufgeben(){
+    aus = true;
+    removeEventListener('resize', groesse);
+    renderer.dispose(); renderer.forceContextLoss();
+    cv.remove(); fe.classList.remove('drei');
+    console.info('Udo zeichnet ohne 3D, das Gerät ist dafür zu langsam.');
+  }
   function schleife(t){
+    if (aus) return;
     requestAnimationFrame(schleife);
-    if (!sichtbar || document.hidden) return;
+    if (!sichtbar || document.hidden) { letzt = 0; return; }
+    if (letzt && t - letzt < 500) { summe += t - letzt; n++; }
+    letzt = t;
+    if (!start) start = t;
+    if (n >= 30) { if (t - start > 1500 && summe / n > 45) return aufgeben(); summe = 0; n = 0; }
+    /* In Ruhe reichen 30 Bilder pro Sekunde */
+    const lebhaft = fe.classList.contains('fliegt') || fe.classList.contains('winkt');
+    if (!lebhaft && !reduce.matches && t - letztesBild < 30) return;
+    letztesBild = t;
     if (reduce.matches) {
       const z = stand(), sig = z.blick.toFixed(2) + z.kipp.toFixed(1) + fe.className;
       if (sig === letzteSig) return;
