@@ -14,7 +14,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '
 const D = JSON.parse($('#catalog').textContent);
 const REG = D.regale;
 const share = r => r.n ? r.rot / r.n : 0;
-window.FIAE = { D, REG, version: root.dataset.version, scrollTo: null, openTile: null, loadStep: null, tree: null, relayoutTree: null, hoverBlock: false, tip: null, sheetOpen: false, closeSheet: null, lenis: null };
+window.FIAE = { D, REG, version: root.dataset.version, scrollTo: null, openTile: null, loadStep: null, tree: null, relayoutTree: null, hoverBlock: false, tip: null, sheetOpen: false, closeSheet: null, lenis: null, jeBild: [] };
 
 /* Lernstand: bleibt nur auf diesem Gerät (localStorage). Schlüssel ist der Pfad der Datei im Wiki,
    damit der Stand auch nach einem neuen Katalog stimmt. 0 = noch nicht, 1 = gelesen, 2 = sitzt */
@@ -1072,6 +1072,9 @@ function zeichneSpur(now){
 
 /* Eine gemeinsame Schleife für Scrollen, Kopf und Stiftspur. Läuft vor den 3D-Schleifen, damit beide dieselbe Scrollposition sehen. */
 function loop(t){
+  /* Wer im selben Takt scrollen will (Udo beim Flug), hängt sich in window.FIAE.jeBild: läuft vor Lenis und vor dem 3D */
+  const jb = window.FIAE.jeBild;
+  if (jb.length) for (const f of jb.slice()) f(t);
   if (lenis) lenis.raf(t);
   updateTop();
   if (penOn) zeichneSpur(performance.now());

@@ -1,10 +1,10 @@
-/* Funkel, das Einhorn aus dem Feenwald. Steht unter der Bühne auf der Linie, winkt ab und zu und fragt erst auf Klick,
+/* Udo, das Einhorn aus dem Feenwald. Steht unter der Bühne auf der Linie, winkt ab und zu und fragt erst auf Klick,
    ob es eine kurze Führung geben soll. Dann fliegt es an der Ranke entlang von Station zu Station, die Seite scrollt mit,
    und an jeder Station erklärt eine Sprechblase einen Teil der Bibliothek.
-   - Weg: die Mittellinie des Stängels aus scene.js (F.rankePfad, Seitenpixel). Ohne 3D fliegt Funkel im Bogen.
-   - Bei "weniger Bewegung": kein Flug, kein Winken, keine Funken, Funkel springt von Station zu Station.
-   - Escape, "Beenden" oder ein geöffneter Artikel beenden die Führung; Funkel steht dann wieder auf seinem Platz.
-   - Gemerkt wird nur, ob die Führung schon gelaufen oder abgelehnt ist (lernwiki-einhorn-v1): dann winkt Funkel seltener. */
+   - Weg: die Mittellinie des Stängels aus scene.js (F.rankePfad, Seitenpixel). Ohne 3D fliegt Udo im Bogen.
+   - Bei "weniger Bewegung": kein Flug, kein Winken, keine Funken, Udo springt von Station zu Station.
+   - Escape, "Beenden" oder ein geöffneter Artikel beenden die Führung; Udo steht dann wieder auf seinem Platz.
+   - Gemerkt wird nur, ob die Führung schon gelaufen oder abgelehnt ist (lernwiki-einhorn-v1): dann winkt Udo seltener. */
 const F = window.FIAE;
 const $ = (s, r = document) => r.querySelector(s);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)');
@@ -82,32 +82,42 @@ const SVG = `<svg class="fe-svg" viewBox="0 0 120 110" aria-hidden="true" focusa
 </svg>`;
 
 /* ---------- Bausteine ---------- */
-/* Eigene Ebene für Funkel und seine Funken: so breit wie das Fenster und seitlich abgeschnitten,
+/* Eigene Ebene für Udo und seine Funken: so breit wie das Fenster und seitlich abgeschnitten,
    damit Funken am Rand die Seite nicht breiter machen (am Handy würde sonst alles verrutschen) */
 const ebene = document.createElement('div');
 ebene.className = 'fe-ebene';
 const fe = document.createElement('button');
-fe.type = 'button'; fe.className = 'fe'; fe.id = 'funkel';
-fe.setAttribute('aria-label', 'Funkel, das Einhorn: kurze Führung durch die Bibliothek');
-fe.innerHTML = `<span class="fe-hub">${SVG}</span><span class="fe-hallo" aria-hidden="true">Hallo! Klick mich</span>`;
+fe.type = 'button'; fe.className = 'fe'; fe.id = 'udo';
+fe.setAttribute('aria-label', 'Udo, das Einhorn: kurze Führung durch die Bibliothek');
+fe.innerHTML = `<span class="fe-hub">${SVG}</span><span class="fe-hallo" aria-hidden="true">Moin! Klick mich</span>`;
 const blase = document.createElement('div');
-blase.className = 'fe-blase'; blase.id = 'funkelBlase'; blase.hidden = true;
-blase.setAttribute('role', 'dialog'); blase.setAttribute('aria-labelledby', 'funkelKopf'); blase.setAttribute('aria-describedby', 'funkelText');
-blase.innerHTML = '<p class="fe-zeile micro" id="funkelKopf"></p><p class="fe-text" id="funkelText"></p>' +
-  '<div class="fe-knoepfe"><button type="button" class="pillbtn micro fe-ja" id="funkelJa"></button><button type="button" class="linkbtn fe-nein" id="funkelNein"></button></div>';
+blase.className = 'fe-blase'; blase.id = 'udoBlase'; blase.hidden = true;
+blase.setAttribute('role', 'dialog'); blase.setAttribute('aria-labelledby', 'udoKopf'); blase.setAttribute('aria-describedby', 'udoText');
+blase.innerHTML = '<p class="fe-zeile micro" id="udoKopf"></p><p class="fe-text" id="udoText"></p>' +
+  '<div class="fe-knoepfe"><button type="button" class="pillbtn micro fe-ja" id="udoJa"></button><button type="button" class="linkbtn fe-nein" id="udoNein"></button></div>';
 ebene.append(fe);
 document.body.append(ebene, blase);
-const kopf = $('#funkelKopf'), text = $('#funkelText'), ja = $('#funkelJa'), nein = $('#funkelNein');
+const kopf = $('#udoKopf'), text = $('#udoText'), ja = $('#udoJa'), nein = $('#udoNein');
 
-/* ---------- Maße und Orte (Seitenpixel, Mitte von Funkel) ---------- */
+/* ---------- Maße und Orte (Seitenpixel, Mitte von Udo) ---------- */
 const eng = () => innerWidth < 860;
 const box = el => { const r = (typeof el === 'string' ? $(el) : el).getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top + scrollY, b: r.bottom + scrollY, w: r.width, h: r.height }; };
 let pos = { x: -200, y: -200 }, links = false;
+/* Größe von Udo merken, damit der Flug nicht in jedem Bild das Layout abfragt (das bremst) */
+let fw = 92, fh = 84;
+function messen(){ fw = fe.offsetWidth || fw; fh = fe.offsetHeight || fh; }
 function setze(p){
   pos = { x: p.x, y: p.y };
-  fe.style.transform = `translate(${pos.x - fe.offsetWidth / 2}px,${pos.y - fe.offsetHeight / 2}px)`;
+  fe.style.transform = `translate(${pos.x - fw / 2}px,${pos.y - fh / 2}px)`;
 }
-function schau(nachLinks){ if (nachLinks !== links) { links = nachLinks; fe.classList.toggle('links', links); } }
+/* Blickrichtung: blick läuft weich von 1 (nach rechts) nach -1 (nach links), dazwischen wird Udo kurz schmal, wie beim Umdrehen.
+   kipp neigt ihn beim Steigen und Sinken. Beides geht als CSS-Variable an die Zeichnung. */
+let blick = 1, blickZiel = 1, kipp = 0;
+function malen(){ fe.style.setProperty('--blick', blick.toFixed(3)); fe.style.setProperty('--kipp', kipp.toFixed(2) + 'deg'); }
+function schau(nachLinks, weich){
+  links = nachLinks; fe.classList.toggle('links', links); blickZiel = links ? -1 : 1;
+  if (!weich) { blick = blickZiel; kipp = 0; malen(); }
+}
 /* Zuhause: auf der Linie unter der Bühne, links; die Hufe stehen auf dem Strich */
 function heim(){
   const r = box('.hero .rule'), w = fe.offsetWidth, h = fe.offsetHeight;
@@ -131,9 +141,9 @@ function nebenRanke(y){
 const abteilungen = () => { const k = F.REG.map(r => r.kurz); return k.slice(0, -1).join(', ') + ' und ' + k[k.length - 1]; };
 const STATIONEN = [
   { ranke: false, seite: 'links', ziel(){ const S = box('#stage'); return eng() ? { x: S.l + S.w * 0.8, y: S.t + S.h * 0.5 } : { x: S.l + S.w * 0.44, y: S.t + S.h * 0.34 }; },
-    text: () => `Die zwölf Würfel da oben sind die Lernfelder deiner Umschulung. Grüne haben schon Artikel, gestrichelte warten noch auf Futter. ${maus.matches ? 'Fahr mal mit der Maus drüber, sie weichen dir aus.' : 'Sie drehen sich, wenn du ein Lernfeld geschafft hast.'}` },
+    text: () => `Die zwölf Würfel da oben sind die Lernfelder deiner Umschulung. Grüne haben schon Artikel, gestrichelte warten noch auf Futter. ${maus.matches ? 'Fahr mal mit der Maus drüber, die sind kitzelig.' : 'Schaffst du ein Lernfeld, dreht sich sein Würfel einmal vor Freude.'}` },
   { ranke: true, ziel(){ const A = box('#a-ranke'); return nebenRanke(A.t + A.h * (eng() ? 0.3 : 0.18)); },
-    text: () => `Das ist die Ranke. Jedes Blatt ist ein Artikel, ${F.D.artikel.length} sind es schon. Blass heißt noch nicht gelesen, grün gelesen, dunkelgrün: sitzt. Rote Knospen sind Prüfungsstoff.` },
+    text: () => `Das ist die Ranke. Jedes Blatt ist ein Artikel, ${F.D.artikel.length} sind es schon. Blass heißt noch nicht gelesen, grün gelesen, dunkelgrün: sitzt. Rote Knospen sind Prüfungsstoff, da gucke ich auch immer zweimal hin.` },
   { ranke: true, seite: 'links', ziel(){
       const lab = [...document.querySelectorAll('#twigLabels .twig-lab')].find(l => l.getBoundingClientRect().width);
       if (!lab) { const A = box('#a-ranke'); return nebenRanke(A.t + A.h * 0.5); }
@@ -141,15 +151,15 @@ const STATIONEN = [
       const x = r.l > w + 30 ? r.l - w * 0.6 : r.r + w * 0.6;
       return { x: clamp(x, 50, W - 50), y: r.t - 26 };
     },
-    text: () => `Sechs Zweige, sechs Abteilungen: ${abteilungen()}. ${maus.matches ? 'Klick' : 'Tipp'} auf einen Zweig, dann springt die passende Kachel auf.` },
+    text: () => `Sechs Zweige, sechs Abteilungen: ${abteilungen()}. ${maus.matches ? 'Klick' : 'Tipp'} auf einen Zweig, dann springt die passende Kachel auf. Ordnung muss sein, auch im Feenwald.` },
   { ranke: true, ziel(){ return nebenRanke(box('#regale').t + 70); },
-    text: () => 'Hier blühen die Kacheln, erst die Abteilungen, darunter die Lernfelder. Deck eine auf und such dir einen Artikel aus. Ist ein Lernfeld geschafft, bekommt es einen Stempel.' },
+    text: () => 'Hier blühen die Kacheln, erst die Abteilungen, darunter die Lernfelder. Deck eine auf und such dir einen Artikel aus. Schaffst du ein Lernfeld, gibt es einen Stempel. Den hätte ich ehrlich gesagt auch gern.' },
   { ranke: true, ziel(){ return nebenRanke(box('#katalog').t + 70); },
-    text: () => `Du suchst etwas Bestimmtes? Hier findest du alle ${F.D.artikel.length} Artikel, mit Suche und Filter nach Abteilung. Ein roter Punkt heißt: Prüfungsstoff drin.` },
+    text: () => `Du suchst was Bestimmtes? Hier findest du alle ${F.D.artikel.length} Artikel, mit Suche und Filter nach Abteilung. Ein roter Punkt heißt: Prüfungsstoff drin.` },
   { ranke: true, ziel(){ return nebenRanke(box('#pruefung').t + 60); },
-    text: () => 'Wenn es ernst wird: ROT zuerst. Das ist sicherer Prüfungsstoff. Im Prüfungsmodus hakst du ab, was sitzt, und der Rest bleibt oben stehen.' },
+    text: () => 'Jetzt wird es ernst: ROT zuerst. Das ist sicherer Prüfungsstoff. Im Prüfungsmodus hakst du ab, was sitzt, und der Rest bleibt oben stehen. Ich drück dir alle vier Hufe.' },
   { ranke: true, ziel(){ const E = box('#a-end'); return { x: clamp(E.l + E.w / 2 + (eng() ? -60 : -110), 50, innerWidth - 50), y: E.t - (eng() ? 60 : 80) }; },
-    text: () => 'Ganz unten blüht die Ranke. Für jeden Artikel, den du liest, fliegt dir eine Biene zu. Dein Stand bleibt nur auf deinem Gerät, ganz ohne Konto, und unter „Mein Stand“ wartet dein Leseausweis. Das war der Garten! Ich flieg zurück in den Feenwald. Du findest mich oben unter den Würfeln und im Menü.' }
+    text: () => 'Ganz unten blüht die Ranke. Für jeden Artikel, den du liest, fliegt dir eine Biene zu. Dein Stand bleibt nur auf deinem Gerät, ganz ohne Konto, und unter „Mein Stand“ wartet dein Leseausweis. So, das war der Garten. Ich flieg zurück in den Feenwald, Udo braucht jetzt einen Kaffee. Du findest mich oben unter den Würfeln und im Menü.' },
 ];
 
 /* ---------- Funken ---------- */
@@ -172,25 +182,26 @@ function puff(p){
 }
 
 /* ---------- Scrollen ---------- */
-/* Wo Funkel im Fenster steht: am Handy weiter oben, weil die Sprechblase dort unten sitzt */
-const blick = () => innerWidth < 560 ? 0.3 : 0.42;
+/* Wo Udo im Fenster steht: am Handy weiter oben, weil die Sprechblase dort unten sitzt */
+const hoehe = () => innerWidth < 560 ? 0.3 : 0.42;
+let scrollMax = 0;
 function scrollAuf(v){
-  v = clamp(v, 0, document.documentElement.scrollHeight - innerHeight);
+  v = clamp(v, 0, scrollMax || document.documentElement.scrollHeight - innerHeight);
   if (F.lenis) F.lenis.scrollTo(v, { immediate: true, force: true });
   else scrollTo(0, v);
 }
 
 /* ---------- Flug ---------- */
-/* Weg von a nach b: an der Ranke entlang (versetzt wie nebenRanke), sonst im Bogen */
+/* Weg von a nach b: an der Ranke entlang, knapp über dem Stängel (immer gleich versetzt, damit nichts springt), sonst im Bogen */
 function weg(a, b, anRanke){
   const P = F.rankePfad, W = innerWidth;
   let pts = [];
   if (anRanke && P && P.length > 2) {
     const naechst = q => { let bi = 0, bd = Infinity; P.forEach((p, i) => { const d = (p[0] - q.x) ** 2 + (p[1] - q.y) ** 2; if (d < bd) { bd = d; bi = i; } }); return bi; };
     const i0 = naechst(a), i1 = naechst(b);
-    const dx = eng() ? 46 : 74, dy = eng() ? 34 : 48;
+    const dy = eng() ? 40 : 52;
     const stueck = i0 <= i1 ? P.slice(i0, i1 + 1) : P.slice(i1, i0 + 1).reverse();
-    pts = stueck.map(p => [clamp(p[0] + (p[0] > W / 2 ? -dx : dx), 50, W - 50), p[1] - dy]);
+    pts = stueck.map(p => [clamp(p[0], 50, W - 50), p[1] - dy]);
   }
   if (pts.length < 3) {
     const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2, h = Math.min(220, Math.hypot(b.x - a.x, b.y - a.y) * 0.3);
@@ -201,8 +212,8 @@ function weg(a, b, anRanke){
     }
   }
   pts = [[a.x, a.y], ...pts, [b.x, b.y]];
-  /* Ecken rund schleifen (Chaikin, zweimal) */
-  for (let r = 0; r < 2; r++) {
+  /* Ecken rund schleifen (Chaikin, dreimal), damit An- und Abflug zur Ranke weich werden */
+  for (let r = 0; r < 3; r++) {
     const n = [pts[0]];
     for (let i = 0; i < pts.length - 1; i++) {
       const p = pts[i], q = pts[i + 1];
@@ -213,42 +224,71 @@ function weg(a, b, anRanke){
   }
   const L = [0];
   for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+  /* Punkt nach s Pixeln Weg (Halbierungssuche) */
   const at = s => {
     s = clamp(s, 0, L[L.length - 1]);
-    let i = 1; while (i < L.length - 1 && L[i] < s) i++;
-    const k = (s - L[i - 1]) / ((L[i] - L[i - 1]) || 1);
-    return { x: pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * k, y: pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * k };
+    let lo = 1, hi = L.length - 1;
+    while (lo < hi) { const m = (lo + hi) >> 1; if (L[m] < s) lo = m + 1; else hi = m; }
+    const k = (s - L[lo - 1]) / ((L[lo] - L[lo - 1]) || 1);
+    return { x: pts[lo - 1][0] + (pts[lo][0] - pts[lo - 1][0]) * k, y: pts[lo - 1][1] + (pts[lo][1] - pts[lo - 1][1]) * k };
   };
   return { len: L[L.length - 1], at };
 }
-let flug = 0;
+/* Reisetempo: sanft anfahren (20 %), gleichmäßig fliegen, sanft landen (20 %). Spitze nur 1,25 mal so schnell wie der Schnitt. */
+function reise(t){
+  const r = 0.2, v = 1 / (1 - r);
+  if (t < r) return v * t * t / (2 * r);
+  if (t > 1 - r) return 1 - v * (1 - t) * (1 - t) / (2 * r);
+  return v * (t - r / 2);
+}
+/* Im Takt der App: die gemeinsame Schleife (app.js, F.jeBild) läuft vor Lenis und vor dem 3D. So sehen Ranke und Seite
+   dieselbe Scrollposition wie Udo, nichts hinkt ein Bild hinterher. */
+function imTakt(fn){
+  const liste = F.jeBild;
+  if (liste) { liste.push(fn); return () => { const k = liste.indexOf(fn); if (k >= 0) liste.splice(k, 1); }; }
+  let id = 0, an = true;
+  const r = t => { if (!an) return; fn(t); if (an) id = requestAnimationFrame(r); };
+  id = requestAnimationFrame(r);
+  return () => { an = false; cancelAnimationFrame(id); };
+}
+let stopFlug = null;
+function flugAus(){ if (stopFlug) { stopFlug(); stopFlug = null; } fe.classList.remove('fliegt'); }
 function flieg(b, anRanke, fertig){
-  cancelAnimationFrame(flug);
+  flugAus();
   if (reduce.matches) {
-    setze(b); scrollAuf(b.y - innerHeight * blick()); fertig(); return;
+    setze(b); scrollAuf(b.y - innerHeight * hoehe()); fertig(); return;
   }
+  messen(); scrollMax = document.documentElement.scrollHeight - innerHeight;
   const w = weg(pos, b, anRanke);
-  const dauer = clamp(w.len / 0.8, 900, 5200), t0 = performance.now();
-  const ease = t => t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
-  let letzterFunke = 0;
+  const dauer = clamp(w.len / 0.7, 1100, 6500);
+  let t0 = null, letzterFunke = 0, gelandet = false;
   fe.classList.add('fliegt');
-  const schritt = now => {
-    const t = clamp((now - t0) / dauer, 0, 1), s = ease(t) * w.len;
-    const p = w.at(s), q = w.at(s + 24);
-    if (Math.abs(q.x - p.x) > 2) schau(q.x < p.x);
-    const kipp = clamp(Math.atan2(q.y - p.y, Math.abs(q.x - p.x) + 12) * 18, -14, 14);
-    fe.style.setProperty('--kipp', (links ? -kipp : kipp).toFixed(1) + 'deg');
-    setze(p);
-    scrollAuf(p.y - innerHeight * blick());
-    if (now - letzterFunke > 55) {
-      letzterFunke = now;
-      const hx = p.x + (links ? 1 : -1) * fe.offsetWidth * 0.36;
-      funke(hx, p.y + fe.offsetHeight * 0.05, (links ? 1 : -1) * (6 + Math.random() * 14), 8 + Math.random() * 16);
+  stopFlug = imTakt(now => {
+    if (t0 === null) t0 = now;
+    /* Nach der Landung laufen Wende und Neigung noch weich aus, dann ist der Takt frei */
+    if (gelandet) {
+      kipp *= 0.85; blick += (blickZiel - blick) * 0.2; malen();
+      if (Math.abs(kipp) < 0.05 && Math.abs(blick - blickZiel) < 0.01) { blick = blickZiel; kipp = 0; malen(); flugAus(); }
+      return;
     }
-    if (t < 1) flug = requestAnimationFrame(schritt);
-    else { fe.classList.remove('fliegt'); fe.style.setProperty('--kipp', '0deg'); fertig(); }
-  };
-  flug = requestAnimationFrame(schritt);
+    const t = clamp((now - t0) / dauer, 0, 1), s = reise(t) * w.len;
+    const p = w.at(s), vor = w.at(s + 70), q = w.at(s + 36);
+    /* Umdrehen erst, wenn es wirklich in die andere Richtung geht (70 Pixel voraus mindestens 28 zur Seite) */
+    if (vor.x - p.x < -28 && !links) schau(true, true);
+    else if (vor.x - p.x > 28 && links) schau(false, true);
+    const zielKipp = clamp(Math.atan2(q.y - p.y, Math.abs(q.x - p.x) + 24) * 20, -12, 12) * (links ? -1 : 1);
+    kipp += (zielKipp - kipp) * 0.08;
+    blick += (blickZiel - blick) * 0.14;
+    malen();
+    setze(p);
+    scrollAuf(p.y - innerHeight * hoehe());
+    if (now - letzterFunke > 60) {
+      letzterFunke = now;
+      const hx = p.x + (links ? 1 : -1) * fw * 0.36;
+      funke(hx, p.y + fh * 0.05, (links ? 1 : -1) * (6 + Math.random() * 14), 8 + Math.random() * 16);
+    }
+    if (t >= 1) { gelandet = true; scrollMax = 0; fe.classList.remove('fliegt'); fertig(); }
+  });
 }
 
 /* ---------- Sprechblase ---------- */
@@ -256,7 +296,7 @@ function blaseSetzen(){
   if (blase.hidden) return;
   if (innerWidth < 560) { blase.style.left = blase.style.top = ''; return; }
   const bw = blase.offsetWidth, bh = blase.offsetHeight, w = fe.offsetWidth, W = innerWidth;
-  /* rechts neben Funkel, außer die Station will links (dort liegt sonst, was erklärt wird) oder rechts ist kein Platz */
+  /* rechts neben Udo, außer die Station will links (dort liegt sonst, was erklärt wird) oder rechts ist kein Platz */
   const rechts = pos.x + w * 0.6, linksX = pos.x - w * 0.6 - bw;
   const willLinks = zustand === 'station' && STATIONEN[nr].seite === 'links';
   let x = willLinks && linksX >= 16 ? linksX : rechts;
@@ -280,7 +320,7 @@ let zustand = 'ruhe', nr = -1;   /* ruhe, frage, fliegt, station */
 const gesehen = () => store.get(KEY) === '1';
 function frage(){
   zustand = 'frage'; ruftNicht();
-  zeige('Funkel aus dem Feenwald', 'Hallo, ich bin Funkel! Ich wohne im Feenwald gleich hinter der Ranke. Soll ich dir in einer Minute zeigen, wie dieser Garten aufgebaut ist?', 'Ja, zeig mal', 'Lieber später');
+  zeige('Udo aus dem Feenwald', 'Moin, ich bin Udo. Ja, Einhörner dürfen auch Udo heißen. Ich wohne im Feenwald gleich hinter der Ranke. Soll ich dir in einer Minute zeigen, wie dieser Garten aufgebaut ist?', 'Ja, zeig mal', 'Lieber später');
 }
 function station(i){
   nr = i; zustand = 'fliegt'; verstecke(); ruftNicht();
@@ -289,14 +329,14 @@ function station(i){
     if (zustand !== 'fliegt') return;
     zustand = 'station';
     const letzte = i === STATIONEN.length - 1;
-    zeige(`Funkel · ${i + 1} von ${STATIONEN.length}`, st.text(), letzte ? 'Danke, Funkel!' : 'Weiter', letzte ? '' : 'Beenden');
+    zeige(`Udo · ${i + 1} von ${STATIONEN.length}`, st.text(), letzte ? 'Danke, Udo!' : 'Weiter', letzte ? '' : 'Beenden');
   });
 }
 function ende(){
-  cancelAnimationFrame(flug);
+  flugAus();
   const warAktiv = zustand !== 'ruhe';
   zustand = 'ruhe'; nr = -1; store.set(KEY, '1');
-  verstecke(); fe.classList.remove('fliegt'); fe.style.setProperty('--kipp', '0deg');
+  verstecke(); kipp = 0; malen();
   if (!warAktiv) return;
   puff({ x: pos.x, y: pos.y });
   fe.classList.add('weg');
@@ -322,7 +362,7 @@ document.addEventListener('keydown', e => {
 });
 /* Ein Artikel oder eine App-Seite geht auf: Führung beenden */
 addEventListener('hashchange', () => { if (location.hash.startsWith('#/') && zustand !== 'ruhe') ende(); });
-/* Aus dem Menü: erst nach oben zu Funkel, dann geht es los */
+/* Aus dem Menü: erst nach oben zu Udo, dann geht es los */
 document.addEventListener('click', e => {
   if (!e.target.closest('[data-einhorn]')) return;
   if (zustand === 'fliegt' || zustand === 'station') return;
@@ -336,6 +376,7 @@ document.addEventListener('click', e => {
 let neuT = 0;
 function neuSetzen(){
   if (zustand === 'fliegt') return;
+  messen();
   if (zustand === 'station') setze(STATIONEN[nr].ziel()); else setze(heim());
   blaseSetzen();
 }
@@ -343,7 +384,7 @@ const spaeter = () => { clearTimeout(neuT); neuT = setTimeout(neuSetzen, 120); }
 addEventListener('resize', spaeter);
 addEventListener('fiae-tree', spaeter);
 if ('ResizeObserver' in window) new ResizeObserver(spaeter).observe(document.body);
-setze(heim());
+messen(); setze(heim());
 
 /* ---------- Winken ---------- */
 let sichtbar = false, gewunken = 0, winkT = 0;

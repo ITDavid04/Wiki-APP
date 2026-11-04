@@ -464,44 +464,44 @@ try {
   await setOffline(fp, false);
   check('Keine Fehler bei den Formeln', ferrs.length === 0, ferrs.slice(0, 5).join(' | '));
 
-  /* 12. Funkel, das Einhorn: steht unter der Bühne, fragt erst auf Klick, führt durch alle Stationen, Escape beendet,
+  /* 12. Udo, das Einhorn: steht unter der Bühne, fragt erst auf Klick, führt durch alle Stationen, Escape beendet,
      bei weniger Bewegung springt es (keine Funken). Eigener Browser-Kontext. */
   const ctx4 = await browser.createBrowserContext();
   const up = await ctx4.newPage();
-  const uerrs = watch(up, 'Funkel');
+  const uerrs = watch(up, 'Udo');
   await up.setViewport({ width: 1280, height: 860 });
   await up.goto(BASE, { waitUntil: 'networkidle0' });
   await ready(up);
-  const blaseAuf = (txt) => up.waitForFunction(t => { const b = document.getElementById('funkelBlase'); return !b.hidden && b.classList.contains('auf') && document.getElementById('funkelKopf').textContent.includes(t); }, { timeout: 15000 }, txt);
-  const heimY = () => up.evaluate(() => { const f = document.getElementById('funkel').getBoundingClientRect(), r = document.querySelector('.hero .rule').getBoundingClientRect(); return { fuss: Math.round(f.bottom - f.height * 0.11 - (r.top + r.height / 2)), x: Math.round(f.left) }; });
+  const blaseAuf = (txt) => up.waitForFunction(t => { const b = document.getElementById('udoBlase'); return !b.hidden && b.classList.contains('auf') && document.getElementById('udoKopf').textContent.includes(t); }, { timeout: 15000 }, txt);
+  const heimY = () => up.evaluate(() => { const f = document.getElementById('udo').getBoundingClientRect(), r = document.querySelector('.hero .rule').getBoundingClientRect(); return { fuss: Math.round(f.bottom - f.height * 0.11 - (r.top + r.height / 2)), x: Math.round(f.left) }; });
   const h0 = await heimY();
-  check('Funkel steht unter der Bühne auf der Linie', Math.abs(h0.fuss) <= 6 && h0.x < 300, JSON.stringify(h0));
+  check('Udo steht unter der Bühne auf der Linie', Math.abs(h0.fuss) <= 6 && h0.x < 300, JSON.stringify(h0));
   await up.evaluate(() => document.querySelector('.hero .rule').scrollIntoView({ block: 'center' }));
   await sleep(600);
-  await up.click('#funkel');
+  await up.click('#udo');
   await blaseAuf('Feenwald');
-  check('Funkel fragt erst auf Klick', await up.evaluate(() => document.getElementById('funkelNein').textContent === 'Lieber später'));
-  await up.click('#funkelJa');
+  check('Udo fragt erst auf Klick', await up.evaluate(() => document.getElementById('udoNein').textContent === 'Lieber später'));
+  await up.click('#udoJa');
   const stationen = [];
   for (let i = 1; i <= 7; i++) {
     await blaseAuf(`${i} von 7`);
     stationen.push(await up.evaluate(() => Math.round(scrollY)));
-    if (i === 3) await up.screenshot({ path: path.join(SHOTS, 'funkel-zweige.png') });
-    await up.click('#funkelJa');
+    if (i === 3) await up.screenshot({ path: path.join(SHOTS, 'udo-zweige.png') });
+    await up.click('#udoJa');
   }
   await sleep(700);
   const h1 = await heimY();
-  const nachher = await up.evaluate(() => ({ blase: document.getElementById('funkelBlase').hidden, key: localStorage.getItem('lernwiki-einhorn-v1') }));
+  const nachher = await up.evaluate(() => ({ blase: document.getElementById('udoBlase').hidden, key: localStorage.getItem('lernwiki-einhorn-v1') }));
   check('Führung: 7 Stationen nach unten, danach wieder zu Hause', stationen[6] > stationen[1] && stationen[1] > stationen[0] && nachher.blase && nachher.key === '1' && Math.abs(h1.fuss) <= 6, JSON.stringify({ stationen, nachher }));
   await up.evaluate(() => document.querySelector('.hero .rule').scrollIntoView({ block: 'center' }));
   await sleep(600);
-  await up.click('#funkel');
+  await up.click('#udo');
   await blaseAuf('Feenwald');
-  await up.click('#funkelJa');
+  await up.click('#udoJa');
   await blaseAuf('1 von 7');
   await up.keyboard.press('Escape');
   await sleep(600);
-  check('Escape beendet die Führung', await up.evaluate(() => document.getElementById('funkelBlase').hidden && document.activeElement.id === 'funkel'));
+  check('Escape beendet die Führung', await up.evaluate(() => document.getElementById('udoBlase').hidden && document.activeElement.id === 'udo'));
   await up.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   await up.reload({ waitUntil: 'networkidle0' });
   await ready(up);
@@ -509,12 +509,12 @@ try {
   await up.click('[data-einhorn]');
   const t0 = Date.now();
   await blaseAuf('1 von 7');
-  await up.click('#funkelJa');
+  await up.click('#udoJa');
   await blaseAuf('2 von 7');
   const ruhig = { ms: Date.now() - t0, funken: await up.evaluate(() => document.querySelectorAll('.fe-funke').length) };
-  check('Weniger Bewegung: Funkel springt ohne Funken, Start aus dem Menü', ruhig.ms < 3000 && ruhig.funken === 0, JSON.stringify(ruhig));
-  await up.screenshot({ path: path.join(SHOTS, 'funkel-ranke.png') });
-  check('Keine Fehler bei Funkel', uerrs.length === 0, uerrs.slice(0, 5).join(' | '));
+  check('Weniger Bewegung: Udo springt ohne Funken, Start aus dem Menü', ruhig.ms < 3000 && ruhig.funken === 0, JSON.stringify(ruhig));
+  await up.screenshot({ path: path.join(SHOTS, 'udo-ranke.png') });
+  check('Keine Fehler bei Udo', uerrs.length === 0, uerrs.slice(0, 5).join(' | '));
   await ctx4.close();
 } catch (e) {
   check('Test lief durch', false, e.message);

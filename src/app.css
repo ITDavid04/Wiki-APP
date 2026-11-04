@@ -501,15 +501,14 @@ html.pen .pen-spur{display:block;position:fixed;inset:0;z-index:2147483000;width
 .leaf-key{display:flex;flex-wrap:wrap;gap:8px 16px;list-style:none;padding:0;margin:0;color:var(--muted)}
 .leaf-key li{display:flex;align-items:center;gap:8px}
 .leaf-key i{width:14px;height:14px;border-radius:3px 11px;background:var(--c)}
-/* Funkel, das Einhorn (einhorn.js): steht unter der Bühne, winkt, führt auf Klick an der Ranke entlang durch die Seite.
+/* Udo, das Einhorn (einhorn.js): steht unter der Bühne, winkt, führt auf Klick an der Ranke entlang durch die Seite.
    Liegt in Seitenpixeln über dem Inhalt (main hat z-index 1), unter Kopfleiste, Menü und Artikelseite. */
 .fe-ebene{position:absolute;left:0;top:0;z-index:15;width:100%;height:0;overflow-x:clip;overflow-y:visible;pointer-events:none}
 .fe{position:absolute;left:0;top:0;pointer-events:auto;width:92px;height:84px;padding:0;border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .35s;will-change:transform}
 .fe.weg{opacity:0}
 .fe:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:22px}
 .fe-hub{display:block;width:100%;height:100%;animation:feSchweben 3.4s ease-in-out infinite}
-.fe-svg{display:block;width:100%;height:100%;overflow:visible;transform:rotate(var(--kipp,0deg));transition:transform .25s;filter:drop-shadow(0 6px 10px rgba(120,80,170,.22))}
-.fe.links .fe-svg{transform:scaleX(-1) rotate(var(--kipp,0deg))}
+.fe-svg{display:block;width:100%;height:100%;overflow:visible;transform:scaleX(var(--blick,1)) rotate(var(--kipp,0deg));filter:drop-shadow(0 6px 10px rgba(120,80,170,.22))}
 .fe:hover .fe-hub{animation-duration:1.6s}
 .fe-svg g,.fe-svg circle,.fe-svg path{transform-box:view-box}
 .fe-fluegel{transform-origin:52px 52px;animation:feFluegel 2.8s ease-in-out infinite}
