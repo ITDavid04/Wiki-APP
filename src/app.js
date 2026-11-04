@@ -133,7 +133,7 @@ function setMenu(open){
 menuBtn.addEventListener('click', e => { e.stopPropagation(); setMenu(menu.hidden); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden && !$('dialog[open]')) { setMenu(false); menuBtn.focus(); } });
 document.addEventListener('click', e => { if (!menu.hidden && !e.target.closest('#menu')) setMenu(false); });
-menu.addEventListener('click', e => { if (e.target.closest('a,[data-melden]')) setMenu(false); });
+menu.addEventListener('click', e => { if (e.target.closest('a,[data-melden],[data-einhorn]')) setMenu(false); });
 
 /* Ladebildschirm: 6 Felder für die Ladeschritte */
 const loader = $('#loader'), cells = [...$('#loaderRow').children];

@@ -63,7 +63,7 @@ if (!html.includes('/*CATALOG*/')) throw new Error('Platzhalter /*CATALOG*/ fehl
 if (!html.includes('/*APPVERSION*/')) throw new Error('Platzhalter /*APPVERSION*/ fehlt');
 html = html.replace('/*CATALOG*/', () => catJs);
 await put('index.html', html);
-for (const f of ['app.css', 'app.js', 'scene.js', 'reader.js', 'melden.js']) {
+for (const f of ['app.css', 'app.js', 'scene.js', 'reader.js', 'melden.js', 'einhorn.js']) {
   const code = await read(path.join(SRC, f));
   noDashes('src/' + f, code);
   if (f === 'app.css') await put(f, code);
