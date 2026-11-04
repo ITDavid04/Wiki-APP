@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
 > **Stand:** 04.11.2026
-> **App-Stand:** Commit `91bbc65` (Neu-Hinweis und rosa Stift), Version 1.0.0 zählt selbst hoch
+> **App-Stand:** Commit `65ef49a` (Funkel, das Einhorn), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -21,7 +21,7 @@ eine weg, wird diese Seite mitgepflegt.
 | **Nr.** | **Abschnitt** | **Worum es geht** |
 |---|---|---|
 | 1 | [Überblick](#1-überblick) | Alle Funktionen auf einen Blick |
-| 2 | [Startseite](#2-startseite) | Ladebildschirm, Würfel, Ranke, Kacheln, Katalog, Prüfung, Mitmachen |
+| 2 | [Startseite](#2-startseite) | Ladebildschirm, Würfel, Ranke, Kacheln, Katalog, Prüfung, Mitmachen, Funkel das Einhorn |
 | 3 | [Lesen und Lernen](#3-lesen-und-lernen) | Artikelseite, Lernstand, Prüfungsmodus, Mein Stand |
 | 4 | [Belohnungen](#4-belohnungen) | Bienen, Lernfeld geschafft, Leseausweis mit Stempeln |
 | 5 | [App auf dem Gerät](#5-app-auf-dem-gerät) | Installieren, offline, Updates, Versionsnummer, Fehler melden, Handy-Leiste, hell und dunkel |
@@ -39,6 +39,7 @@ eine weg, wird diese Seite mitgepflegt.
 |---|---|---|
 | Start | Ladebildschirm „Moin. Die Ranke wird gegossen.“ | beim Öffnen |
 | Start | 12 Lernfeld-Würfel in 3D | Bühne ganz oben |
+| Start | Funkel, das Einhorn aus dem Feenwald: winkt und gibt auf Klick eine kurze Führung an der Ranke entlang | unter der Bühne, Menü |
 | Start | Wegweiser und Zahlen zur Bibliothek | Intro |
 | Start | Hinweis „Neu“ auf den zuletzt dazugekommenen Artikel, höchstens 7 Tage | Intro, über dem Text |
 | Start | Die Ranke: jedes Blatt ein Artikel, wächst beim Scrollen | Abschnitt 01 und die ganze Seite |
@@ -156,6 +157,24 @@ Schrift und Karte richten sich nach der Breite der Kachel. Bei reduzierter Beweg
 - Fuß: „Viel Erfolg bei der Prüfung.“ (hier endet die Ranke mit ihrer großen Blüte), Datum des letzten Wiki-Eintrags,
   „Fehler melden“, „Version 1.0.…“, „Impressum“ und „Datenschutz“ (öffnen die Seiten im Wiki-Repo auf GitHub).
 - Im Menü steht „Fehler melden“ unter GitHub.
+
+### 2.9 Funkel, das Einhorn
+
+Funkel kommt aus dem Feenwald gleich hinter der Ranke: weißes Einhorn mit Feenflügeln, Mähne und Schweif in Rosa, Flieder
+und Mint, goldenes Horn mit Schimmer und ein Blumenkranz in den Farben der App. Es erklärt in einer kurzen Führung,
+wie die Bibliothek aufgebaut ist.
+
+| **Teil** | **Was es tut** |
+|---|---|
+| Platz | Steht unter der Bühne links auf der Linie „Scroll weiter, die Ranke wächst mit“, schwebt leicht, Flügel und Schweif bewegen sich. |
+| Winken | Winkt alle 7 Sekunden mit dem Vorderhuf und lässt ein paar Funken steigen. Die ersten Male steht „Hallo! Klick mich“ daneben. Ist die Führung gelaufen oder abgelehnt, winkt es nur noch alle 22 Sekunden, ohne Schild. |
+| Frage | Erst ein Klick auf Funkel öffnet die Sprechblase: „Soll ich dir in einer Minute zeigen, wie dieser Garten aufgebaut ist?“ mit „Ja, zeig mal“ und „Lieber später“. |
+| Führung | 7 Stationen: Würfel, Ranke und Blätter, Zweige (Abteilungen), Kacheln, Suchen, Prüfung, Blüte am Ende mit Bienen, Mein Stand und Leseausweis. Zwischen den Stationen fliegt Funkel an der Ranke entlang, mit Funkenspur; die Seite scrollt mit. Die Sprechblase zeigt „Funkel · 3 von 7“, „Weiter“ und „Beenden“. |
+| Ende | Nach der letzten Station („Danke, Funkel!“), mit „Beenden“, Escape oder wenn ein Artikel aufgeht: Funkel verschwindet in Funken und steht wieder auf seinem Platz. Die Seite bleibt, wo sie ist. |
+| Menü | „Führung mit Funkel“ scrollt nach oben zu Funkel und startet die Führung direkt. |
+| Handy | Kleineres Einhorn, die Sprechblase sitzt unten über der Handy-Leiste. Funkel und seine Funken liegen in einer eigenen Ebene, die seitlich nichts überstehen lässt. |
+| Ohne 3D | Fliegt im Bogen statt an der Ranke entlang. |
+| Weniger Bewegung | Kein Flug, kein Winken, keine Funken: Funkel springt von Station zu Station. |
 
 ---
 
@@ -327,7 +346,7 @@ Bedingung und Fortschritt („10 von 25“).
 | Tastatur | Sprunglink „Zum Inhalt“, Kacheln per Tastatur aufdecken, Escape schließt Menü, Kachel, Feier-Karte und Seite; ist „Fehler melden“ offen, schließt Escape nur das Formular |
 | Screenreader | Beschriftungen an Kacheln, Knöpfen und Bienen („gelesen“); Feier, Biene und Stempel werden über `aria-live` angesagt |
 | Fokus | Beim Öffnen einer Seite springt der Fokus auf ihren Titel, beim Schließen zurück |
-| Reduzierte Bewegung | keine Animationen: Ranke sofort voll, Würfel ohne Schweben, kein Blätterflug, keine fliegenden Bienen, Bienen in der Ranke sitzen still, Stempel ohne Aufdrücken, Stift ohne Spur, Schild „Neu“ pulsiert nicht |
+| Reduzierte Bewegung | keine Animationen: Ranke sofort voll, Würfel ohne Schweben, kein Blätterflug, keine fliegenden Bienen, Bienen in der Ranke sitzen still, Stempel ohne Aufdrücken, Stift ohne Spur, Schild „Neu“ pulsiert nicht, Funkel springt statt zu fliegen und winkt nicht |
 | Ohne WebGL | Standbild der Würfel (mit Häkchen für geschaffte Lernfelder) und gezeichnete Ranke (mit Blüten und Bienen); alles andere funktioniert gleich |
 
 ---
@@ -343,6 +362,7 @@ Alles liegt nur im **Browser des Geräts**. Nichts geht an einen Server.
 | `lernwiki-erfolge-v1` | welche Lernfelder schon gefeiert wurden (mit Artikelzahl beim Feiern), dazu die Gesamtfeier | ja |
 | `lernwiki-bienen-v1` | bei welchen Artikeln die Biene schon eingeflogen ist | ja |
 | `lernwiki-stempel-v1` | verdiente Stempel mit Datum | ja |
+| `lernwiki-einhorn-v1` | ob die Führung mit Funkel schon gelaufen oder abgelehnt ist (dann winkt Funkel seltener) | nein |
 | `lernwiki-tage-v1` | Lerntage als Datum | ja |
 | `fiae-theme` | hell oder dunkel, wenn selbst gewählt | nein |
 | `lernwiki-version` | zuletzt gesehene Versionsnummer, für „Aktualisiert auf Version …“ | nein |
@@ -367,6 +387,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | `src/app.js` | Startseite, Lernstand, Erfolge, Bienen, Stempel, Feier-Karte, Ansagen |
 | `src/reader.js` | Artikelseite, Prüfungsmodus, Mein Stand mit Leseausweis, Sichern |
 | `src/melden.js` | Fehler melden: Formular, GitHub-Issue, Text für Teams |
+| `src/einhorn.js` | Funkel, das Einhorn: Platz, Winken, Führung mit Sprechblase, Flug an der Ranke (Weg aus `scene.js` als `F.rankePfad`) |
 | `src/scene.js` | 3D: Würfel, Ranke, Blüten, Bienen |
 | `src/sw.js` | Service Worker: App-Hülle und Artikel offline |
 | `data/catalog.json` | Katalog aller Artikel, erzeugt mit `tools/catalog.mjs`; je Artikel der Tag, an dem er auf `main` dazukam (`d`), dazu `neu` = der zuletzt dazugekommene. Dafür braucht das Skript den ganzen Verlauf des Wikis, der Workflow klont es deshalb ohne `--depth 1` |
@@ -379,7 +400,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 **Ereignisse zwischen den Dateien:** `fiae-stand` (Lernstand geändert), `fiae-stempel` (Stempel geändert),
 `fiae-theme`, `fiae-tree`. Gemeinsame Werkzeuge liegen in `window.FIAE` (zum Beispiel `stand`, `erfolg`, `biene`, `stempel`).
 
-**Tests** (`npm test`, zurzeit 59 Prüfungen):
+**Tests** (`npm test`, zurzeit 65 Prüfungen):
 
 | **Teil** | **Prüft** |
 |---|---|
@@ -392,6 +413,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | 9 | Leseausweis: Stempel still beim Laden, Karte, Sprung zum Ausweis, Backup-Profi, Nachteule, Zurücksetzen, Wiederherstellen |
 | 10 | Versionsnummer im Fuß und in `version.json`; Fehler melden: Artikel und Abschnitt, ohne Text nichts, Kopieren, Escape, GitHub-Link, Startseite |
 | 11 | Formeln im USV-Artikel: alle gezeichnet, auch in Tabellen und als Block, kein Dollarzeichen übrig, auch im Flugmodus |
+| 12 | Funkel: Platz auf der Linie, Frage erst auf Klick, alle 7 Stationen und zurück, Escape, Start aus dem Menü und weniger Bewegung ohne Funken |
 
 Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht zufällig die Nachteule auslöst.
 
@@ -422,6 +444,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `635c701` | Gruppe „Profi-Track“ in der Abteilung KI (Ordner `0.4_Profi_Track` im Wiki; ohne Zeile in `GRUPPEN` brach der Katalog ab und die App ging nicht mehr live) |
 | 04.11.2026 | `91bbc65` | Hinweis „Neu“ im Intro: zuletzt dazugekommener Artikel, höchstens 7 Tage; Katalog kennt dafür das Datum je Artikel, der Workflow klont das Wiki mit ganzem Verlauf |
 | 04.11.2026 | `91bbc65` | Mauszeiger als rosa Stift mit kurzer, funkelnder Spur (nur mit Maus) |
+| 04.11.2026 | `65ef49a` | Funkel, das Einhorn aus dem Feenwald: winkt unter der Bühne, führt auf Klick in 7 Stationen an der Ranke entlang durch die Seite |
 
 ### Entfernt oder ersetzt
 
