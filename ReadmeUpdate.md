@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
 > **Stand:** 04.11.2026
-> **App-Stand:** Commit `69127a2` (Klaus-Dieter, die Hummel), Version 1.0.0 zählt selbst hoch
+> **App-Stand:** Commit `76af42a` (Klaus-Dieter als blauer Plüsch-Knubbel), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -160,8 +160,8 @@ Schrift und Karte richten sich nach der Breite der Kachel. Bei reduzierter Beweg
 
 ### 2.9 Klaus-Dieter Pollenberg, die Hummel
 
-Klaus-Dieter Pollenberg ist die Gartenaufsicht („Sag ruhig Klaus-Dieter“): eine runde, flauschige Erdhummel, gelb-schwarz
-gestreift mit hellem Hinterteil, mit runder Goldbrille, Fühlern und einem kleinen Lächeln. Er erklärt in einer kurzen Führung,
+Klaus-Dieter Pollenberg ist die Gartenaufsicht („Sag ruhig Klaus-Dieter“): ein runder, blauer Plüsch-Knubbel mit schrägen dunkelblauen
+und gelben Streifen, großen glänzenden Kulleraugen, Bäckchen, kleinem Lächeln, Fühlern mit gelben Spitzen und einer kleinen gelben Blume in den Händchen. Er erklärt in einer kurzen Führung,
 wie die Bibliothek aufgebaut ist. Die Bienen bleiben die Belohnung fürs Lesen; Klaus-Dieter wohnt hier nur, und das sagt er auch.
 
 | **Teil** | **Was es tut** |
@@ -173,7 +173,7 @@ wie die Bibliothek aufgebaut ist. Die Bienen bleiben die Belohnung fürs Lesen; 
 | Ende | Nach der letzten Station („Danke, Klaus-Dieter!“), mit „Beenden“, Escape oder wenn ein Artikel aufgeht: Er verschwindet in einem Pollenwölkchen und sitzt wieder auf seiner Blüte. Die Seite bleibt, wo sie ist. |
 | Menü | „Führung mit Klaus-Dieter“ scrollt nach oben zu ihm und startet die Führung direkt. |
 | Handy | Kleinere Hummel und Blüte, die Sprechblase sitzt unten über der Handy-Leiste. Hummel, Blüte und Pollenstaub liegen in einer eigenen Ebene, die seitlich nichts überstehen lässt. |
-| 3D | Mit WebGL ist er ein 3D-Modell aus Grundformen (wie die Bienen der Ranke): runder Körper mit Streifen, darauf über 500 kurze Fellbüschel in der Farbe ihres Streifens (eine Instanz-Form, billig), Kopf mit Augen hinter runder Goldbrille, Bäckchen, Lächeln, Fühler, sechs Beinchen, zwei Paar Flügel. Beim Wenden dreht er sich wirklich um und schaut dabei kurz in die Kamera; im Flug schwirren die Flügel und er schaukelt, ab und zu blinzelt er. Eigene kleine WebGL-Fläche über dem Inhalt, gezeichnet nur, solange er im Bild ist, in Ruhe mit 30 Bildern pro Sekunde. Auf Geräten im Datensparmodus oder mit wenig Speicher bleibt die Zeichnung. **Notbremse:** Vor dem Aufbau misst er eine knappe Sekunde, wie flüssig die Seite läuft; über 34 ms pro Bild bleibt die Zeichnung. Wird es später zäh (im Schnitt über 45 ms), gibt er sein 3D auf. So auch im Testlauf auf GitHub, der 3D ohne Grafikkarte rechnet. |
+| 3D | Mit WebGL ist er ein 3D-Modell aus Grundformen (wie die Bienen der Ranke): runder Körper mit samtiger Oberfläche (Sheen wie bei Plüsch), die Streifen schräg als schmale Leinwand aufgemalt, damit die Kanten sauber bleiben; das Gesicht sitzt vorn am Körper mit glänzenden Kulleraugen samt Lichtpunkten, Bäckchen und Lächeln; Fühler mit gelben Kugeln, Stummelbeinchen, Händchen mit gelber Blume, durchscheinende Flügel mit gemalten Adern. Er schaut beim Fliegen halb zur Kamera, damit man sein Gesicht sieht. Beim Wenden dreht er sich wirklich um und schaut dabei kurz in die Kamera; im Flug schwirren die Flügel und er schaukelt, ab und zu blinzelt er. Eigene kleine WebGL-Fläche über dem Inhalt, gezeichnet nur, solange er im Bild ist, in Ruhe mit 30 Bildern pro Sekunde. Auf Geräten im Datensparmodus oder mit wenig Speicher bleibt die Zeichnung. **Notbremse:** Vor dem Aufbau misst er eine knappe Sekunde, wie flüssig die Seite läuft; über 34 ms pro Bild bleibt die Zeichnung. Wird es später zäh (im Schnitt über 45 ms), gibt er sein 3D auf. So auch im Testlauf auf GitHub, der 3D ohne Grafikkarte rechnet. |
 | Ohne 3D | Die Zeichnung von Klaus-Dieter; ohne 3D-Ranke fliegt er im Bogen statt an der Ranke entlang. |
 | Weniger Bewegung | Kein Flug, kein Winken, kein Pollenstaub: er springt von Station zu Station. In 3D sitzt er still und wird nur neu gezeichnet, wenn sich etwas ändert. |
 
@@ -451,6 +451,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `d66954e` | Udo in 3D: Modell aus Grundformen mit Wolkenmähne, goldenem Horn und schillernden Flügeln, dreht sich beim Wenden echt um, blinzelt; Zeichnung bleibt als Rückfall |
 | 04.11.2026 | `64225c2` | Notbremse für den 3D-Udo: erst messen, dann bauen (über 34 ms pro Bild bleibt die Zeichnung), im Betrieb über 45 ms Rückfall auf die Zeichnung; einfaches Licht statt Spiegelungsumgebung, billigeres Material, in Ruhe 30 Bilder pro Sekunde. Der Testlauf auf GitHub (3D in Software) war daran gescheitert; der Test für Udo wartet dort nur noch aufs Laden und prüft bei weniger Bewegung „kein Flug“ statt einer Zeitgrenze |
 | 04.11.2026 | `69127a2` | Klaus-Dieter Pollenberg, die Hummel, statt Udo, dem Einhorn: neue Zeichnung und neues 3D-Modell (flauschig, runde Goldbrille), Sitzplatz auf einer Blüte an der Linie, Pollenstaub statt Glitzer, Texte als Gartenaufsicht; Dateien `hummel.js` und `hummel3d.js` |
+| 04.11.2026 | `76af42a` | Klaus-Dieter neu gestaltet nach Vorlage: blauer Plüsch-Knubbel mit schrägen dunkelblauen und gelben Streifen, Kulleraugen, Bäckchen, gelben Fühlerspitzen, geäderten Flügeln und gelber Blume in den Händchen (Zeichnung und 3D) |
 
 ### Entfernt oder ersetzt
 
@@ -466,6 +467,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `91bbc65` | Mauszeiger-Ring, der über Klickbarem größer wurde | ersetzt durch den rosa Stift |
 | 04.11.2026 | `f2f5118` | Name „Funkel“ für das Einhorn | klang zu sehr nach Kinderbuch; jetzt Udo |
 | 04.11.2026 | `69127a2` | Udo, das Einhorn (Zeichnung, 3D-Modell, `einhorn.js`, `einhorn3d.js`) | passte nicht in den Garten; die Hummel gehört zum Thema |
+| 04.11.2026 | `76af42a` | Erster Klaus-Dieter (gelb-schwarze Erdhummel mit Goldbrille und Fellbüscheln) | sah merkwürdig aus; die Vorlage zeigte einen runden Plüsch-Knubbel |
 
 ### Bewusst nicht gebaut
 
