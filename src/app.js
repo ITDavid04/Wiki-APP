@@ -133,7 +133,7 @@ function setMenu(open){
 menuBtn.addEventListener('click', e => { e.stopPropagation(); setMenu(menu.hidden); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden && !$('dialog[open]')) { setMenu(false); menuBtn.focus(); } });
 document.addEventListener('click', e => { if (!menu.hidden && !e.target.closest('#menu')) setMenu(false); });
-menu.addEventListener('click', e => { if (e.target.closest('a,[data-melden],[data-einhorn]')) setMenu(false); });
+menu.addEventListener('click', e => { if (e.target.closest('a,[data-melden],[data-hummel]')) setMenu(false); });
 
 /* Ladebildschirm: 6 Felder für die Ladeschritte */
 const loader = $('#loader'), cells = [...$('#loaderRow').children];
@@ -1072,7 +1072,7 @@ function zeichneSpur(now){
 
 /* Eine gemeinsame Schleife für Scrollen, Kopf und Stiftspur. Läuft vor den 3D-Schleifen, damit beide dieselbe Scrollposition sehen. */
 function loop(t){
-  /* Wer im selben Takt scrollen will (Udo beim Flug), hängt sich in window.FIAE.jeBild: läuft vor Lenis und vor dem 3D */
+  /* Wer im selben Takt scrollen will (Klaus-Dieter beim Flug), hängt sich in window.FIAE.jeBild: läuft vor Lenis und vor dem 3D */
   const jb = window.FIAE.jeBild;
   if (jb.length) for (const f of jb.slice()) f(t);
   if (lenis) lenis.raf(t);

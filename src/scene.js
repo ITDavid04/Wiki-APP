@@ -400,7 +400,7 @@ function bootVine(THREE, RoomEnvironment){
     const pts = curve.getSpacedPoints(segs);
     let cm = -1e9;
     const mainPx = pts.map((p, i) => { const x = p.x / unit + W / 2, y = -p.y / unit; cm = Math.max(cm, y); mainY.push(cm); mainG.push(i / segs * Lpx); return [x, y]; });
-    /* Weg für Funkel, das Einhorn (einhorn.js): Mittellinie des Stängels in Seitenpixeln, etwa alle 20 Pixel ein Punkt */
+    /* Weg für Klaus-Dieter, die Hummel (hummel.js): Mittellinie des Stängels in Seitenpixeln, etwa alle 20 Pixel ein Punkt */
     F.rankePfad = mainPx.filter((p, i) => i % 4 === 0 || i === mainPx.length - 1);
     const gAt = (x, y, from = 0, to = mainPx.length) => {
       let best = 0, bd = 1e18;

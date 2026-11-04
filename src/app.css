@@ -501,43 +501,46 @@ html.pen .pen-spur{display:block;position:fixed;inset:0;z-index:2147483000;width
 .leaf-key{display:flex;flex-wrap:wrap;gap:8px 16px;list-style:none;padding:0;margin:0;color:var(--muted)}
 .leaf-key li{display:flex;align-items:center;gap:8px}
 .leaf-key i{width:14px;height:14px;border-radius:3px 11px;background:var(--c)}
-/* Udo, das Einhorn (einhorn.js): steht unter der Bühne, winkt, führt auf Klick an der Ranke entlang durch die Seite.
+/* Klaus-Dieter Pollenberg, die Hummel (hummel.js): sitzt unter der Bühne auf einer Blüte, winkt, führt auf Klick an der Ranke entlang durch die Seite.
    Liegt in Seitenpixeln über dem Inhalt (main hat z-index 1), unter Kopfleiste, Menü und Artikelseite. */
 .fe-ebene{position:absolute;left:0;top:0;z-index:15;width:100%;height:0;overflow-x:clip;overflow-y:visible;pointer-events:none}
 .fe{position:absolute;left:0;top:0;pointer-events:auto;width:92px;height:84px;padding:0;border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .35s;will-change:transform}
 .fe.weg{opacity:0}
 .fe:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:22px}
 .fe-hub{position:relative;display:block;width:100%;height:100%;animation:feSchweben 3.4s ease-in-out infinite}
-/* 3D (einhorn3d.js): Fläche größer als der Knopf, damit Flügel und Horn Platz haben; die Zeichnung tritt zurück, schweben macht das 3D selbst */
+/* 3D (hummel3d.js): Fläche größer als der Knopf, damit Flügel und Horn Platz haben; die Zeichnung tritt zurück, schweben macht das 3D selbst */
 .fe-3d{position:absolute;left:-40%;top:-45%;width:180%;height:180%;pointer-events:none}
 .fe.drei .fe-svg{display:none}
 .fe.drei .fe-hub{animation:none}
 .fe-svg{display:block;width:100%;height:100%;overflow:visible;transform:scaleX(var(--blick,1)) rotate(var(--kipp,0deg));filter:drop-shadow(0 6px 10px rgba(120,80,170,.22))}
 .fe:hover .fe-hub{animation-duration:1.6s}
 .fe-svg g,.fe-svg circle,.fe-svg path{transform-box:view-box}
-.fe-fluegel{transform-origin:52px 52px;animation:feFluegel 2.8s ease-in-out infinite}
-.fe.fliegt .fe-fluegel{animation:feFlattern .26s ease-in-out infinite}
-.fe-schweif{transform-origin:28px 62px;animation:feSchweif 3.2s ease-in-out infinite}
-.fe-wink{transform-origin:72px 75px;transition:transform .3s}
-.fe.fliegt .fe-wink{transform:rotate(-38deg)}
+.fe-fluegel{transform-origin:57px 40px;animation:feFluegel 1.6s ease-in-out infinite}
+.fe.fliegt .fe-fluegel{animation:feSchwirren .07s linear infinite}
+.fe-fuehler{transform-origin:92px 44px;animation:feFuehler 2.6s ease-in-out infinite}
+.fe.winkt .fe-fuehler{animation-duration:.5s}
+.fe-wink{transform-origin:76px 82px;transition:transform .3s}
+.fe.fliegt .fe-wink{transform:rotate(-40deg)}
 .fe.winkt .fe-wink{animation:feWink 2.2s ease-in-out}
-.fe-kopf{transform-origin:78px 52px}
+.fe-kopf{transform-origin:90px 60px}
 .fe.winkt .fe-kopf{animation:feNicken 2.2s ease-in-out}
-.fe-glanz{animation:feGlanz 2.4s ease-in-out infinite}
-.fe-glitzer path{transform-box:fill-box;transform-origin:center;animation:feGlitzer 2.2s ease-in-out infinite}
-.fe-glitzer path:nth-child(2){animation-delay:.7s}
-.fe-glitzer path:nth-child(3){animation-delay:1.4s}
+.fe-glanz{animation:feGlanz 3s ease-in-out infinite}
+.fe-glitzer circle{transform-box:fill-box;transform-origin:center;animation:feGlitzer 2.2s ease-in-out infinite}
+.fe-glitzer circle:nth-child(2){animation-delay:.7s}
+.fe-glitzer circle:nth-child(3){animation-delay:1.4s}
 .fe-hallo{position:absolute;left:84%;top:-14px;padding:5px 11px;border-radius:99px;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.14);font-size:.78rem;font-weight:600;white-space:nowrap;pointer-events:none;opacity:0;transform:translateY(6px) scale(.9);transform-origin:left bottom;transition:opacity .3s,transform .3s}
 .fe.ruft .fe-hallo{opacity:1;transform:none}
 .fe.links .fe-hallo,.fe.fliegt .fe-hallo{display:none}
 @keyframes feSchweben{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@keyframes feFluegel{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(-7deg) scale(1.04,.94)}}
-@keyframes feFlattern{0%,100%{transform:rotate(4deg) scale(1,1)}50%{transform:rotate(-16deg) scale(1.06,.7)}}
-@keyframes feSchweif{0%,100%{transform:rotate(0)}50%{transform:rotate(7deg)}}
-@keyframes feWink{0%,100%{transform:rotate(0)}14%,42%,70%{transform:rotate(-78deg)}28%,56%,84%{transform:rotate(-50deg)}}
+@keyframes feFluegel{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg)}}
+@keyframes feSchwirren{0%,100%{transform:rotate(6deg) scale(1,1)}50%{transform:rotate(-14deg) scale(1,.55)}}
+@keyframes feFuehler{0%,100%{transform:rotate(0)}50%{transform:rotate(-6deg)}}
+@keyframes feWink{0%,100%{transform:rotate(0)}14%,42%,70%{transform:rotate(-95deg)}28%,56%,84%{transform:rotate(-65deg)}}
 @keyframes feNicken{0%,100%{transform:rotate(0)}20%,80%{transform:rotate(-6deg)}}
 @keyframes feGlanz{0%,100%{opacity:.55}50%{opacity:1}}
 @keyframes feGlitzer{0%,100%{opacity:.25;transform:scale(.6)}50%{opacity:1;transform:scale(1.15)}}
+.fe-bluete{position:absolute;left:0;top:0;width:34px;height:40px;pointer-events:none}
+.fe-bluete svg{display:block;width:100%;height:100%}
 .fe-funke{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;pointer-events:none;background:var(--c);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);animation:feFunke .95s ease-out forwards}
 @keyframes feFunke{0%{opacity:1;transform:scale(calc(var(--s)*.4))}35%{opacity:1;transform:translate(calc(var(--dx)*.45),calc(var(--dy)*.45)) scale(var(--s)) rotate(30deg)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2) rotate(90deg)}}
 .fe-blase{position:absolute;left:0;top:0;z-index:16;width:min(330px,calc(100vw - 32px));padding:16px 18px 14px;border-radius:22px;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.22);opacity:0;transform:translateY(8px) scale(.97);transition:opacity .28s,transform .28s}
@@ -550,9 +553,10 @@ html.pen .pen-spur{display:block;position:fixed;inset:0;z-index:2147483000;width
 .fe-nein{color:var(--muted);font-size:.9rem}
 @media (max-width:560px){
   .fe{width:70px;height:64px}
+  .fe-bluete{width:28px;height:33px}
   .fe-blase{position:fixed;left:12px!important;right:12px;top:auto!important;bottom:calc(84px + env(safe-area-inset-bottom,0px));width:auto;z-index:39}
 }
-@media (prefers-reduced-motion:reduce){.fe-hub,.fe-fluegel,.fe-schweif,.fe-glanz,.fe-glitzer path{animation:none}.fe-funke{display:none}}
+@media (prefers-reduced-motion:reduce){.fe-hub,.fe-fluegel,.fe-fuehler,.fe-glanz,.fe-glitzer circle{animation:none}.fe-funke{display:none}}
 
 /* Hinweis auf den zuletzt dazugekommenen Artikel (höchstens 7 Tage, siehe app.js) */
 .neu{display:inline-flex;align-items:center;gap:12px;max-width:100%;margin-bottom:22px;padding:7px 16px 7px 7px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);text-decoration:none;transition:border-color .25s}
