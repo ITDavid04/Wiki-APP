@@ -1,6 +1,6 @@
 {
  "repo": "https://github.com/ITDavid04/Lern-Wiki",
- "stand": "2026-10-29",
+ "stand": "2026-11-03",
  "regale": [
   {
    "id": "lf",
@@ -155,7 +155,7 @@
    "name": "KI",
    "kurz": "KI",
    "sub": "Vom ersten Prompt bis zu Tokens und Transformern, dazu lokale Modelle.",
-   "n": 29,
+   "n": 35,
    "rot": 1,
    "gruppen": [
     [
@@ -168,7 +168,11 @@
     ],
     [
      "Das Dahinter",
-     5
+     9
+    ],
+    [
+     "Profi-Track",
+     2
     ],
     [
      "LLMs lokal und im Alltag",
@@ -1589,6 +1593,54 @@
    "lf": null,
    "rot": false,
    "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D5_Training_in_drei_Stufen.md"
+  },
+  {
+   "t": "KI-D6 · Modellfamilien und Größen: Wie groß, wie offen, wie spezialisiert",
+   "r": "ki",
+   "g": "Das Dahinter",
+   "lf": null,
+   "rot": false,
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D6_Modellfamilien_und_Gr%C3%B6%C3%9Fen.md"
+  },
+  {
+   "t": "KI-D7 · Argumentieren und Denken: Was Reasoning-Modelle anders machen",
+   "r": "ki",
+   "g": "Das Dahinter",
+   "lf": null,
+   "rot": false,
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D7_Argumentieren_und_Denken.md"
+  },
+  {
+   "t": "KI-D8 · Warum Halluzinationen entstehen: Flüssig ist nicht wahr",
+   "r": "ki",
+   "g": "Das Dahinter",
+   "lf": null,
+   "rot": false,
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D8_Warum_Halluzinationen_entstehen.md"
+  },
+  {
+   "t": "KI-D9 · Bias, Daten und Urheberrecht: Was im Training steckt, kommt wieder heraus",
+   "r": "ki",
+   "g": "Das Dahinter",
+   "lf": null,
+   "rot": false,
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D9_Bias_Daten_und_Urheberrecht.md"
+  },
+  {
+   "t": "KI-P1 · Lokale Modelle betreiben: Vom Gewächshaus zum Hofladen",
+   "r": "ki",
+   "g": "Profi-Track",
+   "lf": null,
+   "rot": false,
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.4_Profi_Track/P1_Lokale_Modelle_betreiben.md"
+  },
+  {
+   "t": "KI-P2 · API-Nutzung: Der Bestellschein ans Modell",
+   "r": "ki",
+   "g": "Profi-Track",
+   "lf": null,
+   "rot": false,
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.4_Profi_Track/P2_API_Nutzung.md"
   },
   {
    "t": "LLM/KI/Thinking-Modelle: Praxisleitfaden für IT, Umschulung und lokale Workflows",

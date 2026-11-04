@@ -81,6 +81,7 @@ const GRUPPEN = [
   ['KI-Anfänger_bis_Nerd_Die_Sammlung/0.1_Was ist KI', 'ki', 'Einstieg: Was ist KI'],
   ['KI-Anfänger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen', 'ki', 'Aufbau: KI beim Lernen und Arbeiten'],
   ['KI-Anfänger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter', 'ki', 'Das Dahinter'],
+  ['KI-Anfänger_bis_Nerd_Die_Sammlung/0.4_Profi_Track', 'ki', 'Profi-Track'],
   ['LLM_Stuff', 'ki', 'LLMs lokal und im Alltag'],
   ['Recherche_Agent', 'ki', 'Recherche-Agent'],
   ['Umschulung_Praktika_Hilfe.md', 'um', 'Praktikum und Bewerbung'],
