@@ -1,8 +1,8 @@
 # Wiki-APP: Funktionen und Gimmicks
 
-> **Stand:** 03.11.2026
-> **App-Stand:** Commit `7a94eb0` (Kacheln in Blütenform), Version 1.0.0 zählt selbst hoch
-> **Katalog:** 172 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 20.10.2026
+> **Stand:** 04.11.2026
+> **App-Stand:** Commit `635c701` (Profi-Track im Katalog), Version 1.0.0 zählt selbst hoch
+> **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
 
@@ -107,7 +107,7 @@ eine weg, wird diese Seite mitgepflegt.
 
 - **Blatt anfassen:** Am Desktop zeigt ein Hinweis Titel, Abteilung, Ampel und Lernstand, ein Klick öffnet den Artikel.
   Am Handy zeigt einmal Tippen den Titel, ein zweites Tippen öffnet ihn (dieser Hinweis steht auch auf der Seite).
-- Neben der Ranke: **„Dein Stand“** mit Biene („🐝 17 von 172 gelesen, 17 sitzen“), Blattfarben-Legende,
+- Neben der Ranke: **„Dein Stand“** mit Biene („🐝 17 von 178 gelesen, 17 sitzen“), Blattfarben-Legende,
   Knopf „Mein Stand ansehen“ und die **Legende der Abteilungen**, die per Tastatur zu denselben Kacheln führt.
 - Link „Was der rote Punkt heißt“ springt zur Erklärung der Ampel.
 
@@ -270,10 +270,10 @@ Bedingung und Fortschritt („10 von 25“).
 | Fleißige Biene | 25 Artikel gelesen | Honig | „Fleißig ist hier keine Floskel, das ist Statistik.“ |
 | Ganzes Volk | 75 Artikel gelesen | Honig | „Ein ganzes Bienenvolk arbeitet jetzt für dich.“ |
 | Honigernte | 100 Artikel gelesen | Honig | „Dreistellig! Zeit, den Honig zu ernten.“ |
-| Bücherwurm mit Flügeln | alle Artikel gelesen (zurzeit 172) | Honig | „Aus dem Bücherwurm ist eine Biene geworden…“ |
+| Bücherwurm mit Flügeln | alle Artikel gelesen (zurzeit 178) | Honig | „Aus dem Bücherwurm ist eine Biene geworden…“ |
 | KI-Anfänger | Teil 1 der KI-Sammlung „Anfänger bis Nerd“ gelesen | Grün | „…was KI ist, was sie kann und wo sie flunkert.“ |
-| KI-Profi | alle 3 Teile der KI-Sammlung gelesen | Grün | „…du weißt, was unter der Haube passiert.“ |
-| KI-Nerd | alle Artikel der Abteilung KI gelesen (zurzeit 29) | Grün | „Von Anfänger bis Nerd, genau wie versprochen.“ |
+| KI-Profi | alle 4 Teile der KI-Sammlung gelesen | Grün | „…du weißt, was unter der Haube passiert.“ |
+| KI-Nerd | alle Artikel der Abteilung KI gelesen (zurzeit 35) | Grün | „Von Anfänger bis Nerd, genau wie versprochen.“ |
 | Erstes Lernfeld | ein Lernfeld geschafft | Grün | „An deiner Ranke ist die erste Blüte aufgegangen…“ |
 | Prüfungsreif | alle Artikel mit Ampel sitzen (zurzeit 75) | Rot | „Rot ist jetzt offiziell deine Lieblingsfarbe. Die IHK kann kommen.“ |
 | Dranbleiber | an 7 verschiedenen Tagen gelernt | Grün | „Steter Tropfen höhlt den Stein und füllt den Kopf.“ |
@@ -412,6 +412,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 23.10.2026 | `5b005ca` | Formeln mit KaTeX (gemeldet über Teams: Formeln in der USV-Tabelle standen als Text mit Dollarzeichen da) |
 | 29.10.2026 | `dc6b39a` | Impressum und Datenschutz im Fuß verlinkt (statt Platzhalter), für das öffentliche Release |
 | 03.11.2026 | `7a94eb0` | Kacheln in Blütenform: sechs Blätter, Nummer in der Mitte, Blätter fallen beim Aufdecken ab |
+| 04.11.2026 | `635c701` | Gruppe „Profi-Track“ in der Abteilung KI (Ordner `0.4_Profi_Track` im Wiki; ohne Zeile in `GRUPPEN` brach der Katalog ab und die App ging nicht mehr live) |
 
 ### Entfernt oder ersetzt
 
@@ -460,10 +461,10 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 ```yaml
 seite: ReadmeUpdate.md
 inhalt: Funktionen und Gimmicks der Wiki-APP
-stand: 2026-11-03
-app_commit: 7a94eb0
+stand: 2026-11-04
+app_commit: 635c701
 app_version: ab 1.0.0, zählt selbst hoch
-katalog: 172 Artikel, 75 mit Ampel, 10 von 12 Lernfeldern mit Artikeln, Wiki-Stand 2026-10-20
+katalog: 178 Artikel, 75 mit Ampel, 10 von 12 Lernfeldern mit Artikeln, Wiki-Stand 2026-11-03
 stempel: 17
 tests: 59 Prüfungen
 gepflegt_von: Lernteam FIAE/FISI
