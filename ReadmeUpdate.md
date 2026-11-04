@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
 > **Stand:** 04.11.2026
-> **App-Stand:** Commit `d66954e` (Udo in 3D), Version 1.0.0 zählt selbst hoch
+> **App-Stand:** Commit `64225c2` (Udo in 3D mit Notbremse), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -173,7 +173,7 @@ wie die Bibliothek aufgebaut ist.
 | Ende | Nach der letzten Station („Danke, Udo!“), mit „Beenden“, Escape oder wenn ein Artikel aufgeht: Udo verschwindet in Funken und steht wieder auf seinem Platz. Die Seite bleibt, wo sie ist. |
 | Menü | „Führung mit Udo“ scrollt nach oben zu Udo und startet die Führung direkt. |
 | Handy | Kleineres Einhorn, die Sprechblase sitzt unten über der Handy-Leiste. Udo und seine Funken liegen in einer eigenen Ebene, die seitlich nichts überstehen lässt. |
-| 3D | Mit WebGL ist Udo ein 3D-Modell aus Grundformen (wie die Bienen): Kapseln für Körper, Hals und Beine, Kugeln für Kopf und Schnauze, Wolkenmähne und Schweif aus Perlen in Pastell, goldenes Horn mit rosa Spirale und Schimmer, Blumenkranz, schillernde Feenflügel. Beim Wenden dreht er sich wirklich um und schaut dabei kurz in die Kamera, im Flug zieht er die Beine an, ab und zu blinzelt er. Eigene kleine WebGL-Fläche über dem Inhalt, gezeichnet nur, solange Udo im Bild ist. Auf Geräten im Datensparmodus oder mit wenig Speicher bleibt die Zeichnung. |
+| 3D | Mit WebGL ist Udo ein 3D-Modell aus Grundformen (wie die Bienen): Kapseln für Körper, Hals und Beine, Kugeln für Kopf und Schnauze, Wolkenmähne und Schweif aus Perlen in Pastell, goldenes Horn mit rosa Spirale und Schimmer, Blumenkranz, schillernde Feenflügel. Beim Wenden dreht er sich wirklich um und schaut dabei kurz in die Kamera, im Flug zieht er die Beine an, ab und zu blinzelt er. Eigene kleine WebGL-Fläche über dem Inhalt, gezeichnet nur, solange Udo im Bild ist, in Ruhe mit 30 Bildern pro Sekunde. Auf Geräten im Datensparmodus oder mit wenig Speicher bleibt die Zeichnung. **Notbremse:** Vor dem Aufbau misst Udo eine knappe Sekunde, wie flüssig die Seite läuft; über 34 ms pro Bild bleibt die Zeichnung. Wird es später zäh (im Schnitt über 45 ms), gibt er sein 3D auf. So auch im Testlauf auf GitHub, der 3D ohne Grafikkarte rechnet. Licht: Himmelslicht und zwei gerichtete Lichter statt Spiegelungsumgebung. |
 | Ohne 3D | Die Zeichnung von Udo; ohne 3D-Ranke fliegt er im Bogen statt an der Ranke entlang. |
 | Weniger Bewegung | Kein Flug, kein Winken, keine Funken: Udo springt von Station zu Station. In 3D steht er still und wird nur neu gezeichnet, wenn sich etwas ändert. |
 
@@ -402,7 +402,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 **Ereignisse zwischen den Dateien:** `fiae-stand` (Lernstand geändert), `fiae-stempel` (Stempel geändert),
 `fiae-theme`, `fiae-tree`. Gemeinsame Werkzeuge liegen in `window.FIAE` (zum Beispiel `stand`, `erfolg`, `biene`, `stempel`).
 
-**Tests** (`npm test`, zurzeit 65 Prüfungen):
+**Tests** (`npm test`, zurzeit 66 Prüfungen):
 
 | **Teil** | **Prüft** |
 |---|---|
@@ -415,7 +415,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | 9 | Leseausweis: Stempel still beim Laden, Karte, Sprung zum Ausweis, Backup-Profi, Nachteule, Zurücksetzen, Wiederherstellen |
 | 10 | Versionsnummer im Fuß und in `version.json`; Fehler melden: Artikel und Abschnitt, ohne Text nichts, Kopieren, Escape, GitHub-Link, Startseite |
 | 11 | Formeln im USV-Artikel: alle gezeichnet, auch in Tabellen und als Block, kein Dollarzeichen übrig, auch im Flugmodus |
-| 12 | Udo: Platz auf der Linie, Frage erst auf Klick, alle 7 Stationen und zurück, Escape, Start aus dem Menü und weniger Bewegung ohne Funken |
+| 12 | Udo: in 3D (auf GitHub: Notbremse greift, Zeichnung bleibt), Platz auf der Linie, Frage erst auf Klick, alle 7 Stationen und zurück, Escape, Start aus dem Menü und weniger Bewegung ohne Funken |
 
 Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht zufällig die Nachteule auslöst.
 
@@ -449,6 +449,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `65ef49a` | Einhorn aus dem Feenwald (damals „Funkel“, heute Udo): winkt unter der Bühne, führt auf Klick in 7 Stationen an der Ranke entlang durch die Seite |
 | 04.11.2026 | `f2f5118` | Udo fliegt flüssig: im Takt der Seite (gemeinsame Schleife mit Lenis und 3D), gleichmäßig knapp über dem Stängel, ruhiges Reisetempo, weich wenden und neigen; das Einhorn heißt jetzt Udo, Texte mit etwas mehr Humor |
 | 04.11.2026 | `d66954e` | Udo in 3D: Modell aus Grundformen mit Wolkenmähne, goldenem Horn und schillernden Flügeln, dreht sich beim Wenden echt um, blinzelt; Zeichnung bleibt als Rückfall |
+| 04.11.2026 | `64225c2` | Notbremse für den 3D-Udo: erst messen, dann bauen (über 34 ms pro Bild bleibt die Zeichnung), im Betrieb über 45 ms Rückfall auf die Zeichnung; einfaches Licht statt Spiegelungsumgebung, billigeres Material, in Ruhe 30 Bilder pro Sekunde. Der Testlauf auf GitHub (3D in Software) war daran gescheitert; der Test für Udo wartet dort nur noch aufs Laden und prüft bei weniger Bewegung „kein Flug“ statt einer Zeitgrenze |
 
 ### Entfernt oder ersetzt
 
