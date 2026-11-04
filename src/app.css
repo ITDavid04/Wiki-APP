@@ -507,7 +507,11 @@ html.pen .pen-spur{display:block;position:fixed;inset:0;z-index:2147483000;width
 .fe{position:absolute;left:0;top:0;pointer-events:auto;width:92px;height:84px;padding:0;border:0;background:none;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .35s;will-change:transform}
 .fe.weg{opacity:0}
 .fe:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:22px}
-.fe-hub{display:block;width:100%;height:100%;animation:feSchweben 3.4s ease-in-out infinite}
+.fe-hub{position:relative;display:block;width:100%;height:100%;animation:feSchweben 3.4s ease-in-out infinite}
+/* 3D (einhorn3d.js): Fläche größer als der Knopf, damit Flügel und Horn Platz haben; die Zeichnung tritt zurück, schweben macht das 3D selbst */
+.fe-3d{position:absolute;left:-40%;top:-45%;width:180%;height:180%;pointer-events:none}
+.fe.drei .fe-svg{display:none}
+.fe.drei .fe-hub{animation:none}
 .fe-svg{display:block;width:100%;height:100%;overflow:visible;transform:scaleX(var(--blick,1)) rotate(var(--kipp,0deg));filter:drop-shadow(0 6px 10px rgba(120,80,170,.22))}
 .fe:hover .fe-hub{animation-duration:1.6s}
 .fe-svg g,.fe-svg circle,.fe-svg path{transform-box:view-box}

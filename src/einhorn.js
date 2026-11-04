@@ -403,3 +403,13 @@ function winken(){
   setTimeout(() => fe.classList.remove('winkt', 'ruft'), 2600);
 }
 winkT = setTimeout(winken, 2600);
+
+/* ---------- 3D ---------- */
+/* Udo in 3D (einhorn3d.js), sobald three.js da ist; auf schwachen Geräten oder ohne WebGL bleibt die Zeichnung */
+const sparsam = (navigator.connection && navigator.connection.saveData) || (navigator.deviceMemory && navigator.deviceMemory < 2);
+if (!sparsam) {
+  import('./einhorn3d.js')
+    .then(m => m.baue({ fe, stand: () => ({ blick, kipp }) }))
+    .then(ok => { if (ok) { messen(); if (zustand === 'ruhe') setze(heim()); } })
+    .catch(e => console.warn('Udo ohne 3D:', e));
+}
