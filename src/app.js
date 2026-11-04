@@ -596,6 +596,25 @@ function paintErfolg(){
 paintStand();
 addEventListener('fiae-stand', paintStand);
 
+/* Neu: der zuletzt dazugekommene Artikel (D.neu, aus dem Verlauf des Wikis) steht oben im Text, bis ein neuerer kommt,
+   höchstens 7 Tage ab dem Tag, an dem er dazukam. Mitgezählt werden die Artikel desselben Themas vom selben Tag. */
+(function neuHinweis(){
+  const a = D.neu != null && D.artikel[D.neu];
+  if (!a || !a.d) return;
+  const tag = d => new Date(d + 'T00:00:00').getTime(), WOCHE = 7 * 864e5;
+  const ab = tag(a.d), heute = new Date(); heute.setHours(0, 0, 0, 0);
+  if (!(heute.getTime() - ab <= WOCHE)) return;
+  const reg = REG.find(r => r.id === a.r);
+  const thema = a.r === 'lf' ? a.g : (reg ? reg.name : '');
+  const n = D.artikel.filter(x => x.r === a.r && (a.r !== 'lf' || x.g === a.g) && x.d === a.d).length;
+  const el = $('#neu');
+  $('#neuK').textContent = n > 1 ? `${n} neue Artikel zum Thema ${thema}` : `Neuer Artikel zum Thema ${thema}`;
+  $('#neuT').textContent = a.t;
+  el.href = artUrl(a);
+  el.setAttribute('aria-label', `${n > 1 ? n + ' neue Artikel' : 'Neuer Artikel'} zum Thema ${thema}, zuletzt: ${a.t}. Artikel öffnen`);
+  el.hidden = false;
+})();
+
 /* Hinweisfeld */
 const toast = $('#toast'), toastText = $('#toastText'), toastBtn = $('#toastBtn');
 let toastTimer = 0;
@@ -969,28 +988,93 @@ addEventListener('online', () => showToast('Wieder online.', null, null, 2500));
 const top = $('#top');
 function updateTop(){ top.classList.toggle('solid', scrollY > 40); }
 
-/* Mauszeiger-Ring */
-const cur = $('#cursor');
-const fine = matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce.matches;
-let cx = -100, cy = -100, rx = -100, ry = -100;
-if (fine) {
-  addEventListener('pointermove', e => {
-    cx = e.clientX; cy = e.clientY; cur.classList.add('on');
-    const hot = e.target.closest && e.target.closest('a,button,summary,.cover');
-    cur.classList.toggle('big', !!hot || !!window.FIAE.hoverBlock);
-  }, { passive: true });
-  document.addEventListener('pointerleave', () => cur.classList.remove('on'));
+/* Mauszeiger: rosa Stift mit kurzer, leicht funkelnder Spur. Nur mit Maus oder Grafiktablett, nie mit dem Finger.
+   Die Spitze sitzt genau auf der Mausposition, der Stift bleibt überall und auch beim Klicken ein Stift.
+   Bei "weniger Bewegung" gibt es den Stift ohne Spur. */
+const cur = $('#cursor'), spur = $('#penSpur'), sctx = spur.getContext('2d');
+const maus = matchMedia('(hover:hover) and (pointer:fine)');
+let penOn = false, penX = -100, penY = -100, dpr = 1, spurLeer = true, seitFunke = 0;
+const punkte = [], funken = [];
+const SPUR_MS = 200, FUNKE_ALLE_PX = 22, MAX_FUNKEN = 40;
+function penMode(){
+  penOn = maus.matches;
+  root.classList.toggle('pen', penOn);
+  if (!penOn) { cur.classList.remove('on'); punkte.length = funken.length = 0; }
+  spurGroesse();
+}
+function spurGroesse(){
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  spur.width = Math.round(innerWidth * dpr); spur.height = Math.round(innerHeight * dpr);
+  spurLeer = false;
+}
+maus.addEventListener('change', penMode);
+addEventListener('resize', () => { if (penOn) spurGroesse(); });
+penMode();
+addEventListener('pointermove', e => {
+  if (!penOn) return;
+  if (e.pointerType === 'touch') { cur.classList.remove('on'); return; }
+  const now = performance.now();
+  const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [];
+  for (const c of (evs.length ? evs : [e])) {
+    const x = c.clientX, y = c.clientY, dist = Math.hypot(x - penX, y - penY);
+    if (!reduce.matches && penX > -100 && dist < 400) {
+      punkte.push({ x, y, t: now });
+      seitFunke += dist;
+      while (seitFunke > FUNKE_ALLE_PX && funken.length < MAX_FUNKEN) {
+        seitFunke -= FUNKE_ALLE_PX;
+        const w = Math.random() * Math.PI * 2;
+        funken.push({ x: x + Math.cos(w) * 4, y: y + Math.sin(w) * 4, vx: Math.cos(w) * 0.012, vy: Math.sin(w) * 0.012 + 0.008,
+          t: now, life: 380 + Math.random() * 320, r: 1.2 + Math.random() * 1.6, hell: Math.random() < 0.45 });
+      }
+    }
+    penX = x; penY = y;
+  }
+  cur.style.transform = `translate(${penX}px,${penY}px)`;
+  cur.classList.add('on');
+}, { passive: true });
+document.addEventListener('pointerleave', () => cur.classList.remove('on'));
+addEventListener('blur', () => cur.classList.remove('on'));
+
+function stern(x, y, r){
+  sctx.beginPath();
+  sctx.moveTo(x, y - r * 2); sctx.quadraticCurveTo(x, y, x + r * 2, y); sctx.quadraticCurveTo(x, y, x, y + r * 2);
+  sctx.quadraticCurveTo(x, y, x - r * 2, y); sctx.quadraticCurveTo(x, y, x, y - r * 2);
+  sctx.fill();
+}
+function zeichneSpur(now){
+  while (punkte.length && now - punkte[0].t > SPUR_MS) punkte.shift();
+  for (let i = funken.length - 1; i >= 0; i--) if (now - funken[i].t > funken[i].life) funken.splice(i, 1);
+  if (!punkte.length && !funken.length) {
+    if (!spurLeer) { sctx.setTransform(1, 0, 0, 1, 0, 0); sctx.clearRect(0, 0, spur.width, spur.height); spurLeer = true; }
+    return;
+  }
+  spurLeer = false;
+  sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  sctx.clearRect(0, 0, innerWidth, innerHeight);
+  sctx.lineCap = 'round'; sctx.lineJoin = 'round';
+  sctx.shadowColor = 'rgba(255,111,181,.7)'; sctx.shadowBlur = 6;
+  const pts = punkte.concat({ x: penX, y: penY, t: now });
+  for (let i = 1; i < pts.length; i++) {
+    const k = 1 - (now - pts[i].t) / SPUR_MS;
+    sctx.strokeStyle = `rgba(255,111,181,${(0.75 * k).toFixed(3)})`;
+    sctx.lineWidth = 0.6 + 2 * k;
+    sctx.beginPath(); sctx.moveTo(pts[i - 1].x, pts[i - 1].y); sctx.lineTo(pts[i].x, pts[i].y); sctx.stroke();
+  }
+  sctx.shadowBlur = 4;
+  for (const f of funken) {
+    const a = (now - f.t) / f.life, dt = now - f.t;
+    const blink = 0.55 + 0.45 * Math.sin(dt / 45 + f.r * 9);
+    sctx.fillStyle = f.hell ? `rgba(255,240,248,${((1 - a) * blink).toFixed(3)})` : `rgba(255,140,200,${((1 - a) * blink).toFixed(3)})`;
+    stern(f.x + f.vx * dt, f.y + f.vy * dt, f.r * (1 - a * 0.6));
+  }
+  sctx.shadowBlur = 0;
 }
 
-/* Eine gemeinsame Schleife für Scrollen, Kopf und Ring. Läuft vor den 3D-Schleifen, damit beide dieselbe Scrollposition sehen. */
+/* Eine gemeinsame Schleife für Scrollen, Kopf und Stiftspur. Läuft vor den 3D-Schleifen, damit beide dieselbe Scrollposition sehen. */
 function loop(t){
   if (lenis) lenis.raf(t);
   updateTop();
-  if (fine) {
-    rx += (cx - rx) * 0.2; ry += (cy - ry) * 0.2;
-    cur.style.transform = `translate(${rx}px,${ry}px)`;
-    if (window.FIAE.hoverBlock) cur.classList.add('big');
-  }
+  if (penOn) zeichneSpur(performance.now());
   requestAnimationFrame(loop);
 }
 updateTop();

@@ -11,6 +11,8 @@
    - Regal und Gruppe über GRUPPEN, der längste passende Pfad gewinnt. Dateien, die nirgends passen, meldet das Skript
      als NICHT EINSORTIERT und lässt sie weg, ohne abzubrechen.
    - stand = Datum des letzten Commits im Klon
+   - d = Tag, an dem der Artikel auf main dazukam (Verschieben und Umbenennen zählen nicht als neu);
+     neu = Nummer des zuletzt dazugekommenen Artikels. Braucht den ganzen Verlauf, also keinen Klon mit --depth 1.
    Der Lernstand in der App hängt am Pfad der Datei (u). Umbenannte oder verschobene Dateien meldet das Skript deshalb. */
 import { readFile, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -168,6 +170,26 @@ function gruppeVon(p){
 const stand = git('log', '-1', '--date=short', '--format=%cd').trim();
 const dateien = git('ls-files', '-z').split('\0').filter(Boolean);
 const md = dateien.filter(f => /\.md$/i.test(f));
+
+/* Seit wann gibt es welche Datei? Der Verlauf von main, ältester Commit zuerst. Merges zählen mit dem Tag, an dem sie
+   auf main landeten. Bei Umbenennungen (R) wandert das Datum mit, damit Verschieben nichts "neu" macht. */
+const seit = new Map();
+const flach = git('rev-parse', '--is-shallow-repository').trim() === 'true';
+if (flach) console.warn('Klon ohne ganzen Verlauf (--depth): keine Datumsangaben, kein Hinweis auf neue Artikel.');
+else {
+  const z = git('log', '--reverse', '--first-parent', '--diff-merges=first-parent', '-M', '--name-status', '-z', '--format=%x01%cI').split('\0');
+  let wann = '';
+  for (let i = 0; i < z.length; i++) {
+    const t = z[i].replace(/^\n+/, '');
+    if (!t) continue;
+    if (t[0] === '\x01') { wann = t.slice(1); continue; }
+    const s = t[0];
+    if (s === 'R' || s === 'C') { const von = nfc(z[++i]), nach = nfc(z[++i]); seit.set(nach, s === 'R' && seit.get(von) || wann); if (s === 'R') seit.delete(von); }
+    else if (s === 'A') seit.set(nfc(z[++i]), wann);
+    else if (s === 'D') seit.delete(nfc(z[++i]));
+    else i++;
+  }
+}
 const weg = md.filter(f => WEG.test(path.posix.basename(f)));
 const ohne = [], artikel = [];
 for (const p of md) {
@@ -182,7 +204,7 @@ for (const p of md) {
     t = path.posix.basename(p).replace(/\.md$/i, '').replace(/_+/g, ' ').trim();
     console.warn(`Kein Titel gefunden, nehme den Dateinamen: ${p} -> ${t} (besser in OVERRIDE eintragen)`);
   }
-  artikel.push({ t, r: g[1], g: g[2], lf: g[3] ?? null, rot: ROT.test(text), u: blob(p), p });
+  artikel.push({ t, r: g[1], g: g[2], lf: g[3] ?? null, rot: ROT.test(text), u: blob(p), p, seit: seit.get(nfc(p)) || '' });
 }
 
 /* Reihenfolge: Regal, dann Gruppe wie in GRUPPEN, dann Pfad */
@@ -211,9 +233,13 @@ for (const [k, p] of Object.entries(LINKS)) {
   links[k] = ordner ? `${REPO}/tree/${BRANCH}/${enc(p)}` : blob(p);
 }
 
+/* Zuletzt dazugekommen: der jüngste Zeitpunkt, bei Gleichstand (ein Commit mit mehreren Dateien) der erste in der Reihenfolge */
+const ms = a => a.seit ? Date.parse(a.seit) : -Infinity;
+const jung = artikel.reduce((best, a, i) => ms(a) > (best < 0 ? -Infinity : ms(artikel[best])) ? i : best, -1);
+
 const catalog = {
-  repo: REPO, stand, regale, lf,
-  artikel: artikel.map(({ t, r, g, lf, rot, u }) => ({ t, r, g, lf, rot, u })),
+  repo: REPO, stand, neu: jung >= 0 && artikel[jung].seit ? jung : null, regale, lf,
+  artikel: artikel.map(({ t, r, g, lf, rot, u, seit }) => ({ t, r, g, lf, rot, u, ...(seit ? { d: seit.slice(0, 10) } : {}) })),
   links
 };
 
@@ -227,6 +253,7 @@ await writeFile(ziel, json);
 const liste = (kopf, xs) => { if (xs.length) console.log(`${kopf} (${xs.length}):\n` + xs.map(x => '  ' + x).join('\n')); };
 const rel = path.relative(process.cwd(), ziel);
 console.log(`${rel && !rel.startsWith('..') ? rel : ziel}: ${artikel.length} Artikel, Stand ${stand}, ${artikel.filter(a => a.rot).length} mit Ampel`);
+if (catalog.neu !== null) console.log(`  Zuletzt dazugekommen (${artikel[catalog.neu].seit.slice(0, 10)}): ${artikel[catalog.neu].t}`);
 for (const r of regale) console.log(`  ${r.kurz}: ${r.n} (${r.gruppen.map(([g, n]) => `${g} ${n}`).join(', ')})`);
 liste('Nicht im Katalog, weil keine Artikel', weg);
 liste('NICHT EINSORTIERT, fehlen im Katalog (Zeile in GRUPPEN ergänzen)', ohne);

@@ -126,9 +126,14 @@ section[id],li[id]{scroll-margin-top:96px}
 .tip span{color:var(--muted)}
 
 /* Mauszeiger-Ring */
-.cursor{position:fixed;left:0;top:0;z-index:50;width:38px;height:38px;margin:-19px 0 0 -19px;border:1.5px solid var(--ink);border-radius:50%;pointer-events:none;opacity:0;transition:width .25s,height .25s,margin .25s,opacity .25s,background-color .25s,border-color .25s}
-.cursor.on{opacity:.55}
-.cursor.big{width:70px;height:70px;margin:-35px 0 0 -35px;background:color-mix(in srgb,var(--accent) 16%,transparent);border-color:var(--accent);opacity:1}
+/* Mauszeiger: rosa Stift, die Spitze sitzt genau auf der Mausposition. Nur mit Maus (app.js setzt html.pen), nie auf dem Handy.
+   Die Spur dahinter zeichnet ein Canvas, bei "weniger Bewegung" bleibt sie aus. */
+.cursor,.pen-spur{display:none}
+html.pen,html.pen *{cursor:none!important}
+html.pen .cursor{display:block;position:fixed;left:0;top:0;z-index:2147483001;width:30px;height:38px;margin:-5px 0 0 -5px;pointer-events:none;opacity:0;transition:opacity .2s;filter:drop-shadow(0 1px 3px rgba(194,65,127,.35))}
+html.pen .cursor.on{opacity:1}
+html.pen .cursor svg{display:block;overflow:visible}
+html.pen .pen-spur{display:block;position:fixed;inset:0;z-index:2147483000;width:100%;height:100%;pointer-events:none}
 
 /* Ladebildschirm */
 .loader{position:fixed;inset:0;z-index:60;display:none;place-content:center;justify-items:center;gap:18px;background:var(--bg);color:var(--muted);transition:clip-path .8s cubic-bezier(.7,0,.2,1);clip-path:inset(0 0 0 0)}
@@ -496,6 +501,17 @@ section[id],li[id]{scroll-margin-top:96px}
 .leaf-key{display:flex;flex-wrap:wrap;gap:8px 16px;list-style:none;padding:0;margin:0;color:var(--muted)}
 .leaf-key li{display:flex;align-items:center;gap:8px}
 .leaf-key i{width:14px;height:14px;border-radius:3px 11px;background:var(--c)}
+/* Hinweis auf den zuletzt dazugekommenen Artikel (höchstens 7 Tage, siehe app.js) */
+.neu{display:inline-flex;align-items:center;gap:12px;max-width:100%;margin-bottom:22px;padding:7px 16px 7px 7px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);text-decoration:none;transition:border-color .25s}
+.neu:hover,.neu:focus-visible{border-color:var(--accent)}
+.neu-tag{position:relative;flex:none;padding:6px 10px;border-radius:99px;background:var(--accent);color:var(--accent-ink)}
+.neu-tag::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 var(--accent);animation:neuPuls 2.4s ease-out infinite}
+@keyframes neuPuls{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent)}70%,100%{box-shadow:0 0 0 9px transparent}}
+.neu-txt{display:grid;min-width:0;line-height:1.25}
+.neu-kopf{color:var(--muted);font-size:.8rem}
+.neu-t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;font-size:.92rem}
+.neu-ar{flex:none;color:var(--muted);transition:transform .25s,color .25s}
+.neu:hover .neu-ar{transform:translateX(3px);color:var(--accent)}
 .resume{max-width:100%}
 .resume span{display:inline-block;max-width:24ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom;text-transform:none;letter-spacing:0;font-weight:500;font-size:.85rem}
 .exam-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
@@ -690,7 +706,6 @@ html.sheet-open body{overflow:hidden}
   .chips{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
   .chip{flex:none}
   .twig-lab{padding:4px 9px;font-size:.68rem}
-  .cursor{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -698,7 +713,6 @@ html.sheet-open body{overflow:hidden}
   .erfolg.stempelkarte.in .erfolg-stempel .stempel-svg{animation:none}
   .erfolg-mark path{stroke-dashoffset:0}
 }
-@media (hover:none),(pointer:coarse){.cursor{display:none}}
 
 /* Formeln (KaTeX): Blöcke breiter als der Text scrollen für sich, bis KaTeX geladen ist steht der Quelltext da */
 .prose .math.display{display:block;margin:1.1em 0;padding:4px 0;overflow-x:auto;overflow-y:hidden;text-align:center}

@@ -36,7 +36,7 @@ jobs:
       - name: Katalog aus dem Wiki
         shell: bash
         run: |
-          git clone --depth 1 https://github.com/ITDavid04/Lern-Wiki "$RUNNER_TEMP/wiki"
+          git clone https://github.com/ITDavid04/Lern-Wiki "$RUNNER_TEMP/wiki"
           printf '### Katalog\n```\n' >> "$GITHUB_STEP_SUMMARY"
           set +e
           node tools/catalog.mjs "$RUNNER_TEMP/wiki" --streng 2>&1 | tee -a "$GITHUB_STEP_SUMMARY"

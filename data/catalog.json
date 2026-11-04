@@ -1,6 +1,7 @@
 {
  "repo": "https://github.com/ITDavid04/Lern-Wiki",
  "stand": "2026-11-03",
+ "neu": 168,
  "regale": [
   {
    "id": "lf",
@@ -296,7 +297,8 @@
    "g": "LF1",
    "lf": 1,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.1_Wurzeln_der_IT.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.1_Wurzeln_der_IT.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF1.2: Berufsbild, Studium & Karriere",
@@ -304,7 +306,8 @@
    "g": "LF1",
    "lf": 1,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.2_Berufsbild_Studium_Karriere.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.2_Berufsbild_Studium_Karriere.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF1.3: Recht, Schutz & Mitbestimmung",
@@ -312,7 +315,8 @@
    "g": "LF1",
    "lf": 1,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.3_Recht_Schutz_Mitbestimmung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.3_Recht_Schutz_Mitbestimmung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF1.4: Das System Unternehmen",
@@ -320,7 +324,8 @@
    "g": "LF1",
    "lf": 1,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.4_%20Das_System_Unternehmen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_1/LF1.4_%20Das_System_Unternehmen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.1: Die Logik der Maschinen",
@@ -328,7 +333,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.1_Die_Logik_der_Maschienen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.1_Die_Logik_der_Maschienen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.2: Herz & Hirn der Maschine",
@@ -336,7 +342,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.2_Herz_und_Hirn_der_Maschine.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.2_Herz_und_Hirn_der_Maschine.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.3: Infrastruktur & Energie",
@@ -344,7 +351,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.3_Infrastruktur_Energie.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.3_Infrastruktur_Energie.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.4: Anbindung an die Außenwelt (Peripherie & I/O)",
@@ -352,7 +360,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.4_Anbindung_an_die_Au%C3%9Fenwelt.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.4_Anbindung_an_die_Au%C3%9Fenwelt.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.5: Der Geist der Maschine (Betriebssysteme)",
@@ -360,7 +369,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.5_Der_Geist_der_Maschine_Betriebssysteme.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.5_Der_Geist_der_Maschine_Betriebssysteme.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.6: Der Kunden-Dialog (Analyse & Verständnis)",
@@ -368,7 +378,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.6_Der_Kunden_Dialog_Analyse_Verst%C3%A4ndnis.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.6_Der_Kunden_Dialog_Analyse_Verst%C3%A4ndnis.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.7: Vom Konzept zum Abschluss (Planung & Verkauf)",
@@ -376,7 +387,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.7_Vom_Konzept_zum_Abschluss_Planung_Verkauf.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.7_Vom_Konzept_zum_Abschluss_Planung_Verkauf.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF2.8: Der moderne Arbeitsplatz & Teamwork",
@@ -384,7 +396,8 @@
    "g": "LF2",
    "lf": 2,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.8_Der_moderne_Arbeitsplatz_Teamwork.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_2/LF2.8_Der_moderne_Arbeitsplatz_Teamwork.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF3.3 Bonus: Spanning Tree Protocol (STP)",
@@ -392,7 +405,8 @@
    "g": "LF3",
    "lf": 3,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.0_Bonus_Spanning_Tree_Protovol.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.0_Bonus_Spanning_Tree_Protovol.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF3.1: Der erste Kontakt (Das Fundament des Netzwerks)",
@@ -400,7 +414,8 @@
    "g": "LF3",
    "lf": 3,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.1_Das_Fundament_des_Netzwerks.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.1_Das_Fundament_des_Netzwerks.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF3.2: Die Kommunikation begreifen (OSI-Modell, Transportprotokolle & Dienste)",
@@ -408,7 +423,8 @@
    "g": "LF3",
    "lf": 3,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.2_OSI-Modell_Transportprotokolle_Dienste.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.2_OSI-Modell_Transportprotokolle_Dienste.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF3.3: Infrastruktur (Topologien, Übertragungsmedien & Strukturierte Verkabelung)",
@@ -416,7 +432,8 @@
    "g": "LF3",
    "lf": 3,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.3_Infrastruktur_Topologoien_etc.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.3_Infrastruktur_Topologoien_etc.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF3.4: WLAN & VLAN (Funknetze und logische Segmentierung)",
@@ -424,7 +441,8 @@
    "g": "LF3",
    "lf": 3,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.4_WLAN_VLAN_Funknetze_und_logische_Segmentierung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.4_WLAN_VLAN_Funknetze_und_logische_Segmentierung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF3.5: Standortvernetzung (WAN & Routing)",
@@ -432,7 +450,8 @@
    "g": "LF3",
    "lf": 3,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.5_Standortvernetzung_WAN_Routing.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_3/LF3.5_Standortvernetzung_WAN_Routing.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF4.1: Grundlagen der Informationssicherheit & Gefahrenlandschaft",
@@ -440,7 +459,8 @@
    "g": "LF4",
    "lf": 4,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.1_Grundlagen_der_Informationssicherheit_Gefahrenlandschaft.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.1_Grundlagen_der_Informationssicherheit_Gefahrenlandschaft.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF4.2 (Teil A): BSI-Grundschutz-Methodik: Strukturanalyse & Schutzbedarf",
@@ -448,7 +468,8 @@
    "g": "LF4",
    "lf": 4,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.2A_BSI-Grundschutz-Methodik.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.2A_BSI-Grundschutz-Methodik.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF4.2 (Teil B): BSI-Grundschutz-Methodik: Schutzmaßnahmen & Betrieb",
@@ -456,7 +477,8 @@
    "g": "LF4",
    "lf": 4,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.2B_BSI-Grundschutz-Methodik.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.2B_BSI-Grundschutz-Methodik.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF4.3 (Teil A): Cloud Security & Zero Trust",
@@ -464,7 +486,8 @@
    "g": "LF4",
    "lf": 4,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.3A_Cloud_Security_Zero_Trust.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.3A_Cloud_Security_Zero_Trust.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF4.3 (Teil B): Security Awareness, Supply-Chain & KI-Sicherheit",
@@ -472,7 +495,8 @@
    "g": "LF4",
    "lf": 4,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.3B_Security_Awareness_Supply-Chain_KI-Sicherheit.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_4/LF4.3B_Security_Awareness_Supply-Chain_KI-Sicherheit.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF5: Software Configuration and Data Management: Übersicht",
@@ -480,7 +504,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/1.0_Info_Bitte_Lesen/Info_Text_Aufbau.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/1.0_Info_Bitte_Lesen/Info_Text_Aufbau.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Chen-Notation",
@@ -488,7 +513,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Chen_Notations.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Chen_Notations.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Vom ERM zum relationalen Datenbankschema: Die Bauanleitung für deine Tabellen",
@@ -496,7 +522,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Datenbankschema_Die_Bauanleitung_f%C3%BCr_deine_Tabellen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Datenbankschema_Die_Bauanleitung_f%C3%BCr_deine_Tabellen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Entity-Relationship-Modell (ERM): Der Bauplan für Daten",
@@ -504,7 +531,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/ERM_Modell.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/ERM_Modell.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Git-Workflow in der Praxis: Vom Ändern bis zum Synchronisieren",
@@ -512,7 +540,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/IDE/Git_Workflow.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/IDE/Git_Workflow.md",
+   "d": "2026-10-29"
   },
   {
    "t": "IDE, Compiler & Git: Die Werkzeugkiste für sauberen Code",
@@ -520,7 +549,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/IDE/IDE_Compiler_Git_Die_Werkzeugkiste_f%C3%BCr_sauberen_Code.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/IDE/IDE_Compiler_Git_Die_Werkzeugkiste_f%C3%BCr_sauberen_Code.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Java: Das Lern- und Praxis-Hub für die IT-Ausbildung",
@@ -528,7 +558,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/IDE/Java_First.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/IDE/Java_First.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Vorgehensmodelle der Softwareentwicklung: Wasserfall, V-Modell, Spiralmodell",
@@ -536,7 +567,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Lernmaterial_V-Modell_etc/Vorgehensmodelle_Softwareentwicklung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Lernmaterial_V-Modell_etc/Vorgehensmodelle_Softwareentwicklung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF5.1: Requirements & Analysis",
@@ -544,7 +576,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.1_%20Requirements_und_Analysis.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.1_%20Requirements_und_Analysis.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF5.4: Writing the Logic",
@@ -552,7 +585,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.4_Writing_the_Logic.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.4_Writing_the_Logic.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF5.5: Ensuring Quality",
@@ -560,7 +594,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.5_Ensuring_Quality.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.5_Ensuring_Quality.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF5.6: Agile Methodologien: Scrum, Kanban & XP",
@@ -568,7 +603,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.6_Agile_Methodologien_Scrum_Kanban_%26_XP.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/LF5.1_5.4_5.5_5.6/LF5.6_Agile_Methodologien_Scrum_Kanban_%26_XP.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Nassi-Shneiderman-Struktogramm (DIN 66261): Der agile Bauplan für sauberen Code",
@@ -576,7 +612,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Nassi_Schneider_Diagramm.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Nassi_Schneider_Diagramm.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Programmablaufplan (PAP): DIN 66001: Der Bauplan mit Pfeilen",
@@ -584,7 +621,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Programmablaufplan%20%28PAP%20-%20DIN%2066001%29.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/Programmablaufplan%20%28PAP%20-%20DIN%2066001%29.md",
+   "d": "2026-10-29"
   },
   {
    "t": "UML-Klassendiagramm: Der Bauplan der Software",
@@ -592,7 +630,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML-Klassendiagramm_Der_Bauplan_der_Software.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML-Klassendiagramm_Der_Bauplan_der_Software.md",
+   "d": "2026-10-29"
   },
   {
    "t": "UML-Sequenzdiagramm (2): Aktivitätsbalken und synchrone Kommunikation",
@@ -600,7 +639,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Sequenzdiagramm%282%29.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Sequenzdiagramm%282%29.md",
+   "d": "2026-10-29"
   },
   {
    "t": "UML-Sequenzdiagramm (3): Asynchrone Nachrichten und Parallelität",
@@ -608,7 +648,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Sequenzdiagramm%283%29.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Sequenzdiagramm%283%29.md",
+   "d": "2026-10-29"
   },
   {
    "t": "UML-Sequenzdiagramm (1): Lebenslinie und Zeitfluss",
@@ -616,7 +657,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Sequenzdigarmm%281%29.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Sequenzdigarmm%281%29.md",
+   "d": "2026-10-29"
   },
   {
    "t": "UML-Sequenzdiagramm (4): Kombinierte Fragmente: Logik in den Zeitfluss bringen",
@@ -624,7 +666,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Zusatz.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/UML_Sequenzdiagramm/UML_Zusatz.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Use-Case-Diagramm",
@@ -632,7 +675,8 @@
    "g": "LF5",
    "lf": 5,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/USE_Case_Diagramm.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_5/USE_Case_Diagramm.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF6.1: Der 1st-Level-Support-Workflow",
@@ -640,7 +684,8 @@
    "g": "LF6",
    "lf": 6,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.1_Der_1st_Level_Support_Workflow.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.1_Der_1st_Level_Support_Workflow.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF6.2: Systembereitstellung, Software & Identitätsmanagement",
@@ -648,7 +693,8 @@
    "g": "LF6",
    "lf": 6,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.2_Systembereitstellung_Software_Identit%C3%A4tsmanagement.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.2_Systembereitstellung_Software_Identit%C3%A4tsmanagement.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF6.3a: IT-Lifecycle & Bestandsverwaltung",
@@ -656,7 +702,8 @@
    "g": "LF6",
    "lf": 6,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.3_IT_Lifecycle_Bestandsverwaltung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.3_IT_Lifecycle_Bestandsverwaltung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF6.3b: ITIL v4 Service Management",
@@ -664,7 +711,8 @@
    "g": "LF6",
    "lf": 6,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.4_ITIL_v4_Service_Management.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.4_ITIL_v4_Service_Management.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF6.4: Support-Kommunikation & Service-Qualität",
@@ -672,7 +720,8 @@
    "g": "LF6",
    "lf": 6,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.5_Support_Kommunikation_Service_Qualit%C3%A4t.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_6_Service_Desk/LF6.5_Support_Kommunikation_Service_Qualit%C3%A4t.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF7.1: Architektur & IoT-Kommunikation",
@@ -680,7 +729,8 @@
    "g": "LF7",
    "lf": 7,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7.1_Architektur_IoT-Kommunikation.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7.1_Architektur_IoT-Kommunikation.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF7.2: Edge Computing & Low-Power Design",
@@ -688,7 +738,8 @@
    "g": "LF7",
    "lf": 7,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7.2_%20Edge_Computing_und_Low-Power_Design.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7.2_%20Edge_Computing_und_Low-Power_Design.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF7.3: Sicherheit & Erweiterung",
@@ -696,7 +747,8 @@
    "g": "LF7",
    "lf": 7,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7.3_Sicherheit_und_Erweiterung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7.3_Sicherheit_und_Erweiterung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Infomaterial (Typ C): Robustheit, Wartung & Wirtschaftlichkeit im IoT-Flottenbetrieb",
@@ -704,7 +756,8 @@
    "g": "LF7",
    "lf": 7,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7_Infomaterial_Zusatz.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_7/LF7_Infomaterial_Zusatz.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF8.1: Client-Server-Architektur & OOP Design Patterns",
@@ -712,7 +765,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.1_Client-Server-Architektur_OOP_Design_Patterns.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.1_Client-Server-Architektur_OOP_Design_Patterns.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF8.2: UI/UX-Engineering & Ergonomisches Prototyping",
@@ -720,7 +774,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.2_UX-Engineering_Ergonomisches_Prototyping.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.2_UX-Engineering_Ergonomisches_Prototyping.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF8.3: Datenqualität, heterogene Datenintegration & ETL-Pipelines",
@@ -728,7 +783,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.3_%20Datenqualit%C3%A4t%2C%20heterogene%20Datenintegration%20%26%20ETL-Pipelines.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.3_%20Datenqualit%C3%A4t%2C%20heterogene%20Datenintegration%20%26%20ETL-Pipelines.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF8.4: Verteilte Systeme, API-Paradigmen & Datenvalidierung",
@@ -736,7 +792,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.4_%20Verteilte_Systeme_API-Paradigmen_Datenvalidierung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.4_%20Verteilte_Systeme_API-Paradigmen_Datenvalidierung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF8.5: Datenbanken & Normalisierung",
@@ -744,7 +801,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.5_Datenbanken_%26_Normalisierung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.5_Datenbanken_%26_Normalisierung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF8.6: Code-Qualität, Statische/Dynamische Sicherheitstests & Test-Strategien",
@@ -752,7 +810,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.6_Code-Qualit%C3%A4t_Sicherheitstest_Test-Strategien.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/LF8.6_Code-Qualit%C3%A4t_Sicherheitstest_Test-Strategien.md",
+   "d": "2026-10-29"
   },
   {
    "t": "MVC-Architektur in TypeScript",
@@ -760,7 +819,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/MVC-Architektur_in_TypeScript.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/MVC-Architektur_in_TypeScript.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Python vs. TypeScript & MVC-Architekturen (Django, Angular, NestJS)",
@@ -768,7 +828,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/Python_vs_Typescript_MVC_Architekturen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/Python_vs_Typescript_MVC_Architekturen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Das Entkopplungsprinzip in der IT",
@@ -776,7 +837,8 @@
    "g": "LF8",
    "lf": 8,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/Recherche_LF8.1_Das_Entkopplungsprinzip%20_IT.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_8_Providing_Data_Across_Systems/Recherche_LF8.1_Das_Entkopplungsprinzip%20_IT.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Einstieg zu LF9: Warum diese Serie FISI-fokussiert ist",
@@ -784,7 +846,8 @@
    "g": "LF9",
    "lf": 9,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_9/0.1_Zusatz_zu_LF9.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_9/0.1_Zusatz_zu_LF9.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF9.1: Netze planen und adressieren",
@@ -792,7 +855,8 @@
    "g": "LF9",
    "lf": 9,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_9/LF9.1_%20Netze_planen_und_adressieren.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_9/LF9.1_%20Netze_planen_und_adressieren.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF9.2: Dienste bereitstellen und betreiben",
@@ -800,7 +864,8 @@
    "g": "LF9",
    "lf": 9,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_9/LF9.2_Dienste_bereitstellen_und_betreiben.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_9/LF9.2_Dienste_bereitstellen_und_betreiben.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Einstieg zu LF10: Warum diese Serie FIAE-fokussiert ist",
@@ -808,7 +873,8 @@
    "g": "LF10",
    "lf": 10,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/0.1_Zusatz_zu_LF10.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/0.1_Zusatz_zu_LF10.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF10a Teil 1: Konzeption & Struktur",
@@ -816,7 +882,8 @@
    "g": "LF10",
    "lf": 10,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/LF10a_Teil_1_Konzeption_und_Struktur.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/LF10a_Teil_1_Konzeption_und_Struktur.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF10a Teil 2: Interaktion & Daten",
@@ -824,7 +891,8 @@
    "g": "LF10",
    "lf": 10,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/LF10a_Teil_2_Interaktion_und_Daten.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/LF10a_Teil_2_Interaktion_und_Daten.md",
+   "d": "2026-10-29"
   },
   {
    "t": "LF10a Teil 3: Sicherheit, Test & Abnahme",
@@ -832,7 +900,8 @@
    "g": "LF10",
    "lf": 10,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/LF10a_Teil_3_Sicherheit_Test_und_Abnahme.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Lernfeld_10/LF10a_Teil_3_Sicherheit_Test_und_Abnahme.md",
+   "d": "2026-10-29"
   },
   {
    "t": "AP1-Übungsblatt: Lösungen",
@@ -840,7 +909,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP1.1_L%C3%B6sungen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP1.1_L%C3%B6sungen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "AP1-Übungsblatt: Einrichten eines IT-gestützten Arbeitsplatzes",
@@ -848,7 +918,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP1_Aufgaben.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP1_Aufgaben.md",
+   "d": "2026-10-29"
   },
   {
    "t": "AP2-Übungsblatt (Anwendungsentwicklung): Lösungen",
@@ -856,7 +927,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/Ap2.1_L%C3%B6sungen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/Ap2.1_L%C3%B6sungen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "AP2-Übungsblatt (Anwendungsentwicklung): Planen eines Softwareproduktes: Lösungen",
@@ -864,7 +936,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP2.2_L%C3%B6sungen_AUFPLanenen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP2.2_L%C3%B6sungen_AUFPLanenen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "AP2-Übungsblatt (Anwendungsentwicklung): Entwicklung und Umsetzung von Algorithmen",
@@ -872,7 +945,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP2_Aufgaben.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP2_Aufgaben.md",
+   "d": "2026-10-29"
   },
   {
    "t": "AP2-Übungsblatt (Anwendungsentwicklung): Planen eines Softwareproduktes",
@@ -880,7 +954,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP2_AUfgabenBlatt_Planen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/AP2_AUfgabenBlatt_Planen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo-Übungsblatt: 30 Fragen",
@@ -888,7 +963,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/Wiso_multiple_choice_Aufgaben.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/Wiso_multiple_choice_Aufgaben.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo-Übungsblatt: Lösungen",
@@ -896,7 +972,8 @@
    "g": "Übungsblätter AP1, AP2, WISO",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/Wiso_multiple_choice_L%C3%B6sungen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/%C3%9Cbungsbl%C3%A4tter_AP1_AP2_WISO/Wiso_multiple_choice_L%C3%B6sungen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Prüfungs-Spickzettel: Übersicht",
@@ -904,7 +981,8 @@
    "g": "Spickzettel",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Pr%C3%BCfungs_Spickzettel_%C3%9Cbersicht.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Pr%C3%BCfungs_Spickzettel_%C3%9Cbersicht.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Prüfungs-Spickzettel Teil 1: AP1-Einzelthemen",
@@ -912,7 +990,8 @@
    "g": "Spickzettel",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Spickzettel_Teil1AP1_Einzelthemen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Spickzettel_Teil1AP1_Einzelthemen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Prüfungs-Spickzettel Teil 3: AP2-Einzelthemen",
@@ -920,7 +999,8 @@
    "g": "Spickzettel",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Spickzettel_Teil2_AP2-Einzelthemen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Spickzettel_Teil2_AP2-Einzelthemen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Prüfungs-Spickzettel Teil 2: WiSo-Multiple-Choice",
@@ -928,7 +1008,8 @@
    "g": "Spickzettel",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Wiso_multiple_Choice.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Pruefungs-Spickzettel/Wiso_multiple_Choice.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo 1: Ausbildung & Arbeitsrecht",
@@ -936,7 +1017,8 @@
    "g": "WISO",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF1_Ausbildung%20%26%20Arbeitsrecht.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF1_Ausbildung%20%26%20Arbeitsrecht.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo 2 (Teil A): Sozialversicherung & Entgeltabrechnung",
@@ -944,7 +1026,8 @@
    "g": "WISO",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF2A_Sozialversicherung%20%26%20Entgeltabrechnung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF2A_Sozialversicherung%20%26%20Entgeltabrechnung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo 2 (Teil B): Selbstständigkeit, sozialer Schutz & private Vorsorge",
@@ -952,7 +1035,8 @@
    "g": "WISO",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF2B_%20Selbstst%C3%A4ndigkeit_sozialer_Schutz%26private_Vorsorge.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF2B_%20Selbstst%C3%A4ndigkeit_sozialer_Schutz%26private_Vorsorge.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo 3 (Teil A): Unternehmen & Wertschöpfungskette",
@@ -960,7 +1044,8 @@
    "g": "WISO",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF3A_Unternehmen_Wertsch%C3%B6pfungskette.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF3A_Unternehmen_Wertsch%C3%B6pfungskette.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo 3 (Teil B): Wirtschaftsordnungen & Wirtschaftskreislauf",
@@ -968,7 +1053,8 @@
    "g": "WISO",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF3B_Wirtschaftsordnungen_Wirtschaftskreislauf.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF3B_Wirtschaftsordnungen_Wirtschaftskreislauf.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo 4: Vertragsrecht & Existenzgründung",
@@ -976,7 +1062,8 @@
    "g": "WISO",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF4_Vertragsrecht_Existenzgr%C3%BCndung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF4_Vertragsrecht_Existenzgr%C3%BCndung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "WiSo 5: Wirtschaftspolitik, Globalisierung & Nachhaltigkeit",
@@ -984,7 +1071,8 @@
    "g": "WISO",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF5_Wirtschaftspolitik_Globalisierung_Nachhaltigkeit.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/WISO/WisoLF5_Wirtschaftspolitik_Globalisierung_Nachhaltigkeit.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Pseudocode & Algorithmenstrukturen",
@@ -992,7 +1080,8 @@
    "g": "Mathe, was nötig ist",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Mathe_Was_Notwendig_ist/Part_1_Pseudocode_%26_Algorithmenstrukturen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Mathe_Was_Notwendig_ist/Part_1_Pseudocode_%26_Algorithmenstrukturen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Mengenlehre, Dreisatz & De-Morgan-Regeln",
@@ -1000,7 +1089,8 @@
    "g": "Mathe, was nötig ist",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Mathe_Was_Notwendig_ist/Part_2_Mengenlehre_Dreisatz_und_De-Morgan-Regeln.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Mathe_Was_Notwendig_ist/Part_2_Mengenlehre_Dreisatz_und_De-Morgan-Regeln.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Zahlensysteme & Boolesche Logik",
@@ -1008,7 +1098,8 @@
    "g": "Mathe, was nötig ist",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Mathe_Was_Notwendig_ist/Part_3_Zahlensysteme_und_Boolesche_Logik.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/Mathe_Was_Notwendig_ist/Part_3_Zahlensysteme_und_Boolesche_Logik.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Die IQR-Regel: Ausreißer systematisch erkennen",
@@ -1016,7 +1107,8 @@
    "g": "Mathe zum Vertiefen",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/Deeo_Dive_IQR_Regel.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/Deeo_Dive_IQR_Regel.md",
+   "d": "2026-10-29"
   },
   {
    "t": "L’Hospitalsche Regel (IT-Umschulung FIAE/FISI, 2. Lehrjahr)",
@@ -1024,7 +1116,8 @@
    "g": "Mathe zum Vertiefen",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/l%60Hospital_Recherche.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/l%60Hospital_Recherche.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Heuristik vs. Exaktheit in der Informatik: Finale Gesamtfassung",
@@ -1032,7 +1125,8 @@
    "g": "Mathe zum Vertiefen",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/M6.1.1_Heuristiken.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/M6.1.1_Heuristiken.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Das Master-Theorem: einfach erklärt",
@@ -1040,7 +1134,8 @@
    "g": "Mathe zum Vertiefen",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/M6.1.2_Das_Master_Theorem.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Mathe/M6.1.2_Das_Master_Theorem.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Infoblatt: Orientierung SQL- vs. SQLite-Ordner",
@@ -1048,7 +1143,8 @@
    "g": "SQL",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/0.1_Info_WIchtig_Bitte_Lesen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/0.1_Info_WIchtig_Bitte_Lesen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQL Grundlagen: Datenbanken und Tabellen anlegen (DDL)",
@@ -1056,7 +1152,8 @@
    "g": "SQL",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/1.SQL_Grundlagen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/1.SQL_Grundlagen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQL Abfragen: Daten finden und auswerten (DML / DQL)",
@@ -1064,7 +1161,8 @@
    "g": "SQL",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/2.SQL_Abfragen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/2.SQL_Abfragen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQL JOINs und Aggregatfunktionen: Tabellen verknüpfen und Daten verdichten",
@@ -1072,7 +1170,8 @@
    "g": "SQL",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/3.SQL_Joins_und_Aggregatfunktionen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/3.SQL_Joins_und_Aggregatfunktionen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Normalisierung und Constraints: Saubere Tabellen, stabile Daten",
@@ -1080,7 +1179,8 @@
    "g": "SQL",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/4.SQL_Normalisierung_und_Constraints.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/4.SQL_Normalisierung_und_Constraints.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQL Datenmanipulation: Daten schreiben, ändern, löschen (DML)",
@@ -1088,7 +1188,8 @@
    "g": "SQL",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/5.SQL_Datenmanipulation.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/5.SQL_Datenmanipulation.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Atomarität und ACID: Warum eine Transaktion nicht \"halb\" passieren darf",
@@ -1096,7 +1197,8 @@
    "g": "SQL",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/6.SQL_Beiblatt_Atomarit%C3%A4t.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQL/6.SQL_Beiblatt_Atomarit%C3%A4t.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Infoblatt: Orientierung SQL- vs. SQLite-Ordner",
@@ -1104,7 +1206,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/0.1_Info_Wichtig_Bitte_Lesen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/0.1_Info_Wichtig_Bitte_Lesen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQLite: Grundlagen & Architektur: Die unterschätzte Profi-Datenbank",
@@ -1112,7 +1215,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/1.Grundlagen_Architektur.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/1.Grundlagen_Architektur.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Die SQLite-Renaissance 2024-2026: Vom Embedded-Schatz zur Cloud- und Browser-Engine",
@@ -1120,7 +1224,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/2.SQLite_Renaissance_2024_2026.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/2.SQLite_Renaissance_2024_2026.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQLite in der IHK-Prüfung: Projektarbeit, Fachgespräch und schriftliche Aufgaben souverän meistern",
@@ -1128,7 +1233,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/3.SQLite_in_der_IHK_Pr%C3%BCfung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/3.SQLite_in_der_IHK_Pr%C3%BCfung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQLite in der Praxis: Tools, Workflows & Hintergrundwissen für deinen Arbeitsalltag",
@@ -1136,7 +1242,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/4.SQLite_in_der_Praxis.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/4.SQLite_in_der_Praxis.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQLite Cheat Sheet: Alles Wichtige auf einen Blick",
@@ -1144,7 +1251,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/5.SQLite_Cheat_Sheet.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/5.SQLite_Cheat_Sheet.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Anleitung: SQLite-Würfelspiel",
@@ -1152,7 +1260,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/Anleitung_SQLLite_Wuerfelspiel.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/Anleitung_SQLLite_Wuerfelspiel.md",
+   "d": "2026-10-29"
   },
   {
    "t": "SQLite fuer Dummies",
@@ -1160,7 +1269,8 @@
    "g": "SQLite",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/SQLite_fuer_Dummies.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Lernmaterial_Lernfelder/SQLITE/SQLite_fuer_Dummies.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Programmiersprachen 2026: Erklärt für Handwerker",
@@ -1168,7 +1278,8 @@
    "g": "Programmiersprachen",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/0.Hilfreiches_Lernmaterial_Analogien.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/0.Hilfreiches_Lernmaterial_Analogien.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Stand \"Stand: Mai 2026\"",
@@ -1176,7 +1287,8 @@
    "g": "Programmiersprachen",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/1.Forschungbericht_2026.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/1.Forschungbericht_2026.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Teil 1: Programmiersprachen 2026: Die Kaffeekollaborations‑Tisch‑Edition",
@@ -1184,7 +1296,8 @@
    "g": "Programmiersprachen",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/2.Teil_1_Ausarbeitung_Einordnung_Orientierung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/2.Teil_1_Ausarbeitung_Einordnung_Orientierung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Teil 2: Technische Tiefe & Karriere‑Kick: Die Kaffeekollaborations‑Tisch‑Edition",
@@ -1192,7 +1305,8 @@
    "g": "Programmiersprachen",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/3.Teil_2_Technische_Vertiefung_konkrete_Entscheidungshilfen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Programmier_Sprachen_%C3%9Cbersicht/3.Teil_2_Technische_Vertiefung_konkrete_Entscheidungshilfen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "TypeScript Einstieg: Von Null auf Grundgerüst",
@@ -1200,7 +1314,8 @@
    "g": "TypeScript",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/TypeScript/Typescript_Einstieg_Simple_as_possible.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/TypeScript/Typescript_Einstieg_Simple_as_possible.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Software Testing: Erklärt für Handwerker",
@@ -1208,7 +1323,8 @@
    "g": "Software-Testing",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Software_Testing_2026/1.Hilfreiches_Lernamterial_Analogien_zum_einfachen_Lesen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Software_Testing_2026/1.Hilfreiches_Lernamterial_Analogien_zum_einfachen_Lesen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Software Testing 2026: Qualitätssicherung in Praxis und Ausbildung",
@@ -1216,7 +1332,8 @@
    "g": "Software-Testing",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Software_Testing_2026/2.Software_Testing_2026.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Software_Testing_2026/2.Software_Testing_2026.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Software Testing: Ergänzungen für Umschüler",
@@ -1224,7 +1341,8 @@
    "g": "Software-Testing",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Software_Testing_2026/3.Software_Testing_Erg%C3%A4nzung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Software_Testing_2026/3.Software_Testing_Erg%C3%A4nzung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Unterbrechungsfreie Stromversorgung (USV) und USV-Klassen",
@@ -1232,7 +1350,8 @@
    "g": "Netzwerk",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/0.1USV_und_USV_Klassen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/0.1USV_und_USV_Klassen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "USV-Klassifizierung nach IEC 62040-3: Der dreistufige Code",
@@ -1240,7 +1359,8 @@
    "g": "Netzwerk",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/0.2USV_Klassifizierung_nach_IEC_62040-3.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/0.2USV_Klassifizierung_nach_IEC_62040-3.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Broadcast Domain",
@@ -1248,7 +1368,8 @@
    "g": "Netzwerk",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/Broadcast-Domain.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/Broadcast-Domain.md",
+   "d": "2026-10-29"
   },
   {
    "t": "iSCSI: Block-Storage über TCP/IP",
@@ -1256,7 +1377,8 @@
    "g": "Netzwerk",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/ISCIS_Block_Storage.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/ISCIS_Block_Storage.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Storage Area Network (SAN): Grundlagen & Prüfungsvorbereitung",
@@ -1264,7 +1386,8 @@
    "g": "Netzwerk",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/Storage_Area_Network.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/Storage_Area_Network.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Subnetting",
@@ -1272,7 +1395,8 @@
    "g": "Netzwerk",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/Subnetting_Deep_Dive.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Network/Subnetting_Deep_Dive.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Leitfaden: SSH-Zugriff für GitHub einrichten",
@@ -1280,7 +1404,8 @@
    "g": "Git und GitHub",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/1.Leitfaden_SSH_Zugriff_Einrichten.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/1.Leitfaden_SSH_Zugriff_Einrichten.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Wissensdatenbank: Git & GitHub für den Arbeitsalltag",
@@ -1288,7 +1413,8 @@
    "g": "Git und GitHub",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/2.Troubbleshooting_VSCode_GIT.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/2.Troubbleshooting_VSCode_GIT.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Täglicher Git-Workflow: Branches, Pull Requests & Konflikte lösen",
@@ -1296,7 +1422,8 @@
    "g": "Git und GitHub",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/3.Basis_Workflow.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/3.Basis_Workflow.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Trunk-based Development (TBD): die Alternative zu Feature-Branches",
@@ -1304,7 +1431,8 @@
    "g": "Git und GitHub",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/4.Trunked_Based_Development.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/4.Trunked_Based_Development.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Überarbeitete Anleitung: Python-Code mit GitHub Actions automatisch prüfen lassen",
@@ -1312,7 +1440,8 @@
    "g": "Git und GitHub",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/Anleitung_Pipelining_ruff.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Github/Anleitung_Pipelining_ruff.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Die Evolution der Container-Infrastruktur im Jahr 2026: Architektonische Divergenzen, Sicherheits-Compliance und die Relevanz für die IT-Berufsausbildung",
@@ -1320,7 +1449,8 @@
    "g": "Docker und Container",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Docker/1.Die_Evolution_der_Container_Infrastruktur.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Docker/1.Die_Evolution_der_Container_Infrastruktur.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Container-Infrastruktur 2026: Teil 2: Praxis & Hands-on Labs (v2)",
@@ -1328,7 +1458,8 @@
    "g": "Docker und Container",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Docker/2.Praxis_Hands_on_Labs.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Docker/2.Praxis_Hands_on_Labs.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Kubernetes & WebAssembly: Kaffeekollaborations-Tisch-Edition",
@@ -1336,7 +1467,8 @@
    "g": "Docker und Container",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Docker/3.Kubernetes_und_WebAssembly.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Docker/3.Kubernetes_und_WebAssembly.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Automatische Ubuntu-Installation (Autoinstall)",
@@ -1344,7 +1476,8 @@
    "g": "Ubuntu",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Autoinstall/Ubuntu24.04LTSAutoinstall.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Autoinstall/Ubuntu24.04LTSAutoinstall.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Backup & System-Snapshots unter Ubuntu 24.04 LTS",
@@ -1352,7 +1485,8 @@
    "g": "Ubuntu",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/Backup_System_Snapshots_Ubuntu_%224.04_LTS.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/Backup_System_Snapshots_Ubuntu_%224.04_LTS.md",
+   "d": "2026-10-29"
   },
   {
    "t": "nano ~/.bash_aliases: Dein Schweizer Taschenmesser für die Kommandozeile",
@@ -1360,7 +1494,8 @@
    "g": "Ubuntu",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/nano1_bash_aliases_Dein_Schweizer_Taschenmesser.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/nano1_bash_aliases_Dein_Schweizer_Taschenmesser.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Von Aliasen zu Shell-Skripten: Dein Produktivitäts-Boost für die IHK-Projektarbeit",
@@ -1368,7 +1503,8 @@
    "g": "Ubuntu",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/nano2_Von_Aliasen_zu_Shell_Skripten.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/nano2_Von_Aliasen_zu_Shell_Skripten.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Ubuntu 26.04 LTS \"Resolute Raccoon\": Status, Features, Bugs",
@@ -1376,7 +1512,8 @@
    "g": "Ubuntu",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/Ubuntu26.04LTS.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/Ubuntu26.04LTS.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Nützliche Links zu Ubuntu 26.04",
@@ -1384,7 +1521,8 @@
    "g": "Ubuntu",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/UsefullLinksUbuntu26.04.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Ubuntu/Research/Dokumentationen/UsefullLinksUbuntu26.04.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Zusätze und Testleitfaden für die automatisierte Ubuntu-Installation",
@@ -1392,7 +1530,8 @@
    "g": "Autoinstall",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Autoinstall/2.Zusatz.MD"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Autoinstall/2.Zusatz.MD",
+   "d": "2026-10-29"
   },
   {
    "t": "Ubuntu 26.04 Autoinstall: Vollautomatische Systembereitstellung",
@@ -1400,7 +1539,8 @@
    "g": "Autoinstall",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Autoinstall/Autoinstall_26.04_Erkl%C3%A4rt.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Autoinstall/Autoinstall_26.04_Erkl%C3%A4rt.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Workaround: Verschwundenes WLAN/LAN bei Lenovo ThinkPads unter Ubuntu",
@@ -1408,7 +1548,8 @@
    "g": "Bash",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Bash_Scripting/%F0%9F%9B%A0%EF%B8%8F%20Workaround_WLAN_LAN_Lenovo_ThinkPad_Ubuntu..md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Bash_Scripting/%F0%9F%9B%A0%EF%B8%8F%20Workaround_WLAN_LAN_Lenovo_ThinkPad_Ubuntu..md",
+   "d": "2026-10-29"
   },
   {
    "t": "Windows 11 in der KVM-Box: Der Profi-Guide",
@@ -1416,7 +1557,8 @@
    "g": "KVM und QEMU",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KVM_Qemu_Stuff/Erst_Installation_und_Windows11.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KVM_Qemu_Stuff/Erst_Installation_und_Windows11.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E1 · Was ist KI überhaupt?",
@@ -1424,7 +1566,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E1_Was_ist_KI_%C3%9Cberhaupt.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E1_Was_ist_KI_%C3%9Cberhaupt.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E2 · Die Vielfalt der Werkzeuge",
@@ -1432,7 +1575,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E2_Die_Vielfalt_der_Werkzeuge.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E2_Die_Vielfalt_der_Werkzeuge.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E3 · Erste Schritte mit einem Chat-Assistenten",
@@ -1440,7 +1584,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E3_Erste_Schritte.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E3_Erste_Schritte.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E4 · Gutes Prompten",
@@ -1448,7 +1593,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E4_gutes_Prompten.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E4_gutes_Prompten.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E5 · KI zum Lernen nutzen",
@@ -1456,7 +1602,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E5_KI_zum_lernen_nutzen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E5_KI_zum_lernen_nutzen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E6 · Grenzen und Halluzinationen",
@@ -1464,7 +1611,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E6_Grenzen_und_Halluzinationen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E6_Grenzen_und_Halluzinationen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E7 · Datenschutz im Alltag: Was nicht in ein Chatfenster gehört",
@@ -1472,7 +1620,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E7_Datenschutz_IM_Alltag.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E7_Datenschutz_IM_Alltag.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-E8 · KI-Alltag außerhalb des Chats",
@@ -1480,7 +1629,8 @@
    "g": "Einstieg: Was ist KI",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E8_KI_Alltag_au%C3%9Ferhalb_des_Chats.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.1_Was%20ist%20KI/E8_KI_Alltag_au%C3%9Ferhalb_des_Chats.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A1 · Werkzeugwahl im Alltag: Erst die Aufgabe, dann das Werkzeug",
@@ -1488,7 +1638,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A1_Werkzeugwahl_im_Alltag.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A1_Werkzeugwahl_im_Alltag.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A2 · Kontext ist alles: Dem Werkzeug geben, was es wissen muss",
@@ -1496,7 +1647,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A2_Kontext_ist_alles.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A2_Kontext_ist_alles.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A3 · Recherche mit Quellenprüfung: Die KI findet, glauben musst du selbst",
@@ -1504,7 +1656,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A3_Recherche_mit_Quellenpr%C3%BCfung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A3_Recherche_mit_Quellenpr%C3%BCfung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A4 · Lernen mit KI im Detail: Vom Einzeltrick zum Lernsystem",
@@ -1512,7 +1665,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A4_Lernen_mit_KI_im_Detail.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A4_Lernen_mit_KI_im_Detail.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A5 · Code mit KI: Mitarbeiten lassen, ohne das Können abzugeben",
@@ -1520,7 +1674,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A5_Code_mit_KI.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A5_Code_mit_KI.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A6 · Texte, Dokumentation, Bewerbung: Entwürfe mit KI, Stimme von dir",
@@ -1528,7 +1683,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A6_Texte_Dokumentation_Bewerbung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A6_Texte_Dokumentation_Bewerbung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A7 · Wiederverwendbare Anweisungen: Einmal gut schreiben, oft nutzen",
@@ -1536,7 +1692,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A7_%20Wiederverwendbare_Anweisungen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A7_%20Wiederverwendbare_Anweisungen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A8 · Qualitätskontrolle: Ergebnisse prüfen, bevor sie weiterwandern",
@@ -1544,7 +1701,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A8_Qualit%C3%A4tskontrolle.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A8_Qualit%C3%A4tskontrolle.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-A9 · Lokale KI als Einstieg: Das Modell läuft bei dir",
@@ -1552,7 +1710,8 @@
    "g": "Aufbau: KI beim Lernen und Arbeiten",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A9_Lokale_KI_als_Einstieg.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.2_Aufbau_Track_KI_in_Lernen_Arbeiten_einbauen/A9_Lokale_KI_als_Einstieg.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-D1 · Tokens und Kontextfenster: Warum Sprachmodelle vergessen",
@@ -1560,7 +1719,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D1_Tokens_Kontextfenster.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D1_Tokens_Kontextfenster.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-D2 · Embeddings: Bedeutung als Ort auf einer Karte",
@@ -1568,7 +1728,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D2_Embeddings.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D2_Embeddings.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-D3 · Transformer und Attention: Wie Tokens einander zuhören",
@@ -1576,7 +1737,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D3.Transformer_und_Attention.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D3.Transformer_und_Attention.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-D4 · Wahrscheinlichkeit statt Wissen: Wie aus Zahlen Text wird",
@@ -1584,7 +1746,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D4_Wahrscheinlichkeit_statt_Wissen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D4_Wahrscheinlichkeit_statt_Wissen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-D5 · Training in drei Stufen: Vom Lückentext zum Assistenten",
@@ -1592,7 +1755,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D5_Training_in_drei_Stufen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D5_Training_in_drei_Stufen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "KI-D6 · Modellfamilien und Größen: Wie groß, wie offen, wie spezialisiert",
@@ -1600,7 +1764,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D6_Modellfamilien_und_Gr%C3%B6%C3%9Fen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D6_Modellfamilien_und_Gr%C3%B6%C3%9Fen.md",
+   "d": "2026-11-03"
   },
   {
    "t": "KI-D7 · Argumentieren und Denken: Was Reasoning-Modelle anders machen",
@@ -1608,7 +1773,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D7_Argumentieren_und_Denken.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D7_Argumentieren_und_Denken.md",
+   "d": "2026-11-03"
   },
   {
    "t": "KI-D8 · Warum Halluzinationen entstehen: Flüssig ist nicht wahr",
@@ -1616,7 +1782,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D8_Warum_Halluzinationen_entstehen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D8_Warum_Halluzinationen_entstehen.md",
+   "d": "2026-11-03"
   },
   {
    "t": "KI-D9 · Bias, Daten und Urheberrecht: Was im Training steckt, kommt wieder heraus",
@@ -1624,7 +1791,8 @@
    "g": "Das Dahinter",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D9_Bias_Daten_und_Urheberrecht.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.3_Das_Dahinter/D9_Bias_Daten_und_Urheberrecht.md",
+   "d": "2026-11-03"
   },
   {
    "t": "KI-P1 · Lokale Modelle betreiben: Vom Gewächshaus zum Hofladen",
@@ -1632,7 +1800,8 @@
    "g": "Profi-Track",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.4_Profi_Track/P1_Lokale_Modelle_betreiben.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.4_Profi_Track/P1_Lokale_Modelle_betreiben.md",
+   "d": "2026-11-03"
   },
   {
    "t": "KI-P2 · API-Nutzung: Der Bestellschein ans Modell",
@@ -1640,7 +1809,8 @@
    "g": "Profi-Track",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.4_Profi_Track/P2_API_Nutzung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/KI-Anf%C3%A4nger_bis_Nerd_Die_Sammlung/0.4_Profi_Track/P2_API_Nutzung.md",
+   "d": "2026-11-03"
   },
   {
    "t": "LLM/KI/Thinking-Modelle: Praxisleitfaden für IT, Umschulung und lokale Workflows",
@@ -1648,7 +1818,8 @@
    "g": "LLMs lokal und im Alltag",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/LLM_Stuff/LLM_KI_Thinking_Modelle_Praxisleitfaden.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/LLM_Stuff/LLM_KI_Thinking_Modelle_Praxisleitfaden.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Deep Dive: Lokale LLMs mit Ollama auf CachyOS (AMD Hardware)",
@@ -1656,7 +1827,8 @@
    "g": "LLMs lokal und im Alltag",
    "lf": null,
    "rot": true,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/LLM_Stuff/Lokale_LLM_mit_Ollama_CachyOS_AMD.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/LLM_Stuff/Lokale_LLM_mit_Ollama_CachyOS_AMD.md",
+   "d": "2026-10-29"
   },
   {
    "t": "eduScrum-Recherche-Agent: Setup für deine IT-Umschulung",
@@ -1664,7 +1836,8 @@
    "g": "Recherche-Agent",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/1.Einleitung.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/1.Einleitung.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Tag 1: Infrastruktur bauen (ca. 2-3 h)",
@@ -1672,7 +1845,8 @@
    "g": "Recherche-Agent",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/2.Tag1_Infrastruktur_Bauen.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/2.Tag1_Infrastruktur_Bauen.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Tag 2: Agent konfigurieren und dein eduScrum-Template einbauen (ca. 2-3 h)",
@@ -1680,7 +1854,8 @@
    "g": "Recherche-Agent",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/3.Tag2_Agent_Konfigurieren.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/3.Tag2_Agent_Konfigurieren.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Tipps & Troubleshooting",
@@ -1688,7 +1863,8 @@
    "g": "Recherche-Agent",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/4.Tipps_Troubleshooting.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/4.Tipps_Troubleshooting.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Research-Agent für IT- und Physik-Umschüler:innen",
@@ -1696,7 +1872,8 @@
    "g": "Recherche-Agent",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/Zusatz_Prompt_fuer_Recherche.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Recherche_Agent/Zusatz_Prompt_fuer_Recherche.md",
+   "d": "2026-10-29"
   },
   {
    "t": "IT-Bewerbungsgespräche für Umschüler:innen: Fokus: Praktikum",
@@ -1704,7 +1881,8 @@
    "g": "Praktikum und Bewerbung",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Umschulung_Praktika_Hilfe.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Umschulung_Praktika_Hilfe.md",
+   "d": "2026-10-29"
   },
   {
    "t": "Schreib-Guide & Tools",
@@ -1712,7 +1890,8 @@
    "g": "Mitmachen",
    "lf": null,
    "rot": false,
-   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Markdown_Cheet_Cheat.md"
+   "u": "https://github.com/ITDavid04/Lern-Wiki/blob/main/Markdown_Cheet_Cheat.md",
+   "d": "2026-10-29"
   }
  ],
  "links": {
