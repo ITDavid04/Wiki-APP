@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
 > **Stand:** 04.11.2026
-> **App-Stand:** Commit `635c701` (Profi-Track im Katalog), Version 1.0.0 zählt selbst hoch
+> **App-Stand:** Commit `91bbc65` (Neu-Hinweis und rosa Stift), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -40,6 +40,7 @@ eine weg, wird diese Seite mitgepflegt.
 | Start | Ladebildschirm „Moin. Die Ranke wird gegossen.“ | beim Öffnen |
 | Start | 12 Lernfeld-Würfel in 3D | Bühne ganz oben |
 | Start | Wegweiser und Zahlen zur Bibliothek | Intro |
+| Start | Hinweis „Neu“ auf den zuletzt dazugekommenen Artikel, höchstens 7 Tage | Intro, über dem Text |
 | Start | Die Ranke: jedes Blatt ein Artikel, wächst beim Scrollen | Abschnitt 01 und die ganze Seite |
 | Start | Kacheln der 6 Abteilungen und 12 Lernfelder in Blütenform | Abschnitte 02 und 03 |
 | Start | Katalog mit Suche und Filtern | Abschnitt 04 |
@@ -58,6 +59,7 @@ eine weg, wird diese Seite mitgepflegt.
 | Hilfe | Fehler melden: Formular mit Artikel, Abschnitt, Version und Gerät, weiter zu GitHub oder als Text für Teams | Fahne im Artikel, Artikelende, Menü, Fuß, Mein Stand |
 | Gerät | Untere Leiste am Handy | Handy |
 | Gerät | Hell und dunkel | Knopf oben rechts |
+| Gerät | Mauszeiger als rosa Stift mit kurzer, funkelnder Spur | ganze App, nur mit Maus |
 
 ---
 
@@ -70,7 +72,7 @@ eine weg, wird diese Seite mitgepflegt.
 | Ladebildschirm | „Moin. Die Ranke wird gegossen.“ mit sechs Feldern, die sich beim Laden füllen. Höchstens 3,5 Sekunden, bei reduzierter Bewegung gar nicht. |
 | Kopfleiste | Theme-Knopf, „Mein Stand“, „Suchen“ und das Menü. Bleibt oben stehen und bekommt beim Scrollen einen Hintergrund. |
 | Menü | Springt zu allen Abschnitten (01 bis 06), zu Prüfungsmodus, Mein Stand, GitHub und „App installieren“. Escape schließt es. |
-| Mauszeiger-Ring | Am Desktop folgt ein Ring der Maus und wird über Klickbarem größer. |
+| Mauszeiger-Stift | Mit Maus ist der Zeiger überall in der App ein rosa Stift; die Spitze sitzt genau auf der Mausposition, auch beim Klicken bleibt er ein Stift. Hinter ihm zieht eine kurze rosa Spur mit ein paar Funken, die nach etwa 0,2 Sekunden verblasst. Auf Handy und Tablet gibt es ihn nicht, bei reduzierter Bewegung kommt er ohne Spur. |
 | Sanftes Scrollen | Scrollen gleitet nach (Lenis), bei reduzierter Bewegung nicht. |
 
 ### 2.2 Bühne mit den Lernfeld-Würfeln
@@ -85,6 +87,11 @@ eine weg, wird diese Seite mitgepflegt.
 
 ### 2.3 Intro
 
+- **Neu:** Über dem Text steht der Artikel, der zuletzt ins Wiki kam, mit Thema und Titel, zum Beispiel
+  „6 neue Artikel zum Thema KI“ und darunter „KI-P2 · API-Nutzung: Der Bestellschein ans Modell“. Ein Klick öffnet ihn.
+  Er bleibt stehen, bis ein neuerer kommt, höchstens 7 Tage ab dem Tag, an dem er dazukam. Danach verschwindet der Hinweis.
+  Mitgezählt werden die Artikel desselben Themas vom selben Tag (bei Lernfeldern ist das Thema das Lernfeld, zum Beispiel LF5).
+  Das Datum kommt aus dem Verlauf des Wikis (siehe [8](#8-technik-in-kürze)); Verschieben oder Umbenennen macht einen Artikel nicht neu.
 - Kurzer Text, worum es geht, und ein **Wegweiser**: „Neu hier: Start mit LF1“, „Prüfung naht“, „Thema suchen“, „Stöbern“,
   „Weiterlesen“ (zuletzt geöffneter Artikel) und „App installieren“.
 - Drei **Zahlen** aus dem Katalog: Artikel im Repository, Abteilungen, Lernfelder mit Artikeln.
@@ -320,7 +327,7 @@ Bedingung und Fortschritt („10 von 25“).
 | Tastatur | Sprunglink „Zum Inhalt“, Kacheln per Tastatur aufdecken, Escape schließt Menü, Kachel, Feier-Karte und Seite; ist „Fehler melden“ offen, schließt Escape nur das Formular |
 | Screenreader | Beschriftungen an Kacheln, Knöpfen und Bienen („gelesen“); Feier, Biene und Stempel werden über `aria-live` angesagt |
 | Fokus | Beim Öffnen einer Seite springt der Fokus auf ihren Titel, beim Schließen zurück |
-| Reduzierte Bewegung | keine Animationen: Ranke sofort voll, Würfel ohne Schweben, kein Blätterflug, keine fliegenden Bienen, Bienen in der Ranke sitzen still, Stempel ohne Aufdrücken |
+| Reduzierte Bewegung | keine Animationen: Ranke sofort voll, Würfel ohne Schweben, kein Blätterflug, keine fliegenden Bienen, Bienen in der Ranke sitzen still, Stempel ohne Aufdrücken, Stift ohne Spur, Schild „Neu“ pulsiert nicht |
 | Ohne WebGL | Standbild der Würfel (mit Häkchen für geschaffte Lernfelder) und gezeichnete Ranke (mit Blüten und Bienen); alles andere funktioniert gleich |
 
 ---
@@ -362,7 +369,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | `src/melden.js` | Fehler melden: Formular, GitHub-Issue, Text für Teams |
 | `src/scene.js` | 3D: Würfel, Ranke, Blüten, Bienen |
 | `src/sw.js` | Service Worker: App-Hülle und Artikel offline |
-| `data/catalog.json` | Katalog aller Artikel, erzeugt mit `tools/catalog.mjs` |
+| `data/catalog.json` | Katalog aller Artikel, erzeugt mit `tools/catalog.mjs`; je Artikel der Tag, an dem er auf `main` dazukam (`d`), dazu `neu` = der zuletzt dazugekommene. Dafür braucht das Skript den ganzen Verlauf des Wikis, der Workflow klont es deshalb ohne `--depth 1` |
 | `tools/build.mjs` | baut `docs/`, bestimmt die Versionsnummer und schreibt `version.json`, bricht bei Gedankenstrichen ab |
 | `tools/test.mjs` | automatischer Test mit Chrome |
 | `.github/workflows/pages.yml` | veröffentlicht bei Push auf `main`, jede Nacht um 2:30 Uhr UTC und auf Knopfdruck |
@@ -413,6 +420,8 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 29.10.2026 | `dc6b39a` | Impressum und Datenschutz im Fuß verlinkt (statt Platzhalter), für das öffentliche Release |
 | 03.11.2026 | `7a94eb0` | Kacheln in Blütenform: sechs Blätter, Nummer in der Mitte, Blätter fallen beim Aufdecken ab |
 | 04.11.2026 | `635c701` | Gruppe „Profi-Track“ in der Abteilung KI (Ordner `0.4_Profi_Track` im Wiki; ohne Zeile in `GRUPPEN` brach der Katalog ab und die App ging nicht mehr live) |
+| 04.11.2026 | `91bbc65` | Hinweis „Neu“ im Intro: zuletzt dazugekommener Artikel, höchstens 7 Tage; Katalog kennt dafür das Datum je Artikel, der Workflow klont das Wiki mit ganzem Verlauf |
+| 04.11.2026 | `91bbc65` | Mauszeiger als rosa Stift mit kurzer, funkelnder Spur (nur mit Maus) |
 
 ### Entfernt oder ersetzt
 
@@ -425,6 +434,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 22.10.2026 | `7370346` | Wort „GELESEN“ im Katalog | die Biene steht jetzt dafür |
 | 03.11.2026 | `7a94eb0` | Blattförmige Kacheln mit kleiner Blüte oder Knospe auf dem Deckblatt (`00cdc92`) | gewünscht war, dass die Kachel selbst eine Blüte ist |
 | 03.11.2026 | `7a94eb0` | Hinweis „aufdecken“ auf dem Deckblatt | sein Platz im oberen Blatt gehört jetzt der Artikelzahl |
+| 04.11.2026 | `91bbc65` | Mauszeiger-Ring, der über Klickbarem größer wurde | ersetzt durch den rosa Stift |
 
 ### Bewusst nicht gebaut
 
