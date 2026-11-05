@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
 > **Stand:** 05.11.2026
-> **App-Stand:** Commit `d60d401` (Klaus-Dieter spricht), Version 1.0.0 zählt selbst hoch
+> **App-Stand:** Commit `58b6875` (Klaus-Dieters Tondateien mit Fingerabdruck), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -172,7 +172,7 @@ wie die Bibliothek aufgebaut ist. Die Bienen bleiben die Belohnung fürs Lesen; 
 | Führung | 7 Stationen: Würfel, Ranke und Blätter, Zweige (Abteilungen), Kacheln, Suchen, Prüfung (mit dem Satz, dass Hummeln nach alter Rechnung gar nicht fliegen dürften: „Ich flieg trotzdem! Und genauso packst du die Prüfung, egal was die Rechnung sagt!“), Blüte am Ende mit Bienen, Mein Stand und Leseausweis. Zwischen den Stationen fliegt er knapp über dem Stängel an der Ranke entlang und zieht Pollenstaub hinter sich her; die Seite scrollt mit. Der Flug läuft in der gemeinsamen Schleife der App (`F.jeBild`, vor Lenis und 3D), damit Ranke und Seite nicht hinterherhinken. Er fährt sanft an, fliegt in ruhigem Tempo, landet sanft, dreht sich erst bei einem echten Richtungswechsel und neigt sich weich. Die Sprechblase zeigt „Klaus-Dieter · 3 von 7“, „Weiter“ und „Beenden“. |
 | Ende | Nach der letzten Station („Danke, Klaus-Dieter!“), mit „Beenden“, Escape oder wenn ein Artikel aufgeht: Er verschwindet in einem Pollenwölkchen und sitzt wieder auf seiner Blüte. Die Seite bleibt, wo sie ist. |
 | Menü | „Führung mit Klaus-Dieter“ scrollt nach oben zu ihm und startet die Führung direkt. |
-| Stimme | Klaus-Dieter spricht jede Sprechblase selbst: die Begrüßung (`ton/kd-hallo.mp3`) und die 7 Stationen (`ton/kd-1.mp3` bis `kd-7.mp3`), jeweils nach der Landung. Während er spricht, nickt er leicht im Takt. Der Lautsprecher „Ton an“ / „Ton aus“ rechts in der Sprechblase schaltet ihn stumm und wieder an (dann fängt der Satz von vorn an); gemerkt in `lernwiki-hummel-ton`. Weiter, Beenden, Escape, ein geöffneter Artikel oder ein Wechsel des Tabs brechen den Satz ab. Handys spielen Ton nur nach einem Tipp: Darum lädt jeder Klick die nächste Datei schon stumm an. Die Dateien (knapp 2 MB) werden nicht vorgeladen, sondern erst beim Abspielen geholt; offline bleibt er still, die Sprechblase steht trotzdem da. Bei der Prüfungsstation (Station 6) passt der Text in der Blase zur Aufnahme; bei Würfeln und Ranke stehen in der Blase Zahlen und Maus-Hinweise, die die Aufnahme allgemein hält. |
+| Stimme | Klaus-Dieter spricht jede Sprechblase selbst: die Begrüßung (`ton/kd-hallo.mp3`) und die 7 Stationen (`ton/kd-1.mp3` bis `kd-7.mp3`), jeweils nach der Landung. Während er spricht, nickt er leicht im Takt. Der Lautsprecher „Ton an“ / „Ton aus“ rechts in der Sprechblase schaltet ihn stumm und wieder an (dann fängt der Satz von vorn an); gemerkt in `lernwiki-hummel-ton`. Weiter, Beenden, Escape, ein geöffneter Artikel oder ein Wechsel des Tabs brechen den Satz ab. Handys spielen Ton nur nach einem Tipp: Darum lädt jeder Klick die nächste Datei schon stumm an. Die Dateien (knapp 2 MB) werden nicht vorgeladen, sondern erst beim Abspielen geholt, mit einem Fingerabdruck des Inhalts in der Adresse (`ton/kd-1.mp3?v=…`, setzt der Build ein), damit nach einer neuen Aufnahme kein Browser die alte aus dem Zwischenspeicher spielt; offline bleibt er still, die Sprechblase steht trotzdem da. Bei der Prüfungsstation (Station 6) passt der Text in der Blase zur Aufnahme; bei Würfeln und Ranke stehen in der Blase Zahlen und Maus-Hinweise, die die Aufnahme allgemein hält. |
 | Handy | Kleinere Hummel und Blüte, die Sprechblase sitzt unten über der Handy-Leiste. Hummel, Blüte und Pollenstaub liegen in einer eigenen Ebene, die seitlich nichts überstehen lässt. |
 | 3D | Mit WebGL ist er ein 3D-Modell aus Grundformen (wie die Bienen der Ranke): runder Körper mit samtiger Oberfläche (Sheen wie bei Plüsch), die Streifen schräg als schmale Leinwand aufgemalt, damit die Kanten sauber bleiben; das Gesicht sitzt vorn am Körper mit glänzenden Kulleraugen samt Lichtpunkten, Bäckchen und Lächeln; Fühler mit gelben Kugeln, Stummelbeinchen, Händchen mit gelber Blume, durchscheinende Flügel mit gemalten Adern. Er schaut beim Fliegen halb zur Kamera, damit man sein Gesicht sieht. Beim Wenden dreht er sich wirklich um und schaut dabei kurz in die Kamera; im Flug schwirren die Flügel und er schaukelt, ab und zu blinzelt er. Eigene kleine WebGL-Fläche über dem Inhalt, gezeichnet nur, solange er im Bild ist, in Ruhe mit 30 Bildern pro Sekunde. Auf Geräten im Datensparmodus oder mit wenig Speicher bleibt die Zeichnung. **Notbremse:** Vor dem Aufbau misst er eine knappe Sekunde, wie flüssig die Seite läuft; über 34 ms pro Bild bleibt die Zeichnung. Wird es später zäh (im Schnitt über 45 ms), gibt er sein 3D auf. So auch im Testlauf auf GitHub, der 3D ohne Grafikkarte rechnet. |
 | Ohne 3D | Die Zeichnung von Klaus-Dieter; ohne 3D-Ranke fliegt er im Bogen statt an der Ranke entlang. |
@@ -391,7 +391,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | `src/reader.js` | Artikelseite, Prüfungsmodus, Mein Stand mit Leseausweis, Sichern |
 | `src/melden.js` | Fehler melden: Formular, GitHub-Issue, Text für Teams |
 | `src/hummel.js` | Klaus-Dieter, die Hummel: Blüte, Platz, Winken, Führung mit Sprechblase, Flug an der Ranke (Weg aus `scene.js` als `F.rankePfad`), Stimme mit Lautsprecher-Knopf, Zeichnung als Rückfall |
-| `src/ton/` | Klaus-Dieters Stimme: `kd-hallo.mp3` und `kd-1.mp3` bis `kd-7.mp3`; nicht vorgeladen, am Service Worker vorbei |
+| `src/ton/` | Klaus-Dieters Stimme: `kd-hallo.mp3` und `kd-1.mp3` bis `kd-7.mp3`; nicht vorgeladen, am Service Worker vorbei, Adresse mit Fingerabdruck (`/*TON*/` in `hummel.js`). Neue Aufnahme: Datei einfach ersetzen |
 | `src/hummel3d.js` | Klaus-Dieter in 3D: Modell aus Grundformen mit Fell, eigene kleine WebGL-Fläche, Notbremse, wird von `hummel.js` nachgeladen |
 | `src/scene.js` | 3D: Würfel, Ranke, Blüten, Bienen |
 | `src/sw.js` | Service Worker: App-Hülle und Artikel offline |
@@ -456,6 +456,8 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `69127a2` | Klaus-Dieter Pollenberg, die Hummel, statt Udo, dem Einhorn: neue Zeichnung und neues 3D-Modell (flauschig, runde Goldbrille), Sitzplatz auf einer Blüte an der Linie, Pollenstaub statt Glitzer, Texte als Gartenaufsicht; Dateien `hummel.js` und `hummel3d.js` |
 | 04.11.2026 | `76af42a` | Klaus-Dieter neu gestaltet nach Vorlage: blauer Plüsch-Knubbel mit schrägen dunkelblauen und gelben Streifen, Kulleraugen, Bäckchen, gelben Fühlerspitzen, geäderten Flügeln und gelber Blume in den Händchen (Zeichnung und 3D) |
 | 05.11.2026 | `d60d401` | Klaus-Dieter spricht: Begrüßung und alle 7 Stationen vertont, Lautsprecher-Knopf in der Sprechblase, Nicken beim Sprechen; neuer Text an der Prüfungsstation („Ich flieg trotzdem! Und genauso packst du die Prüfung, egal was die Rechnung sagt!“) |
+| 05.11.2026 | `0ddc3fe` | Richtige Aufnahme für Station 1 (war dieselbe wie die Begrüßung) |
+| 05.11.2026 | `58b6875` | Tondateien mit Fingerabdruck in der Adresse: Nach `0ddc3fe` spielte der Browser noch die alte Aufnahme aus dem Zwischenspeicher |
 
 ### Entfernt oder ersetzt
 
@@ -510,7 +512,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 seite: ReadmeUpdate.md
 inhalt: Funktionen und Gimmicks der Wiki-APP
 stand: 2026-11-05
-app_commit: d60d401
+app_commit: 58b6875
 app_version: ab 1.0.0, zählt selbst hoch
 katalog: 178 Artikel, 75 mit Ampel, 10 von 12 Lernfeldern mit Artikeln, Wiki-Stand 2026-11-03
 stempel: 17
