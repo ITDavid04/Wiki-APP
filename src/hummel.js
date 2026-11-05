@@ -99,6 +99,9 @@ const kopf = $('#hummelKopf'), text = $('#hummelText'), ja = $('#hummelJa'), nei
    schaltet ihn stumm, gemerkt in lernwiki-hummel-ton. Handys spielen Ton nur nach einem Tipp ab: Darum lädt jeder Klick
    die nächste Datei schon stumm an (das gibt sie frei), und nach der Landung spricht er sie. Offline bleibt er still. */
 const TON_KEY = 'lernwiki-hummel-ton';
+/* Fingerabdruck je Datei, setzt tools/build.mjs ein: Neue Aufnahme heißt neue Adresse, kein Browser spielt dann noch die alte */
+const TON = /*TON*/{};
+const tonUrl = datei => 'ton/' + datei + (TON[datei] ? '?v=' + TON[datei] : '');
 const stimme = $('#hummelStimme'), tonKnopf = $('#hummelTon');
 let tonAn = store.get(TON_KEY) !== '0', tonSoll = false, tonDatei = '';
 function tonZeigen(){
@@ -112,13 +115,13 @@ function verstumme(){ tonSoll = false; stimme.pause(); fe.classList.remove('spri
 function vorbereiten(datei){
   verstumme(); tonDatei = datei;
   if (!tonAn) return;
-  if (!stimme.src.endsWith('ton/' + datei)) stimme.src = 'ton/' + datei;
+  if (!stimme.src.endsWith(tonUrl(datei))) stimme.src = tonUrl(datei);
   stimme.muted = true;
   const p = stimme.play();
   if (p) p.then(() => { if (!tonSoll) stimme.pause(); }, () => {});
 }
 function sprich(datei){
-  if (datei !== tonDatei || !stimme.src.endsWith('ton/' + datei)) vorbereiten(datei);
+  if (datei !== tonDatei || !stimme.src.endsWith(tonUrl(datei))) vorbereiten(datei);
   if (!tonAn) return;
   tonSoll = true; stimme.muted = false;
   try { stimme.currentTime = 0; } catch (e) {}

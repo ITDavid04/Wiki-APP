@@ -487,14 +487,14 @@ try {
   await blaseAuf('Gartenaufsicht');
   check('Klaus-Dieter fragt erst auf Klick', await up.evaluate(() => document.getElementById('hummelNein').textContent === 'Lieber später'));
   /* Stimme: die Begrüßung lädt und läuft ohne Fehler (Tipp zählt als Erlaubnis zum Abspielen) */
-  const hallo = await up.waitForFunction(() => { const s = document.getElementById('hummelStimme'); return s.src.endsWith('ton/kd-hallo.mp3') && !s.error && s.readyState >= 2 && !s.muted; }, { timeout: 15000 }).then(() => true, () => false);
+  const hallo = await up.waitForFunction(() => { const s = document.getElementById('hummelStimme'); return /\/ton\/kd-hallo\.mp3\?v=[0-9a-f]{10}$/.test(s.src) && !s.error && s.readyState >= 2 && !s.muted; }, { timeout: 15000 }).then(() => true, () => false);
   check('Klaus-Dieter spricht die Begrüßung', hallo, await up.evaluate(() => { const s = document.getElementById('hummelStimme'); return JSON.stringify({ src: s.src, rs: s.readyState, err: s.error && s.error.code, muted: s.muted }); }));
   await up.click('#hummelJa');
   const stationen = [], toene = [];
   for (let i = 1; i <= 7; i++) {
     await blaseAuf(`${i} von 7`);
     stationen.push(await up.evaluate(() => Math.round(scrollY)));
-    toene.push(await up.evaluate(() => { const s = document.getElementById('hummelStimme'); return s.src.split('/').pop() + (s.error ? '!' : '') + (s.muted ? '~' : ''); }));
+    toene.push(await up.evaluate(() => { const s = document.getElementById('hummelStimme'); return s.src.split('/').pop().split('?')[0] + (s.error ? '!' : '') + (s.muted ? '~' : ''); }));
     if (i === 3) await up.screenshot({ path: path.join(SHOTS, 'hummel-zweige.png') });
     await up.click('#hummelJa');
   }

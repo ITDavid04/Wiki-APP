@@ -63,8 +63,15 @@ if (!html.includes('/*CATALOG*/')) throw new Error('Platzhalter /*CATALOG*/ fehl
 if (!html.includes('/*APPVERSION*/')) throw new Error('Platzhalter /*APPVERSION*/ fehlt');
 html = html.replace('/*CATALOG*/', () => catJs);
 await put('index.html', html);
+/* Klaus-Dieters Stimme: je Datei ein Fingerabdruck des Inhalts, hummel.js hängt ihn an die Adresse (?v=...) */
+const TON = {};
+for (const f of await readdir(path.join(SRC, 'ton'))) TON[f] = createHash('sha256').update(await readFile(path.join(SRC, 'ton', f))).digest('hex').slice(0, 10);
 for (const f of ['app.css', 'app.js', 'scene.js', 'reader.js', 'melden.js', 'hummel.js', 'hummel3d.js']) {
-  const code = await read(path.join(SRC, f));
+  let code = await read(path.join(SRC, f));
+  if (f === 'hummel.js') {
+    if (!code.includes('/*TON*/{}')) throw new Error('Platzhalter /*TON*/{} fehlt in hummel.js');
+    code = code.replace('/*TON*/{}', JSON.stringify(TON));
+  }
   noDashes('src/' + f, code);
   if (f === 'app.css') await put(f, code);
   else await put(f, await mini(code, f !== 'app.js'));
