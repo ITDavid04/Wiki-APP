@@ -1,7 +1,7 @@
 # Wiki-APP: Funktionen und Gimmicks
 
-> **Stand:** 04.11.2026
-> **App-Stand:** Commit `76af42a` (Klaus-Dieter als blauer Plüsch-Knubbel), Version 1.0.0 zählt selbst hoch
+> **Stand:** 05.11.2026
+> **App-Stand:** Commit `d60d401` (Klaus-Dieter spricht), Version 1.0.0 zählt selbst hoch
 > **Katalog:** 178 Artikel in 6 Abteilungen, 75 davon mit Prüfungs-Ampel, Wiki-Stand 03.11.2026
 > **Live:** https://itdavid04.github.io/Wiki-APP/
 > **Pflege:** Wie diese Seite aktuell bleibt, steht in [Abschnitt 10](#10-so-bleibt-diese-seite-aktuell)
@@ -39,7 +39,7 @@ eine weg, wird diese Seite mitgepflegt.
 |---|---|---|
 | Start | Ladebildschirm „Moin. Die Ranke wird gegossen.“ | beim Öffnen |
 | Start | 12 Lernfeld-Würfel in 3D | Bühne ganz oben |
-| Start | Klaus-Dieter Pollenberg, die Hummel: sitzt auf einer Blüte, winkt und gibt auf Klick eine kurze Führung an der Ranke entlang | unter der Bühne, Menü |
+| Start | Klaus-Dieter Pollenberg, die Hummel: sitzt auf einer Blüte, winkt und gibt auf Klick eine kurze, gesprochene Führung an der Ranke entlang | unter der Bühne, Menü |
 | Start | Wegweiser und Zahlen zur Bibliothek | Intro |
 | Start | Hinweis „Neu“ auf den zuletzt dazugekommenen Artikel, höchstens 7 Tage | Intro, über dem Text |
 | Start | Die Ranke: jedes Blatt ein Artikel, wächst beim Scrollen | Abschnitt 01 und die ganze Seite |
@@ -168,14 +168,15 @@ wie die Bibliothek aufgebaut ist. Die Bienen bleiben die Belohnung fürs Lesen; 
 |---|---|
 | Platz | Sitzt links unter der Bühne auf einer kleinen gelben Blüte, die mit dem Stiel auf der Linie „Scroll weiter, die Ranke wächst mit“ steht. Schwebt leicht, Flügel zittern, Fühler wippen. Die Blüte bleibt stehen, wenn er losfliegt. |
 | Winken | Winkt alle 7 Sekunden mit einem Vorderbein, die Fühler wackeln, ein paar Körnchen Pollenstaub steigen auf. Die ersten Male steht „Moin! Klick mich“ daneben. Ist die Führung gelaufen oder abgelehnt, winkt er nur noch alle 22 Sekunden, ohne Schild. |
-| Frage | Erst ein Klick öffnet die Sprechblase: „Moin, Klaus-Dieter Pollenberg, Gartenaufsicht. Sag ruhig Klaus-Dieter. Soll ich dir in einer Minute zeigen, wie dieser Garten aufgebaut ist?“ mit „Ja, zeig mal“ und „Lieber später“. |
-| Führung | 7 Stationen: Würfel, Ranke und Blätter, Zweige (Abteilungen), Kacheln, Suchen, Prüfung (mit dem Satz, dass Hummeln nach alter Rechnung gar nicht fliegen dürften), Blüte am Ende mit Bienen, Mein Stand und Leseausweis. Zwischen den Stationen fliegt er knapp über dem Stängel an der Ranke entlang und zieht Pollenstaub hinter sich her; die Seite scrollt mit. Der Flug läuft in der gemeinsamen Schleife der App (`F.jeBild`, vor Lenis und 3D), damit Ranke und Seite nicht hinterherhinken. Er fährt sanft an, fliegt in ruhigem Tempo, landet sanft, dreht sich erst bei einem echten Richtungswechsel und neigt sich weich. Die Sprechblase zeigt „Klaus-Dieter · 3 von 7“, „Weiter“ und „Beenden“. |
+| Frage | Erst ein Klick öffnet die Sprechblase, er sagt sie auch: „Moin, Klaus-Dieter Pollenberg, Gartenaufsicht. Sag ruhig Klaus-Dieter. Soll ich dir in einer Minute zeigen, wie dieser Garten aufgebaut ist?“ mit „Ja, zeig mal“ und „Lieber später“. |
+| Führung | 7 Stationen: Würfel, Ranke und Blätter, Zweige (Abteilungen), Kacheln, Suchen, Prüfung (mit dem Satz, dass Hummeln nach alter Rechnung gar nicht fliegen dürften: „Ich flieg trotzdem! Und genauso packst du die Prüfung, egal was die Rechnung sagt!“), Blüte am Ende mit Bienen, Mein Stand und Leseausweis. Zwischen den Stationen fliegt er knapp über dem Stängel an der Ranke entlang und zieht Pollenstaub hinter sich her; die Seite scrollt mit. Der Flug läuft in der gemeinsamen Schleife der App (`F.jeBild`, vor Lenis und 3D), damit Ranke und Seite nicht hinterherhinken. Er fährt sanft an, fliegt in ruhigem Tempo, landet sanft, dreht sich erst bei einem echten Richtungswechsel und neigt sich weich. Die Sprechblase zeigt „Klaus-Dieter · 3 von 7“, „Weiter“ und „Beenden“. |
 | Ende | Nach der letzten Station („Danke, Klaus-Dieter!“), mit „Beenden“, Escape oder wenn ein Artikel aufgeht: Er verschwindet in einem Pollenwölkchen und sitzt wieder auf seiner Blüte. Die Seite bleibt, wo sie ist. |
 | Menü | „Führung mit Klaus-Dieter“ scrollt nach oben zu ihm und startet die Führung direkt. |
+| Stimme | Klaus-Dieter spricht jede Sprechblase selbst: die Begrüßung (`ton/kd-hallo.mp3`) und die 7 Stationen (`ton/kd-1.mp3` bis `kd-7.mp3`), jeweils nach der Landung. Während er spricht, nickt er leicht im Takt. Der Lautsprecher „Ton an“ / „Ton aus“ rechts in der Sprechblase schaltet ihn stumm und wieder an (dann fängt der Satz von vorn an); gemerkt in `lernwiki-hummel-ton`. Weiter, Beenden, Escape, ein geöffneter Artikel oder ein Wechsel des Tabs brechen den Satz ab. Handys spielen Ton nur nach einem Tipp: Darum lädt jeder Klick die nächste Datei schon stumm an. Die Dateien (knapp 2 MB) werden nicht vorgeladen, sondern erst beim Abspielen geholt; offline bleibt er still, die Sprechblase steht trotzdem da. Bei der Prüfungsstation (Station 6) passt der Text in der Blase zur Aufnahme; bei Würfeln und Ranke stehen in der Blase Zahlen und Maus-Hinweise, die die Aufnahme allgemein hält. |
 | Handy | Kleinere Hummel und Blüte, die Sprechblase sitzt unten über der Handy-Leiste. Hummel, Blüte und Pollenstaub liegen in einer eigenen Ebene, die seitlich nichts überstehen lässt. |
 | 3D | Mit WebGL ist er ein 3D-Modell aus Grundformen (wie die Bienen der Ranke): runder Körper mit samtiger Oberfläche (Sheen wie bei Plüsch), die Streifen schräg als schmale Leinwand aufgemalt, damit die Kanten sauber bleiben; das Gesicht sitzt vorn am Körper mit glänzenden Kulleraugen samt Lichtpunkten, Bäckchen und Lächeln; Fühler mit gelben Kugeln, Stummelbeinchen, Händchen mit gelber Blume, durchscheinende Flügel mit gemalten Adern. Er schaut beim Fliegen halb zur Kamera, damit man sein Gesicht sieht. Beim Wenden dreht er sich wirklich um und schaut dabei kurz in die Kamera; im Flug schwirren die Flügel und er schaukelt, ab und zu blinzelt er. Eigene kleine WebGL-Fläche über dem Inhalt, gezeichnet nur, solange er im Bild ist, in Ruhe mit 30 Bildern pro Sekunde. Auf Geräten im Datensparmodus oder mit wenig Speicher bleibt die Zeichnung. **Notbremse:** Vor dem Aufbau misst er eine knappe Sekunde, wie flüssig die Seite läuft; über 34 ms pro Bild bleibt die Zeichnung. Wird es später zäh (im Schnitt über 45 ms), gibt er sein 3D auf. So auch im Testlauf auf GitHub, der 3D ohne Grafikkarte rechnet. |
 | Ohne 3D | Die Zeichnung von Klaus-Dieter; ohne 3D-Ranke fliegt er im Bogen statt an der Ranke entlang. |
-| Weniger Bewegung | Kein Flug, kein Winken, kein Pollenstaub: er springt von Station zu Station. In 3D sitzt er still und wird nur neu gezeichnet, wenn sich etwas ändert. |
+| Weniger Bewegung | Kein Flug, kein Winken, kein Pollenstaub, kein Nicken beim Sprechen (die Stimme bleibt): er springt von Station zu Station. In 3D sitzt er still und wird nur neu gezeichnet, wenn sich etwas ändert. |
 
 ---
 
@@ -364,6 +365,7 @@ Alles liegt nur im **Browser des Geräts**. Nichts geht an einen Server.
 | `lernwiki-bienen-v1` | bei welchen Artikeln die Biene schon eingeflogen ist | ja |
 | `lernwiki-stempel-v1` | verdiente Stempel mit Datum | ja |
 | `lernwiki-hummel-v1` | ob die Führung mit Klaus-Dieter schon gelaufen oder abgelehnt ist (dann winkt er seltener) | nein |
+| `lernwiki-hummel-ton` | ob Klaus-Dieter stumm geschaltet ist (`0`) | nein |
 | `lernwiki-tage-v1` | Lerntage als Datum | ja |
 | `fiae-theme` | hell oder dunkel, wenn selbst gewählt | nein |
 | `lernwiki-version` | zuletzt gesehene Versionsnummer, für „Aktualisiert auf Version …“ | nein |
@@ -388,7 +390,8 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | `src/app.js` | Startseite, Lernstand, Erfolge, Bienen, Stempel, Feier-Karte, Ansagen |
 | `src/reader.js` | Artikelseite, Prüfungsmodus, Mein Stand mit Leseausweis, Sichern |
 | `src/melden.js` | Fehler melden: Formular, GitHub-Issue, Text für Teams |
-| `src/hummel.js` | Klaus-Dieter, die Hummel: Blüte, Platz, Winken, Führung mit Sprechblase, Flug an der Ranke (Weg aus `scene.js` als `F.rankePfad`), Zeichnung als Rückfall |
+| `src/hummel.js` | Klaus-Dieter, die Hummel: Blüte, Platz, Winken, Führung mit Sprechblase, Flug an der Ranke (Weg aus `scene.js` als `F.rankePfad`), Stimme mit Lautsprecher-Knopf, Zeichnung als Rückfall |
+| `src/ton/` | Klaus-Dieters Stimme: `kd-hallo.mp3` und `kd-1.mp3` bis `kd-7.mp3`; nicht vorgeladen, am Service Worker vorbei |
 | `src/hummel3d.js` | Klaus-Dieter in 3D: Modell aus Grundformen mit Fell, eigene kleine WebGL-Fläche, Notbremse, wird von `hummel.js` nachgeladen |
 | `src/scene.js` | 3D: Würfel, Ranke, Blüten, Bienen |
 | `src/sw.js` | Service Worker: App-Hülle und Artikel offline |
@@ -402,7 +405,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 **Ereignisse zwischen den Dateien:** `fiae-stand` (Lernstand geändert), `fiae-stempel` (Stempel geändert),
 `fiae-theme`, `fiae-tree`. Gemeinsame Werkzeuge liegen in `window.FIAE` (zum Beispiel `stand`, `erfolg`, `biene`, `stempel`).
 
-**Tests** (`npm test`, zurzeit 66 Prüfungen):
+**Tests** (`npm test`, zurzeit 70 Prüfungen):
 
 | **Teil** | **Prüft** |
 |---|---|
@@ -415,7 +418,7 @@ Beim Wiederherstellen wird zusammengeführt: Der höhere Lernstand gewinnt, bei 
 | 9 | Leseausweis: Stempel still beim Laden, Karte, Sprung zum Ausweis, Backup-Profi, Nachteule, Zurücksetzen, Wiederherstellen |
 | 10 | Versionsnummer im Fuß und in `version.json`; Fehler melden: Artikel und Abschnitt, ohne Text nichts, Kopieren, Escape, GitHub-Link, Startseite |
 | 11 | Formeln im USV-Artikel: alle gezeichnet, auch in Tabellen und als Block, kein Dollarzeichen übrig, auch im Flugmodus |
-| 12 | Klaus-Dieter: in 3D (auf GitHub: Notbremse greift, Zeichnung bleibt), sitzt auf seiner Blüte an der Linie, Frage erst auf Klick, alle 7 Stationen und zurück, Escape, Start aus dem Menü und weniger Bewegung ohne Funken |
+| 12 | Klaus-Dieter: in 3D (auf GitHub: Notbremse greift, Zeichnung bleibt), sitzt auf seiner Blüte an der Linie, Frage erst auf Klick, alle 7 Stationen mit Stimme (jede Station ihre Datei, danach still) und zurück, Lautsprecher stumm und wieder an, Escape, Start aus dem Menü und weniger Bewegung ohne Funken |
 
 Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht zufällig die Nachteule auslöst.
 
@@ -452,6 +455,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `64225c2` | Notbremse für den 3D-Udo: erst messen, dann bauen (über 34 ms pro Bild bleibt die Zeichnung), im Betrieb über 45 ms Rückfall auf die Zeichnung; einfaches Licht statt Spiegelungsumgebung, billigeres Material, in Ruhe 30 Bilder pro Sekunde. Der Testlauf auf GitHub (3D in Software) war daran gescheitert; der Test für Udo wartet dort nur noch aufs Laden und prüft bei weniger Bewegung „kein Flug“ statt einer Zeitgrenze |
 | 04.11.2026 | `69127a2` | Klaus-Dieter Pollenberg, die Hummel, statt Udo, dem Einhorn: neue Zeichnung und neues 3D-Modell (flauschig, runde Goldbrille), Sitzplatz auf einer Blüte an der Linie, Pollenstaub statt Glitzer, Texte als Gartenaufsicht; Dateien `hummel.js` und `hummel3d.js` |
 | 04.11.2026 | `76af42a` | Klaus-Dieter neu gestaltet nach Vorlage: blauer Plüsch-Knubbel mit schrägen dunkelblauen und gelben Streifen, Kulleraugen, Bäckchen, gelben Fühlerspitzen, geäderten Flügeln und gelber Blume in den Händchen (Zeichnung und 3D) |
+| 05.11.2026 | `d60d401` | Klaus-Dieter spricht: Begrüßung und alle 7 Stationen vertont, Lautsprecher-Knopf in der Sprechblase, Nicken beim Sprechen; neuer Text an der Prüfungsstation („Ich flieg trotzdem! Und genauso packst du die Prüfung, egal was die Rechnung sagt!“) |
 
 ### Entfernt oder ersetzt
 
@@ -468,6 +472,7 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 | 04.11.2026 | `f2f5118` | Name „Funkel“ für das Einhorn | klang zu sehr nach Kinderbuch; jetzt Udo |
 | 04.11.2026 | `69127a2` | Udo, das Einhorn (Zeichnung, 3D-Modell, `einhorn.js`, `einhorn3d.js`) | passte nicht in den Garten; die Hummel gehört zum Thema |
 | 04.11.2026 | `76af42a` | Erster Klaus-Dieter (gelb-schwarze Erdhummel mit Goldbrille und Fellbüscheln) | sah merkwürdig aus; die Vorlage zeigte einen runden Plüsch-Knubbel |
+| 05.11.2026 | `d60d401` | Schluss der Prüfungsstation „Ich flieg trotzdem. Und du schaffst die Prüfung trotzdem.“ | neuer Text passend zur Aufnahme |
 
 ### Bewusst nicht gebaut
 
@@ -504,11 +509,11 @@ Tests mit Uhrzeit laufen mit fester Zeitzone, damit der nächtliche Lauf nicht z
 ```yaml
 seite: ReadmeUpdate.md
 inhalt: Funktionen und Gimmicks der Wiki-APP
-stand: 2026-11-04
-app_commit: 635c701
+stand: 2026-11-05
+app_commit: d60d401
 app_version: ab 1.0.0, zählt selbst hoch
 katalog: 178 Artikel, 75 mit Ampel, 10 von 12 Lernfeldern mit Artikeln, Wiki-Stand 2026-11-03
 stempel: 17
-tests: 59 Prüfungen
+tests: 70 Prüfungen
 gepflegt_von: Lernteam FIAE/FISI
 ```
