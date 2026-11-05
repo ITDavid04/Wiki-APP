@@ -71,6 +71,8 @@ for (const f of ['app.css', 'app.js', 'scene.js', 'reader.js', 'melden.js', 'hum
 }
 await copy(path.join(SRC, 'manifest.webmanifest'), 'manifest.webmanifest');
 for (const f of await readdir(path.join(SRC, 'icons'))) await copy(path.join(SRC, 'icons', f), 'icons/' + f);
+/* Klaus-Dieters Stimme: kommt in die Prüfsumme, wird aber nicht vorgeladen (knapp 2 MB), sondern erst beim Abspielen geholt */
+for (const f of await readdir(path.join(SRC, 'ton'))) await copy(path.join(SRC, 'ton', f), 'ton/' + f);
 await put('.nojekyll', '');
 
 /* Schrift */
@@ -142,7 +144,7 @@ await put('index.html', (await read(path.join(OUT, 'index.html'))).replace('/*AP
 
 let sw = await read(path.join(SRC, 'sw.js'));
 noDashes('src/sw.js', sw);
-sw = sw.replace("'/*VERSION*/'", `'${version}'`).replace('/*PRECACHE*/[]', JSON.stringify(['./', ...files]));
+sw = sw.replace("'/*VERSION*/'", `'${version}'`).replace('/*PRECACHE*/[]', JSON.stringify(['./', ...files.filter(f => !f.startsWith('ton/'))]));
 await put('sw.js', await mini(sw, false));
 /* nicht vorgeladen: der nächste Build und die App selbst (Hinweis "Neu laden") fragen sie frisch ab */
 await put('version.json', JSON.stringify({ version: appVersion, hash: version, stand: catalog.stand, artikel: catalog.artikel.length }) + '\n');

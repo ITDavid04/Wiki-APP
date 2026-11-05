@@ -78,7 +78,11 @@ const blase = document.createElement('div');
 blase.className = 'fe-blase'; blase.id = 'hummelBlase'; blase.hidden = true;
 blase.setAttribute('role', 'dialog'); blase.setAttribute('aria-labelledby', 'hummelKopf'); blase.setAttribute('aria-describedby', 'hummelText');
 blase.innerHTML = '<p class="fe-zeile micro" id="hummelKopf"></p><p class="fe-text" id="hummelText"></p>' +
-  '<div class="fe-knoepfe"><button type="button" class="pillbtn micro fe-ja" id="hummelJa"></button><button type="button" class="linkbtn fe-nein" id="hummelNein"></button></div>';
+  '<div class="fe-knoepfe"><button type="button" class="pillbtn micro fe-ja" id="hummelJa"></button><button type="button" class="linkbtn fe-nein" id="hummelNein"></button>' +
+  '<button type="button" class="fe-ton" id="hummelTon" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/>' +
+  '<path class="fe-ton-an" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.8 7.8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+  '<path class="fe-ton-aus" d="M16 9.5l5 5M21 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span></span></button></div>' +
+  '<audio id="hummelStimme" preload="none"></audio>';
 /* Blüte an der Linie unter der Bühne: sein Sitzplatz, bleibt stehen, wenn er losfliegt */
 const bluete = document.createElement('div');
 bluete.className = 'fe-bluete'; bluete.setAttribute('aria-hidden', 'true');
@@ -89,6 +93,47 @@ bluete.innerHTML = '<svg viewBox="0 0 34 40" focusable="false"><path d="M17 40C1
 ebene.append(bluete, fe);
 document.body.append(ebene, blase);
 const kopf = $('#hummelKopf'), text = $('#hummelText'), ja = $('#hummelJa'), nein = $('#hummelNein');
+
+/* ---------- Stimme ---------- */
+/* Klaus-Dieter spricht seine Sprechblasen (ton/kd-hallo.mp3, ton/kd-1.mp3 bis kd-7.mp3). Der Lautsprecher in der Blase
+   schaltet ihn stumm, gemerkt in lernwiki-hummel-ton. Handys spielen Ton nur nach einem Tipp ab: Darum lädt jeder Klick
+   die nächste Datei schon stumm an (das gibt sie frei), und nach der Landung spricht er sie. Offline bleibt er still. */
+const TON_KEY = 'lernwiki-hummel-ton';
+const stimme = $('#hummelStimme'), tonKnopf = $('#hummelTon');
+let tonAn = store.get(TON_KEY) !== '0', tonSoll = false, tonDatei = '';
+function tonZeigen(){
+  tonKnopf.setAttribute('aria-pressed', String(tonAn));
+  tonKnopf.classList.toggle('aus', !tonAn);
+  tonKnopf.lastChild.textContent = tonAn ? 'Ton an' : 'Ton aus';
+  tonKnopf.title = tonAn ? 'Klaus-Dieter stumm schalten' : 'Klaus-Dieter sprechen lassen';
+}
+function verstumme(){ tonSoll = false; stimme.pause(); fe.classList.remove('spricht'); }
+/* Im Klick: Datei laden und stumm anspielen, damit das Handy sie später ohne Tipp abspielen darf */
+function vorbereiten(datei){
+  verstumme(); tonDatei = datei;
+  if (!tonAn) return;
+  if (!stimme.src.endsWith('ton/' + datei)) stimme.src = 'ton/' + datei;
+  stimme.muted = true;
+  const p = stimme.play();
+  if (p) p.then(() => { if (!tonSoll) stimme.pause(); }, () => {});
+}
+function sprich(datei){
+  if (datei !== tonDatei || !stimme.src.endsWith('ton/' + datei)) vorbereiten(datei);
+  if (!tonAn) return;
+  tonSoll = true; stimme.muted = false;
+  try { stimme.currentTime = 0; } catch (e) {}
+  const p = stimme.play();
+  if (p) p.catch(() => fe.classList.remove('spricht'));
+}
+stimme.addEventListener('playing', () => { if (tonSoll) fe.classList.add('spricht'); });
+['pause', 'ended', 'error'].forEach(ev => stimme.addEventListener(ev, () => fe.classList.remove('spricht')));
+tonKnopf.addEventListener('click', () => {
+  tonAn = !tonAn; store.set(TON_KEY, tonAn ? '1' : '0'); tonZeigen();
+  if (!tonAn) verstumme();
+  else if (tonDatei && !blase.hidden) sprich(tonDatei);
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) verstumme(); });
+tonZeigen();
 
 /* ---------- Maße und Orte (Seitenpixel, Mitte von Klaus-Dieter) ---------- */
 const eng = () => innerWidth < 860;
@@ -151,7 +196,7 @@ const STATIONEN = [
   { ranke: true, ziel(){ return nebenRanke(box('#katalog').t + 70); },
     text: () => `Du suchst was Bestimmtes? Hier findest du alle ${F.D.artikel.length} Artikel, mit Suche und Filter nach Abteilung. Ein roter Punkt heißt: Prüfungsstoff drin.` },
   { ranke: true, ziel(){ return nebenRanke(box('#pruefung').t + 60); },
-    text: () => 'Jetzt wird es ernst: ROT zuerst. Das ist sicherer Prüfungsstoff, im Prüfungsmodus hakst du ab, was sitzt. Übrigens: Nach einer alten Rechnung dürften Hummeln gar nicht fliegen können. Ich flieg trotzdem. Und du schaffst die Prüfung trotzdem.' },
+    text: () => 'Jetzt wird es ernst: ROT zuerst. Das ist sicherer Prüfungsstoff, im Prüfungsmodus hakst du ab, was sitzt. Übrigens: Nach einer alten Rechnung dürften Hummeln gar nicht fliegen können. Ich flieg trotzdem! Und genauso packst du die Prüfung, egal was die Rechnung sagt!' },
   { ranke: true, ziel(){ const E = box('#a-end'); return { x: clamp(E.l + E.w / 2 + (eng() ? -60 : -110), 50, innerWidth - 50), y: E.t - (eng() ? 60 : 80) }; },
     text: () => 'Ganz unten blüht die Ranke. Für jeden Artikel, den du liest, fliegt dir eine Biene zu. Die verdienst du dir, ich wohn hier nur. Dein Stand bleibt auf deinem Gerät, ganz ohne Konto, und unter „Mein Stand“ wartet dein Leseausweis. So, ich brumm zurück auf meine Blüte unter den Würfeln. Im Menü findest du mich auch.' },
 ];
@@ -307,7 +352,7 @@ function zeige(zeile, satz, jaText, neinText){
   requestAnimationFrame(() => blase.classList.add('auf'));
   ja.focus({ preventScroll: true });
 }
-function verstecke(){ blase.hidden = true; blase.classList.remove('auf'); }
+function verstecke(){ blase.hidden = true; blase.classList.remove('auf'); verstumme(); }
 
 /* ---------- Ablauf ---------- */
 let zustand = 'ruhe', nr = -1;   /* ruhe, frage, fliegt, station */
@@ -315,15 +360,18 @@ const gesehen = () => store.get(KEY) === '1';
 function frage(){
   zustand = 'frage'; ruftNicht();
   zeige('Klaus-Dieter Pollenberg, Gartenaufsicht', 'Moin, Klaus-Dieter Pollenberg, Gartenaufsicht. Sag ruhig Klaus-Dieter. Soll ich dir in einer Minute zeigen, wie dieser Garten aufgebaut ist?', 'Ja, zeig mal', 'Lieber später');
+  sprich('kd-hallo.mp3');
 }
 function station(i){
   nr = i; zustand = 'fliegt'; verstecke(); ruftNicht();
-  const st = STATIONEN[i];
+  const st = STATIONEN[i], datei = `kd-${i + 1}.mp3`;
+  vorbereiten(datei);
   flieg(st.ziel(), st.ranke, () => {
     if (zustand !== 'fliegt') return;
     zustand = 'station';
     const letzte = i === STATIONEN.length - 1;
     zeige(`Klaus-Dieter · ${i + 1} von ${STATIONEN.length}`, st.text(), letzte ? 'Danke, Klaus-Dieter!' : 'Weiter', letzte ? '' : 'Beenden');
+    sprich(datei);
   });
 }
 function ende(){
@@ -361,6 +409,7 @@ document.addEventListener('click', e => {
   if (!e.target.closest('[data-hummel]')) return;
   if (zustand === 'fliegt' || zustand === 'station') return;
   verstecke(); zustand = 'ruhe'; schau(false); setze(heim());
+  vorbereiten('kd-1.mp3');
   const ziel = clamp(pos.y - innerHeight * 0.55, 0, 1e9);
   if (F.lenis && !reduce.matches) F.lenis.scrollTo(ziel, { duration: 1.2, onComplete: () => station(0) });
   else { scrollAuf(ziel); station(0); }

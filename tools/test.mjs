@@ -486,17 +486,23 @@ try {
   await up.click('#hummel');
   await blaseAuf('Gartenaufsicht');
   check('Klaus-Dieter fragt erst auf Klick', await up.evaluate(() => document.getElementById('hummelNein').textContent === 'Lieber später'));
+  /* Stimme: die Begrüßung lädt und läuft ohne Fehler (Tipp zählt als Erlaubnis zum Abspielen) */
+  const hallo = await up.waitForFunction(() => { const s = document.getElementById('hummelStimme'); return s.src.endsWith('ton/kd-hallo.mp3') && !s.error && s.readyState >= 2 && !s.muted; }, { timeout: 15000 }).then(() => true, () => false);
+  check('Klaus-Dieter spricht die Begrüßung', hallo, await up.evaluate(() => { const s = document.getElementById('hummelStimme'); return JSON.stringify({ src: s.src, rs: s.readyState, err: s.error && s.error.code, muted: s.muted }); }));
   await up.click('#hummelJa');
-  const stationen = [];
+  const stationen = [], toene = [];
   for (let i = 1; i <= 7; i++) {
     await blaseAuf(`${i} von 7`);
     stationen.push(await up.evaluate(() => Math.round(scrollY)));
+    toene.push(await up.evaluate(() => { const s = document.getElementById('hummelStimme'); return s.src.split('/').pop() + (s.error ? '!' : '') + (s.muted ? '~' : ''); }));
     if (i === 3) await up.screenshot({ path: path.join(SHOTS, 'hummel-zweige.png') });
     await up.click('#hummelJa');
   }
   await sleep(700);
   const h1 = await heimY();
   const nachher = await up.evaluate(() => ({ blase: document.getElementById('hummelBlase').hidden, key: localStorage.getItem('lernwiki-hummel-v1') }));
+  check('Klaus-Dieter spricht jede Station mit eigener Datei', toene.join() === 'kd-1.mp3,kd-2.mp3,kd-3.mp3,kd-4.mp3,kd-5.mp3,kd-6.mp3,kd-7.mp3', toene.join());
+  check('Nach der Führung ist er still', await up.evaluate(() => document.getElementById('hummelStimme').paused));
   check('Führung: 7 Stationen nach unten, danach wieder zu Hause', stationen[6] > stationen[1] && stationen[1] > stationen[0] && nachher.blase && nachher.key === '1' && Math.abs(h1.fuss) <= 6 && Math.abs(h1.mitte) <= 3, JSON.stringify({ stationen, nachher }));
   await up.evaluate(() => document.querySelector('.hero .rule').scrollIntoView({ block: 'center' }));
   await sleep(600);
@@ -504,6 +510,11 @@ try {
   await blaseAuf('Gartenaufsicht');
   await up.click('#hummelJa');
   await blaseAuf('1 von 7');
+  await up.click('#hummelTon');
+  const stumm = await up.evaluate(() => ({ druck: document.getElementById('hummelTon').getAttribute('aria-pressed'), still: document.getElementById('hummelStimme').paused, key: localStorage.getItem('lernwiki-hummel-ton') }));
+  await up.click('#hummelTon');
+  const laut = await up.evaluate(() => ({ druck: document.getElementById('hummelTon').getAttribute('aria-pressed'), key: localStorage.getItem('lernwiki-hummel-ton') }));
+  check('Lautsprecher schaltet Klaus-Dieter stumm und wieder an', stumm.druck === 'false' && stumm.still && stumm.key === '0' && laut.druck === 'true' && laut.key === '1', JSON.stringify({ stumm, laut }));
   await up.keyboard.press('Escape');
   await sleep(600);
   check('Escape beendet die Führung', await up.evaluate(() => document.getElementById('hummelBlase').hidden && document.activeElement.id === 'hummel'));

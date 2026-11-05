@@ -43,6 +43,8 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  /* Klaus-Dieters Stimme geht am Speicher vorbei direkt ins Netz (Audio fragt in Stücken an, offline bleibt er still) */
+  if (url.origin === self.location.origin && url.pathname.includes('/ton/')) return;
   if (url.origin === self.location.origin) {
     if (req.mode === 'navigate') e.respondWith(caches.match('./index.html', { cacheName: SHELL }).then(r => r || fetch(req)));
     else e.respondWith(fromShell(req));

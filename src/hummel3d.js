@@ -158,7 +158,7 @@ export async function baue(api){
   const wohin = b => -0.85 - (1 - b) / 2 * (Math.PI - 1.7);   /* blick 1: nach rechts, 0: in die Kamera, -1: nach links */
   function zeichne(t){
     const z = stand(), still = reduce.matches;
-    const fliegt = fe.classList.contains('fliegt'), winkt = fe.classList.contains('winkt');
+    const fliegt = fe.classList.contains('fliegt'), winkt = fe.classList.contains('winkt'), spricht = fe.classList.contains('spricht');
     const sek = still ? 0 : t / 1000;
     dreh.rotation.y = wohin(z.blick);
     kd.rotation.z = -(z.kipp * Math.sign(z.blick || 1)) * Math.PI / 180;
@@ -177,6 +177,8 @@ export async function baue(api){
     wink.rotation.z = w + tuck;
     beine.forEach((b, i) => { b.rotation.z = i < 2 ? -tuck : tuck; });
     kopf.rotation.z = winkt && !still ? Math.sin(sek * 6) * 0.04 + 0.03 : Math.sin(sek * 0.9) * 0.02;
+    /* Beim Sprechen nickt er leicht im Takt */
+    if (spricht && !still) kopf.rotation.z += Math.abs(Math.sin(sek * 7.5)) * 0.05;
     /* Blinzeln */
     let lid = 1;
     if (!still) { if (t > blinzelNaechst + 140) blinzelNaechst = t + 2500 + Math.random() * 3500; if (t > blinzelNaechst) lid = 0.12; }
