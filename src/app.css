@@ -126,11 +126,11 @@ section[id],li[id]{scroll-margin-top:96px}
 .tip span{color:var(--muted)}
 
 /* Mauszeiger-Ring */
-/* Mauszeiger: rosa Stift, die Spitze sitzt genau auf der Mausposition. Nur mit Maus (app.js setzt html.pen), nie auf dem Handy.
-   Die Spur dahinter zeichnet ein Canvas, bei "weniger Bewegung" bleibt sie aus. */
+/* Mauszeiger: gelber Zauberstab, der Stern sitzt genau auf der Mausposition. Nur mit Maus (app.js setzt html.pen), nie auf dem Handy.
+   Goldspur und Pollen beim Klicken zeichnet ein Canvas, bei "weniger Bewegung" bleiben beide aus. */
 .cursor,.pen-spur{display:none}
 html.pen,html.pen *{cursor:none!important}
-html.pen .cursor{display:block;position:fixed;left:0;top:0;z-index:2147483001;width:30px;height:38px;margin:-5px 0 0 -5px;pointer-events:none;opacity:0;transition:opacity .2s;filter:drop-shadow(0 1px 3px rgba(194,65,127,.35))}
+html.pen .cursor{display:block;position:fixed;left:0;top:0;z-index:2147483001;width:30px;height:38px;margin:-5px 0 0 -5px;pointer-events:none;opacity:0;transition:opacity .2s;filter:drop-shadow(0 1px 3px rgba(184,134,11,.45))}
 html.pen .cursor.on{opacity:1}
 html.pen .cursor svg{display:block;overflow:visible}
 html.pen .pen-spur{display:block;position:fixed;inset:0;z-index:2147483000;width:100%;height:100%;pointer-events:none}

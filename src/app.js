@@ -988,18 +988,19 @@ addEventListener('online', () => showToast('Wieder online.', null, null, 2500));
 const top = $('#top');
 function updateTop(){ top.classList.toggle('solid', scrollY > 40); }
 
-/* Mauszeiger: rosa Stift mit kurzer, leicht funkelnder Spur. Nur mit Maus oder Grafiktablett, nie mit dem Finger.
-   Die Spitze sitzt genau auf der Mausposition, der Stift bleibt überall und auch beim Klicken ein Stift.
-   Bei "weniger Bewegung" gibt es den Stift ohne Spur. */
+/* Mauszeiger: gelber Zauberstab mit kurzer, leicht funkelnder Goldspur. Nur mit Maus oder Grafiktablett, nie mit dem Finger.
+   Der Stern an der Spitze sitzt genau auf der Mausposition. Beim Klicken versprüht er eine Wolke Pollen,
+   die auseinanderstiebt und langsam zu Boden rieselt. Bei "weniger Bewegung" gibt es den Stab ohne Spur und ohne Pollen. */
 const cur = $('#cursor'), spur = $('#penSpur'), sctx = spur.getContext('2d');
 const maus = matchMedia('(hover:hover) and (pointer:fine)');
 let penOn = false, penX = -100, penY = -100, dpr = 1, spurLeer = true, seitFunke = 0;
-const punkte = [], funken = [];
-const SPUR_MS = 200, FUNKE_ALLE_PX = 22, MAX_FUNKEN = 40;
+const punkte = [], funken = [], pollen = [];
+const SPUR_MS = 200, FUNKE_ALLE_PX = 22, MAX_FUNKEN = 40, POLLEN_JE_KLICK = 26, MAX_POLLEN = 160;
+const POLLEN_FARBEN = ['255,217,61', '255,196,0', '255,232,130', '240,170,20', '255,246,200'];
 function penMode(){
   penOn = maus.matches;
   root.classList.toggle('pen', penOn);
-  if (!penOn) { cur.classList.remove('on'); punkte.length = funken.length = 0; }
+  if (!penOn) { cur.classList.remove('on'); punkte.length = funken.length = pollen.length = 0; }
   spurGroesse();
 }
 function spurGroesse(){
@@ -1032,6 +1033,16 @@ addEventListener('pointermove', e => {
   cur.style.transform = `translate(${penX}px,${penY}px)`;
   cur.classList.add('on');
 }, { passive: true });
+addEventListener('pointerdown', e => {
+  if (!penOn || reduce.matches || e.pointerType === 'touch') return;
+  const now = performance.now(), n = Math.min(POLLEN_JE_KLICK, MAX_POLLEN - pollen.length);
+  for (let i = 0; i < n; i++) {
+    const w = Math.random() * Math.PI * 2, v = 0.04 + Math.random() * 0.16;
+    pollen.push({ x: e.clientX, y: e.clientY, vx: Math.cos(w) * v, vy: Math.sin(w) * v - 0.05, t: now,
+      life: 700 + Math.random() * 600, r: 1 + Math.random() * 1.8, farbe: POLLEN_FARBEN[(Math.random() * POLLEN_FARBEN.length) | 0],
+      wackel: Math.random() * Math.PI * 2 });
+  }
+}, { passive: true });
 document.addEventListener('pointerleave', () => cur.classList.remove('on'));
 addEventListener('blur', () => cur.classList.remove('on'));
 
@@ -1044,7 +1055,8 @@ function stern(x, y, r){
 function zeichneSpur(now){
   while (punkte.length && now - punkte[0].t > SPUR_MS) punkte.shift();
   for (let i = funken.length - 1; i >= 0; i--) if (now - funken[i].t > funken[i].life) funken.splice(i, 1);
-  if (!punkte.length && !funken.length) {
+  for (let i = pollen.length - 1; i >= 0; i--) if (now - pollen[i].t > pollen[i].life) pollen.splice(i, 1);
+  if (!punkte.length && !funken.length && !pollen.length) {
     if (!spurLeer) { sctx.setTransform(1, 0, 0, 1, 0, 0); sctx.clearRect(0, 0, spur.width, spur.height); spurLeer = true; }
     return;
   }
@@ -1052,11 +1064,11 @@ function zeichneSpur(now){
   sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   sctx.clearRect(0, 0, innerWidth, innerHeight);
   sctx.lineCap = 'round'; sctx.lineJoin = 'round';
-  sctx.shadowColor = 'rgba(255,111,181,.7)'; sctx.shadowBlur = 6;
+  sctx.shadowColor = 'rgba(255,200,40,.75)'; sctx.shadowBlur = 6;
   const pts = punkte.concat({ x: penX, y: penY, t: now });
   for (let i = 1; i < pts.length; i++) {
     const k = 1 - (now - pts[i].t) / SPUR_MS;
-    sctx.strokeStyle = `rgba(255,111,181,${(0.75 * k).toFixed(3)})`;
+    sctx.strokeStyle = `rgba(255,206,40,${(0.75 * k).toFixed(3)})`;
     sctx.lineWidth = 0.6 + 2 * k;
     sctx.beginPath(); sctx.moveTo(pts[i - 1].x, pts[i - 1].y); sctx.lineTo(pts[i].x, pts[i].y); sctx.stroke();
   }
@@ -1064,13 +1076,22 @@ function zeichneSpur(now){
   for (const f of funken) {
     const a = (now - f.t) / f.life, dt = now - f.t;
     const blink = 0.55 + 0.45 * Math.sin(dt / 45 + f.r * 9);
-    sctx.fillStyle = f.hell ? `rgba(255,240,248,${((1 - a) * blink).toFixed(3)})` : `rgba(255,140,200,${((1 - a) * blink).toFixed(3)})`;
+    sctx.fillStyle = f.hell ? `rgba(255,252,225,${((1 - a) * blink).toFixed(3)})` : `rgba(255,214,70,${((1 - a) * blink).toFixed(3)})`;
     stern(f.x + f.vx * dt, f.y + f.vy * dt, f.r * (1 - a * 0.6));
+  }
+  /* Pollen: fliegen schnell los, werden von der Luft gebremst und rieseln dann taumelnd nach unten */
+  sctx.shadowColor = 'rgba(255,190,20,.6)'; sctx.shadowBlur = 3;
+  for (const p of pollen) {
+    const dt = now - p.t, a = dt / p.life, brems = 1 - Math.exp(-dt / 220);
+    const x = p.x + p.vx * 220 * brems + Math.sin(dt / 140 + p.wackel) * 2.5;
+    const y = p.y + p.vy * 220 * brems + 0.00003 * dt * dt;
+    sctx.fillStyle = `rgba(${p.farbe},${(1 - a * a).toFixed(3)})`;
+    sctx.beginPath(); sctx.arc(x, y, p.r * (1 - a * 0.4), 0, Math.PI * 2); sctx.fill();
   }
   sctx.shadowBlur = 0;
 }
 
-/* Eine gemeinsame Schleife für Scrollen, Kopf und Stiftspur. Läuft vor den 3D-Schleifen, damit beide dieselbe Scrollposition sehen. */
+/* Eine gemeinsame Schleife für Scrollen, Kopf und Zauberstab-Spur. Läuft vor den 3D-Schleifen, damit beide dieselbe Scrollposition sehen. */
 function loop(t){
   /* Wer im selben Takt scrollen will (Klaus-Dieter beim Flug), hängt sich in window.FIAE.jeBild: läuft vor Lenis und vor dem 3D */
   const jb = window.FIAE.jeBild;

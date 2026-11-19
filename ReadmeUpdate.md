@@ -60,7 +60,7 @@ eine weg, wird diese Seite mitgepflegt.
 | Hilfe | Fehler melden: Formular mit Artikel, Abschnitt, Version und Gerät, weiter zu GitHub oder als Text für Teams | Fahne im Artikel, Artikelende, Menü, Fuß, Mein Stand |
 | Gerät | Untere Leiste am Handy | Handy |
 | Gerät | Hell und dunkel | Knopf oben rechts |
-| Gerät | Mauszeiger als rosa Stift mit kurzer, funkelnder Spur | ganze App, nur mit Maus |
+| Gerät | Mauszeiger als gelber Zauberstab mit Goldspur, versprüht Pollen beim Klicken | ganze App, nur mit Maus |
 
 ---
 
@@ -73,7 +73,7 @@ eine weg, wird diese Seite mitgepflegt.
 | Ladebildschirm | „Moin. Die Ranke wird gegossen.“ mit sechs Feldern, die sich beim Laden füllen. Höchstens 3,5 Sekunden, bei reduzierter Bewegung gar nicht. |
 | Kopfleiste | Theme-Knopf, „Mein Stand“, „Suchen“ und das Menü. Bleibt oben stehen und bekommt beim Scrollen einen Hintergrund. |
 | Menü | Springt zu allen Abschnitten (01 bis 06), zu Prüfungsmodus, Mein Stand, GitHub und „App installieren“. Escape schließt es. |
-| Mauszeiger-Stift | Mit Maus ist der Zeiger überall in der App ein rosa Stift; die Spitze sitzt genau auf der Mausposition, auch beim Klicken bleibt er ein Stift. Hinter ihm zieht eine kurze rosa Spur mit ein paar Funken, die nach etwa 0,2 Sekunden verblasst. Auf Handy und Tablet gibt es ihn nicht, bei reduzierter Bewegung kommt er ohne Spur. |
+| Mauszeiger-Zauberstab | Mit Maus ist der Zeiger überall in der App ein gelber Zauberstab; der Stern an der Spitze sitzt genau auf der Mausposition. Hinter ihm zieht eine kurze goldene Spur mit ein paar Funken, die nach etwa 0,2 Sekunden verblasst. Jeder Klick versprüht eine kleine Wolke gelber Pollen, die auseinanderstiebt und in gut einer Sekunde zu Boden rieselt. Auf Handy und Tablet gibt es ihn nicht, bei reduzierter Bewegung kommt er ohne Spur und ohne Pollen. |
 | Sanftes Scrollen | Scrollen gleitet nach (Lenis), bei reduzierter Bewegung nicht. |
 
 ### 2.2 Bühne mit den Lernfeld-Würfeln
@@ -348,7 +348,7 @@ Bedingung und Fortschritt („10 von 25“).
 | Tastatur | Sprunglink „Zum Inhalt“, Kacheln per Tastatur aufdecken, Escape schließt Menü, Kachel, Feier-Karte und Seite; ist „Fehler melden“ offen, schließt Escape nur das Formular |
 | Screenreader | Beschriftungen an Kacheln, Knöpfen und Bienen („gelesen“); Feier, Biene und Stempel werden über `aria-live` angesagt |
 | Fokus | Beim Öffnen einer Seite springt der Fokus auf ihren Titel, beim Schließen zurück |
-| Reduzierte Bewegung | keine Animationen: Ranke sofort voll, Würfel ohne Schweben, kein Blätterflug, keine fliegenden Bienen, Bienen in der Ranke sitzen still, Stempel ohne Aufdrücken, Stift ohne Spur, Schild „Neu“ pulsiert nicht, Klaus-Dieter springt statt zu fliegen und winkt nicht |
+| Reduzierte Bewegung | keine Animationen: Ranke sofort voll, Würfel ohne Schweben, kein Blätterflug, keine fliegenden Bienen, Bienen in der Ranke sitzen still, Stempel ohne Aufdrücken, Zauberstab ohne Spur und Pollen, Schild „Neu“ pulsiert nicht, Klaus-Dieter springt statt zu fliegen und winkt nicht |
 | Ohne WebGL | Standbild der Würfel (mit Häkchen für geschaffte Lernfelder) und gezeichnete Ranke (mit Blüten und Bienen); alles andere funktioniert gleich |
 
 ---
